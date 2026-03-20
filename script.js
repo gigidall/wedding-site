@@ -422,8 +422,18 @@ async function submitFullQuiz() {
   quizUser = fullname;
 
   try {
-    await fetch('/api/update_guest', {
-      method: 'POST', body: JSON.stringify({ fullname, updates: { punteggio: score } }), headers: { 'Content-Type': 'application/json' }
+    const [nome, ...cognomeArr] = fullname.split(' ');
+    const cognome = cognomeArr.join(' ');
+    
+    const formData = new URLSearchParams();
+    formData.append('action', 'quiz');
+    formData.append('nome', nome || '');
+    formData.append('cognome', cognome || '');
+    formData.append('score', score);
+
+    await fetch('api.php', {
+      method: 'POST', 
+      body: formData
     });
   } catch (e) { }
 
