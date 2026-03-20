@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600&display=swap" rel="stylesheet">
+  <title>Area Sposi | Statistiche</title>
+  <style>
+    :root {
+      --bg-color: #fdfaf6;
+      --primary-color: #d4a373;
+      --text-color: #333333;
+      --text-light: #666666;
+      --font-serif: 'Playfair Display', Georgia, serif;
+      --font-sans: 'Montserrat', Arial, sans-serif;
+    }
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.05);
+    }
+    h1 {
+      font-family: var(--font-serif);
+      text-align: center;
+      font-size: 2.5rem;
+      color: var(--primary-color);
+      margin-bottom: 5px;
+    }
+    .subtitle {
+      text-align: center;
+      color: var(--text-light);
+      margin-bottom: 40px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .stat-card {
+      background: var(--bg-color);
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      border: 1px solid rgba(212,163,115,0.2);
+    }
+    .stat-card h3 {
+      font-size: 2.5rem;
+      margin: 0 0 5px 0;
+      font-family: var(--font-serif);
+      color: var(--text-color);
+    }
+    .stat-card p {
+      margin: 0;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    th {
+      font-weight: 600;
+      color: var(--text-light);
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+    }
+    tr:hover {
+      background-color: rgba(212,163,115,0.05);
+    }
+    .status-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    .status-true { background-color: #4caf50; box-shadow: 0 0 8px rgba(76,175,80,0.4); }
+    .status-false { background-color: #9e9e9e; }
+    
+    .back-nav {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      text-decoration: none;
+      color: var(--text-light);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: color 0.3s;
+    }
+    .back-nav:hover {
+      color: var(--primary-color);
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="back-nav">← Torna all'invito</a>
+
+  <div class="container">
+    <h1>Lista degli Invitati</h1>
+    <p class="subtitle">Riepilogo delle presenze confermate</p>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3 id="totale">0</h3>
+        <p>Totale Invitati</p>
+      </div>
+      <div class="stat-card">
+        <h3 id="confermati" style="color: #4caf50;">0</h3>
+        <p>Confermati</p>
+      </div>
+      <div class="stat-card">
+        <h3 id="mancanti">0</h3>
+        <p>Da Confermare</p>
+      </div>
+    </div>
+
+    <table id="guests-table">
+      <thead>
+        <tr>
+          <th>Stato</th>
+          <th>Nome</th>
+          <th>Cognome</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Injected via JS -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    async function loadStats() {
+      let guests = [];
+      let total = 0;
+      let confirmed = 0;
+      
+      try {
+        const response = await fetch('data/guests.csv');
+        if(!response.ok) throw new Error("CORS or network error");
+        const csvData = await response.text();
+        
+        const lines = csvData.split('\n');
+        
+        // Skip header
+        for(let i=1; i<lines.length; i++) {
+          const parts = lines[i].split(';');
+          if(parts.length >= 3) {
+            const nome = parts[0].trim();
+            const cognome = parts[1].trim();
+            let isConfirmed = parts[2].trim().toLowerCase() === 'true';
+            
+            // Override with localStorage if they confirmed locally
+            const localKey = `rsvp_${nome.toLowerCase()}_${cognome.toLowerCase()}`;
+            if(localStorage.getItem(localKey) === "true") {
+              isConfirmed = true;
+            }
+            
+            guests.push({ nome, cognome, isConfirmed });
+            
+            total++;
+            if(isConfirmed) confirmed++;
+          }
+        }
+      } catch(e) {
+        console.warn("Failed to load generic CSV due to local file URI protocols. Resorting to scanning LocalStorage for mock stats.");
+        // Fallback: If running via file:/// protocol, fetch fails. 
+        // We simulate reading those from localStorage that have the prefix "rsvp_"
+        for(let i=0; i<localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if(key.startsWith("rsvp_")) {
+                const parts = key.replace("rsvp_", "").split("_");
+                if(parts.length === 2) {
+                    guests.push({ nome: capitalize(parts[0]), cognome: capitalize(parts[1]), isConfirmed: true });
+                    confirmed++;
+                    total++; // Implicitly
+                }
+            }
+        }
+      }
+
+      // Update UI
+      document.getElementById('totale').innerText = total;
+      document.getElementById('confermati').innerText = confirmed;
+      document.getElementById('mancanti').innerText = total - confirmed;
+
+      const tbody = document.querySelector("#guests-table tbody");
+      tbody.innerHTML = "";
+      
+      if(guests.length === 0) {
+          tbody.innerHTML = "<tr><td colspan='3' style='text-align:center; padding: 30px; color: #999;'>Nessun dato caricato.</td></tr>";
+      }
+
+      guests.sort((a,b) => {
+        // Sort confirmed first, then alphabetical by cognome
+        if(a.isConfirmed && !b.isConfirmed) return -1;
+        if(!a.isConfirmed && b.isConfirmed) return 1;
+        return a.cognome.localeCompare(b.cognome);
+      }).forEach(g => {
+        const tr = document.createElement("tr");
+        const statusClass = g.isConfirmed ? 'status-true' : 'status-false';
+        const statusLabel = g.isConfirmed ? 'Confermato' : 'In attesa';
+        
+        tr.innerHTML = `
+          <td><span class="status-dot ${statusClass}" title="${statusLabel}"></span><span style="font-size:0.85rem; color:#888;">${statusLabel}</span></td>
+          <td style="font-weight: 500;">${g.nome}</td>
+          <td>${g.cognome}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+    
+    function capitalize(s) {
+        return s.charAt(0).toUpperCase() + s.slice(1);
+    }
+
+    // Run on load
+    loadStats();
+  </script>
+</body>
+</html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap"
+    rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:wght@400;500;600&family=Great+Vibes&family=Lato:wght@300;400;700&family=Montserrat:wght@300;400;600&family=Open+Sans:wght@300;400;600&family=Parisienne&family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&family=Raleway:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <title>Antonella & Mauro | 05 Ottobre 2026</title>
+  <script src="https://unpkg.com/wavesurfer.js"></script>
+</head>
+
+<body>
+
+  <!-- AUDIO PLAYER: Fixed at top as requested -->
+  <div id="audio-player" class="hidden">
+    <audio id="music" src="assets/Thinking Out Loud - Ed Sheeran.mp3"></audio>
+    <div class="audio-inner">
+      <button id="musicToggle" class="play-btn" onclick="toggleMusic()">
+        <svg id="icon-play" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M8 5v14l11-7z" />
+        </svg>
+        <svg id="icon-pause" style="display:none;" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+        </svg>
+      </button>
+
+      <div class="audio-center">
+        <!-- WAVESURFER V7 OBBLIGATORIO -->
+        <div id="waveform" style="width: 100%; min-width: 180px;"></div>
+      </div>
+
+      <div class="audio-time">
+        <span id="audio-current">00:00</span> / <span id="audio-total">00:00</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- APERTURA BUSTA REALISTICA -->
+  <div class="envelope-global-wrapper" id="envelope">
+    <div class="envelope-physical">
+      <div class="envelope-flap" id="env-flap"></div>
+      <div class="wax-seal-container" id="seal-btn">
+        <div class="wax-seal">
+          <div class="wax-seal-inner">
+            <img src="assets/logo/AM.png" alt="AM Logo" class="initials" style="height: 100px;">
+          </div>
+          <div class="wax-seal-ring"></div>
+        </div>
+        <div class="tap-hint">Tocca il sigillo</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM TAB BAR (App Mobile Style) -->
+  <nav class="bottom-tab-bar hidden" id="bottom-nav">
+    <a href="#welcome" class="tab-item active" onclick="setActiveTab(this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
+      <span>Home</span>
+    </a>
+    <a href="#countdown-sec" class="tab-item" onclick="setActiveTab(this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+      </svg>
+      <span>Date</span>
+    </a>
+    <a href="#map-sec" class="tab-item" onclick="setActiveTab(this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+        <circle cx="12" cy="10" r="3"></circle>
+      </svg>
+      <span>Percorso</span>
+    </a>
+    <a href="#gallery-sec" class="tab-item" onclick="setActiveTab(this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+        <polyline points="21 15 16 10 5 21"></polyline>
+      </svg>
+      <span>Galleria</span>
+    </a>
+    <a href="#quiz-sec" class="tab-item" onclick="setActiveTab(this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+      </svg>
+      <span>Quiz</span>
+    </a>
+    <a href="#rsvp-sec" class="tab-item" onclick="setActiveTab(this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path
+          d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+        </path>
+      </svg>
+      <span>Ci sarai</span>
+    </a>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <div id="main" class="hidden">
+
+    <!-- WELCOME SECTION (Reduced blur) -->
+    <section class="welcome" id="welcome">
+      <div class="welcome-bg"></div>
+      <div class="welcome-overlay"></div>
+      <div class="welcome-content fade-up al">
+        <img src="assets/logo/AM.png" alt="AM Logo" style="height: 130px;">
+        <p class="emotional-text title" id="typewriter-text">Finalmente possiamo dirlo:<br><span
+            style="font-size: 1.8em;">ci sposiamo!!!</span></p>
+        <div class="welcome-body fade-up delay-1 body">
+          <p>Siamo felicissimi di condividere con te questa notizia e di iniziare il conto alla rovescia verso il nostro
+            grande giorno.</p>
+          <p>Qui trovi tutte
+            le informazioni utili.</p>
+          <p>Ti chiediamo di dedicarci un momento nella sezione “Ci sarai?”, per farci sapere se sarai dei
+            nostri.</p>
+          <p>Grazie per essere qui con noi. Non vediamo l’ora di festeggiare insieme!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- HORIZONTAL COUNTDOWN SECTION -->
+    <hr class="section-divider fade-up">
+    <section class=" countdown-section fade-up" id="countdown-sec">
+      <h2 style="margin-bottom: 20px;">Antonella & Mauro</h2>
+
+      <div class="hero-content">
+        <div class="divider"></div>
+        <p class="date">05 Ottobre 2026</p>
+        <p class="date">Chiesa di Santa Maria Maggiore</p>
+        <img class="anelli" src="assets/logo/anelli.png" alt="Anelli" style="height: 100px;">
+        <p class="date">Miglionico</p>
+        <p class="date">Ore 11:00</p>
+        <div class="divider"></div>
+      </div>
+
+      <div class="horizontal-countdown fade-up visible" id="countdown" style="gap: 15px; margin-top: 15px;">
+
+        <div class="time-box">
+          <span class="time-num" id="days">0</span>
+          <span class="time-label">Giorni</span>
+        </div>
+
+        <span class="time-sep">:</span>
+
+        <div class="time-box">
+          <span class="time-num" id="hours">0</span>
+          <span class="time-label">Ore</span>
+        </div>
+
+        <span class="time-sep">:</span>
+
+        <div class="time-box">
+          <span class="time-num" id="minutes">0</span>
+          <span class="time-label">Minuti</span>
+        </div>
+
+        <span class="time-sep">:</span>
+
+        <div class="time-box">
+          <span class="time-num" id="seconds">0</span>
+          <span class="time-label">Secondi</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- NEW ADVANCED TIMELINE NARRATIVE MAP SECTION -->
+    <hr class="section-divider fade-up">
+    <section class="map-section fade-up" id="map-sec">
+      <h2>Il nostro percorso, passo dopo passo</h2>
+
+      <div class="timeline-container fade-up">
+        <div class="timeline-line"></div>
+
+        <a href="https://www.google.com/maps/search/?api=1&query=Via+Carlo+Levi,+8,+75010+Miglionico+MT" target="_blank"
+          class="timeline-event clickable fade-up">
+          <div class="timeline-time">06:00</div>
+          <div class="timeline-marker">👰</div>
+          <div class="timeline-content">
+            <h4>I preparativi della sposa</h4>
+            <p>La magia prima del SI</p>
+          </div>
+        </a>
+
+        <a href="https://www.google.com/maps/search/?api=1&query=Residenza+delle+Grazie+Miglionico" target="_blank"
+          class="timeline-event clickable fade-up">
+          <div class="timeline-time">07:30</div>
+          <div class="timeline-marker">🤵</div>
+          <div class="timeline-content">
+            <h4>I preparativi dello sposo</h4>
+            <p>L'attesa prima del SI</p>
+          </div>
+        </a>
+
+        <a href="https://www.google.com/maps/search/?api=1&query=Castello+del+Malconsiglio+Miglionico" target="_blank"
+          class="timeline-event clickable fade-up">
+          <div class="timeline-time">10:30</div>
+          <div class="timeline-marker">🏰</div>
+          <div class="timeline-content">
+            <h4>Raduno al Castello</h4>
+            <p>Verso la Chiesa con la sposa</p>
+          </div>
+        </a>
+
+        <a href="https://www.google.com/maps/search/?api=1&query=Chiesa+Madre+Santa+Maria+Maggiore+Miglionico"
+          target="_blank" class="timeline-event clickable fade-up">
+          <div class="timeline-time">11:00</div>
+          <div class="timeline-marker">⛪</div>
+          <div class="timeline-content">
+            <h4>Cerimonia in Chiesa</h4>
+            <p>Il momento più importante</p>
+          </div>
+        </a>
+
+        <a href="https://www.google.com/maps/search/?api=1&query=Castello+del+Malconsiglio+Miglionico" target="_blank"
+          class="timeline-event clickable fade-up">
+          <div class="timeline-time">12:30</div>
+          <div class="timeline-marker">🥂</div>
+          <div class="timeline-content">
+            <h4>Ritorno al Castello</h4>
+            <p>Verso il ricevimento</p>
+          </div>
+        </a>
+
+        <a href="https://www.google.com/maps/search/?api=1&query=Corte+degli+Svevi+Altamura" target="_blank"
+          class="timeline-event clickable fade-up">
+          <div class="timeline-time">13:30</div>
+          <div class="timeline-marker">🍽</div>
+          <div class="timeline-content">
+            <h4>Corte degli Svevi</h4>
+            <p>Inizio del ricevimento</p>
+          </div>
+        </a>
+
+        <a href="https://www.google.com/maps/search/?api=1&query=Corte+degli+Svevi+Altamura" target="_blank"
+          class="timeline-event clickable fade-up">
+          <div class="timeline-time">20:30</div>
+          <div class="timeline-marker">🎂</div>
+          <div class="timeline-content">
+            <h4>Taglio della Torta</h4>
+            <p>Buffet di dolci</p>
+          </div>
+        </a>
+
+        <a href="https://www.google.com/maps/search/?api=1&query=Corte+degli+Svevi+Altamura" target="_blank"
+          class="timeline-event clickable fade-up">
+          <div class="timeline-time">22:30</div>
+          <div class="timeline-marker">🎉</div>
+          <div class="timeline-content">
+            <h4>After Party</h4>
+            <p>Disco & Open Bar</p>
+          </div>
+        </a>
+
+        <a href="https://www.google.com/maps/search/?api=1&query=Corte+degli+Svevi+Altamura" target="_blank"
+          class="timeline-event clickable fade-up">
+          <div class="timeline-time">02:00</div>
+          <div class="timeline-marker">🛏</div>
+          <div class="timeline-content">
+            <h4>Rientro a casa</h4>
+            <p>Fine dei festeggiamenti</p>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- FIXED EXPLICIT GALLERY SECTION -->
+    <hr class="section-divider fade-up">
+    <section class="gallery-section fade-up" id="gallery-sec">
+      <h2>I Nostri Ricordi</h2>
+      <div class="gallery-carousel-wrapper">
+        <div class="gallery-scroll" id="galleryContainer">
+          <!-- Dynamically filled by JS Array -->
+        </div>
+      </div>
+      <div class="gallery-nav fade-up" id="gallery-desktop-nav">
+        <button class="gallery-arrow" onclick="scrollGallery(-1)" id="gal-prev">&#10094;</button>
+        <div class="gallery-dots" id="gallery-dots"></div>
+        <button class="gallery-arrow" onclick="scrollGallery(1)" id="gal-next">&#10095;</button>
+      </div>
+    </section>
+
+    <!-- QUIZ -->
+    <hr class="section-divider fade-up">
+    <section class="quiz-section fade-up" id="quiz-sec">
+      <h2>Quanto ci conoscete?</h2>
+
+      <div id="quiz-container" class="quiz-card">
+        <p style="margin-bottom: 25px; color: var(--text-color);">Abbiamo preparato qualche domanda per mettervi alla
+          prova.<br>Rispondi a tutte e
+          inserisci il tuo nome per la classifica finale!</p>
+
+        <div id="quiz-questions-list" style="text-align: left;">
+          <!-- JS will populate all questions here -->
+        </div>
+
+        <div id="quiz-submit-section" style="margin-top: 40px; position: relative; display: block;">
+          <h4 style="font-family: var(--font-sans); margin-bottom: 10px; color: var(--primary-dark);">Inserisci il tuo
+            nome per la classifica:</h4>
+          <input type="text" id="quiz-username" class="elegant-input" placeholder="Scrivi il tuo nome..."
+            autocomplete="off" oninput="handleAutocomplete(this, 'quiz-hints')" onblur="blurAutocomplete('quiz-hints')"
+            style="margin-bottom:0;">
+          <div id="quiz-hints" class="autocomplete-list"></div>
+          <button class="primary-btn" style="margin-top: 25px;" onclick="submitFullQuiz()">Invia Risposte</button>
+        </div>
+
+        <!-- step 3: result -->
+        <div id="quiz-result" class="hidden" style="margin-top: 30px;">
+          <h3 class="score-title">Quiz Completato!</h3>
+          <div class="score-circle"><span id="quiz-score">0</span></div>
+          <p id="quiz-reward" class="reward-text"></p>
+
+          <!-- Scoreboard aggiunta come richiesto -->
+          <div style="text-align: left; background: #fafafa; border-radius: 12px; padding: 20px; margin-top:25px;">
+            <h4 style="font-family: var(--font-sans); color: var(--primary-dark); margin-bottom: 15px;">Classifica
+              Invitati</h4>
+            <ul id="scoreboard-list" style="list-style: none; padding: 0; margin: 0;"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RSVP -->
+    <hr class="section-divider fade-up">
+    <section class="rsvp-section fade-up" id="rsvp-sec">
+      <h2>Ci sarai?</h2>
+      <p style="margin-bottom: 35px; font-size:1.1rem; line-height: 1.5; color: var(--text-color);">Non vediamo l'ora di
+        festeggiare con
+        te.<br>Conferma la tua presenza cliccando uno dei bottoni.</p>
+
+      <div class="rsvp-buttons"
+        style="display:flex; justify-content:center; gap:20px; align-items:center; flex-wrap: nowrap; width: 100%;">
+        <button class="primary-btn" style="flex:1; white-space:nowrap; font-size:0.9rem;"
+          onclick="sendWhatsApp(true)">Sì, ci sarò! 😍</button>
+        <button class="primary-btn outline"
+          style="flex:1; white-space:nowrap; font-size:0.9rem; background:transparent; border: 2px solid var(--primary-color); color:var(--primary-color);"
+          onclick="sendWhatsApp(false)">No, mi dispiace 😔</button>
+      </div>
+    </section>
+
+    <footer style="background-color: var(--bg-color);">
+      <h2 style="color: #333;">Vi aspettiamo con gioia<br>Antonella & Mauro</h2>
+      <img src="assets/logo/AM.png" alt="AM Logo" style="height: 100px;">
+    </footer>
+
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="toast"></div>
+
+  <!-- LIGHTBOX GALLERY -->
+  <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <img id="lightbox-img" src="">
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
