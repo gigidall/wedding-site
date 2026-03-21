@@ -51,7 +51,7 @@ h2 {
 p {
   line-height: 1.7;
   color: var(--text-white);
-  padding-bottom: 1em;
+  padding-bottom: 0.5em;
 }
 
 /* SPOTIFY-LIKE AUDIO PLAYER FIXED TOP */
@@ -74,7 +74,7 @@ p {
 
 @media (max-width: 768px) {
   #audio-player {
-    width: 90%;
+    width: 93%;
   }
 }
 
@@ -1143,6 +1143,11 @@ footer {
   z-index: 9999;
   padding-bottom: env(safe-area-inset-bottom);
   transition: opacity 0.5s;
+  margin: 0 !important;
+  box-sizing: border-box;
+
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 .bottom-tab-bar.hidden {
@@ -1160,18 +1165,26 @@ footer {
   gap: 4px;
   flex: 1;
   transition: color 0.3s;
+  height: 100%;
+  -webkit-tap-highlight-color: transparent;
+  padding-top: 5px;
+  /* Sposta leggermente in alto icone e testi */
+  padding-bottom: 5px;
 }
 
 .tab-item svg {
   width: 24px;
   height: 24px;
   transition: transform 0.3s;
+  flex-shrink: 0;
 }
 
 .tab-item span {
   font-family: var(--font-sans);
-  font-size: 0.7rem;
+  font-size: 11px;
+  margin-top: 2px;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .tab-item:hover,
@@ -1186,7 +1199,7 @@ footer {
 
 /* Add padding to the whole body so the footer/last content isn't covered by the 70px tab bar */
 body {
-  padding-bottom: 70px;
+  padding-bottom: 90px;
 }
 
 /* --- FIX OVERLAP E SFONDI ALTERNATI --- */
@@ -1228,7 +1241,7 @@ section {
 
 .al .title {
   font-family: 'Allura', cursive;
-  font-size: 40px;
+  font-size: 37px;
   font-weight: 400;
 }
 

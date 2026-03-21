@@ -135,9 +135,9 @@ document.addEventListener("DOMContentLoaded", () => {
   if (sealBtn && audio) {
     sealBtn.addEventListener("click", () => {
 
-      audio.play().then(() => {
-        audio.volume = 0; // Evitiamo doppio audio sovrapposto
-      }).catch(err => console.error("Errore audio nativo:", err));
+      // audio.play().then(() => {
+      //   audio.volume = 0; // Evitiamo doppio audio sovrapposto
+      // }).catch(err => console.error("Errore audio nativo:", err));
 
       wavesurfer.play().then(() => {
         console.log("Audio partito");
@@ -424,7 +424,7 @@ async function submitFullQuiz() {
   try {
     const [nome, ...cognomeArr] = fullname.split(' ');
     const cognome = cognomeArr.join(' ');
-    
+
     const formData = new URLSearchParams();
     formData.append('action', 'quiz');
     formData.append('nome', nome || '');
@@ -432,7 +432,7 @@ async function submitFullQuiz() {
     formData.append('score', score);
 
     await fetch('api.php', {
-      method: 'POST', 
+      method: 'POST',
       body: formData
     });
   } catch (e) { }
@@ -498,11 +498,11 @@ function populateScoreboard() {
 function sendWhatsApp(isComing) {
   // Using a fallback number if none provided by the user. 
   // It is recommended the user changes this to their actual number.
-  const number = "393280000000";
+  const number = "393394001216";
 
   let text = isComing
-    ? "Ciao, confermo la mia presenza al matrimonio di Antonella e Mauro!"
-    : "Ciao, purtroppo non posso partecipare al matrimonio.";
+    ? "Ciao, confermo la mia presenza al vostro matrimonio! \u{1F60D}"
+    : "Ciao, purtroppo non posso partecipare al matrimonio. \u{1F614}";
 
   const encodedText = encodeURIComponent(text);
   const url = `https://wa.me/${number}?text=${encodedText}`;
