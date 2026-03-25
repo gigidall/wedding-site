@@ -1,5 +1,5 @@
-nome;cognome;confermato
-Mario;Rossi;false
-Luigi;Verdi;false
-Giulia;Bianchi;true
-Anna;Neri;false
+id;nome;cognome;relazione;conferma;quiz
+1;Mario;Rossi;;false;
+2;Luigi;Verdi;;false;
+3;Giulia;Bianchi;;true;
+4;Anna;Neri;;false;

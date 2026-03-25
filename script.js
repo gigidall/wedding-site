@@ -2,36 +2,24 @@
 let musicPlaying = false;
 let wavesurfer = null;
 
-// --- GUEST DATA ---
+// Globals
 let guestsArray = [];
 let quizScoreboard = [];
 
 async function loadGuestsData() {
   try {
-    const res = await fetch('data/guests.csv');
-    if (!res.ok) throw new Error("No CSV");
-    const txt = await res.text();
-    const lines = txt.split('\n');
-    for (let i = 1; i < lines.length; i++) {
-      const parts = lines[i].split(';');
-      if (parts.length >= 2) {
-        const fullName = (parts[0].trim() + " " + parts[1].trim());
-        guestsArray.push(fullName);
-        // Create demo scoreboard
-        if (i % 2 === 0 && i < 15) {
-          quizScoreboard.push({ name: fullName, score: Math.floor(Math.random() * 4) + 1 });
-        }
-      }
-    }
-    quizScoreboard.sort((a, b) => b.score - a.score);
-    populateScoreboard();
+    const res = await fetch('api.php?action=search&q=');
+    if (!res.ok) throw new Error("No API");
+    const json = await res.json();
+    guestsArray = json.map(g => ({ id: g.id, name: g.nome + ' ' + g.cognome }));
   } catch (err) {
-    console.error("Guests CSV not found, using mockup data.");
-    guestsArray = ["Antonella Rossi", "Mauro Bianchi", "Giulia Verdi", "Marco Rossi"];
-    quizScoreboard = [{ name: "Marco Rossi", score: 5 }, { name: "Giulia Verdi", score: 4 }];
-    populateScoreboard();
+    guestsArray = [
+      { id: "1", name: "Mario Rossi" },
+      { id: "2", name: "Luigi Verdi" }
+    ];
   }
 }
+
 
 // --- INITIALIZATION (WAX SEAL) ---
 function openInvite() {
@@ -418,8 +406,8 @@ function closeLightbox() {
 }
 
 function lightboxPrev(e) {
-  if(e) e.stopPropagation();
-  if(currentLightboxIndex > 0) {
+  if (e) e.stopPropagation();
+  if (currentLightboxIndex > 0) {
     currentLightboxIndex--;
     document.getElementById("lightbox-img").src = globalImages[currentLightboxIndex];
     updateLightboxCounter();
@@ -427,8 +415,8 @@ function lightboxPrev(e) {
 }
 
 function lightboxNext(e) {
-  if(e) e.stopPropagation();
-  if(currentLightboxIndex < globalImages.length - 1) {
+  if (e) e.stopPropagation();
+  if (currentLightboxIndex < globalImages.length - 1) {
     currentLightboxIndex++;
     document.getElementById("lightbox-img").src = globalImages[currentLightboxIndex];
     updateLightboxCounter();
@@ -439,16 +427,16 @@ function lightboxNext(e) {
 document.addEventListener("DOMContentLoaded", () => {
   const lb = document.getElementById("lightbox");
   let touchstartX = 0;
-  
+
   lb.addEventListener('touchstart', e => {
     touchstartX = e.changedTouches[0].screenX;
-  }, {passive: true});
-  
+  }, { passive: true });
+
   lb.addEventListener('touchend', e => {
     const touchendX = e.changedTouches[0].screenX;
     if (touchstartX - touchendX > 50) lightboxNext(); // swipe left -> next
     if (touchendX - touchstartX > 50) lightboxPrev(); // swipe right -> prev
-  }, {passive: true});
+  }, { passive: true });
 });
 
 let galleryAutoScrollInt;
@@ -458,7 +446,7 @@ function startGalleryAutoScroll() {
   galleryAutoScrollInt = setInterval(() => {
     const container = document.getElementById("galleryContainer");
     if (!container) return;
-    
+
     // Reset se siamo arrivati alla fine
     if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 10) {
       container.scrollTo({ left: 0, behavior: 'smooth' });
@@ -487,9 +475,9 @@ document.addEventListener("DOMContentLoaded", () => {
   startGalleryAutoScroll();
   const container = document.getElementById("galleryContainer");
   if (container) {
-    container.addEventListener('touchstart', () => clearInterval(galleryAutoScrollInt), {passive: true});
-    container.addEventListener('touchend', () => startGalleryAutoScroll(), {passive: true});
-    container.addEventListener('wheel', resetGalleryAutoScroll, {passive: true});
+    container.addEventListener('touchstart', () => clearInterval(galleryAutoScrollInt), { passive: true });
+    container.addEventListener('touchend', () => startGalleryAutoScroll(), { passive: true });
+    container.addEventListener('wheel', resetGalleryAutoScroll, { passive: true });
   }
 });
 
@@ -499,7 +487,11 @@ const quizData = [
   { q: "Qual è stata la nostra prima vacanza insieme?", opts: ["Barcellona", "Sicilia", "Puglia", "Roma"], ans: 2 },
   { q: "Chi ha detto 'Ti amo' per primo?", opts: ["Antonella", "Mauro", "Insieme nello stesso momento", "Nessuno se lo ricorda"], ans: 1 },
   { q: "Qual è il piatto forte di Mauro?", opts: ["Carbonara", "Lasagne", "Risotto ai funghi", "Nessuno, sa solo ordinare su Glovo"], ans: 0 },
-  { q: "Dove è avvenuta la proposta di matrimonio?", opts: ["Al ristorante", "Ad un concerto", "A casa nostra", "In montagna durante un'escursione"], ans: 1 }
+  { q: "Dove è avvenuta la proposta di matrimonio?", opts: ["Al ristorante", "Ad un concerto", "A casa nostra", "In montagna durante un'escursione"], ans: 1 },
+  { q: "Chi dei due è il più ritardatario cronico?", opts: ["Mauro", "Antonella", "Sono svizzeri entrambi", "Dipende dalla stagione"], ans: 1 },
+  { q: "Qual è la serie TV che hanno divorato insieme?", opts: ["Stranger Things", "La Casa di Carta", "Game of Thrones", "Breaking Bad"], ans: 0 },
+  { q: "Chi ha più pazienza quando si tratta di fare shopping?", opts: ["Mauro resiste per ore", "Antonella senza dubbio", "Entrambi odiano lo shopping", "Solo se ci sono sconti"], ans: 1 },
+  { q: "Qual è il loro vizio condiviso la sera?", opts: ["Bere una tisana", "Film su Netflix e divano", "Leggere un libro", "Addormentarsi alle 21:00"], ans: 1 }
 ];
 let currentQ = 0;
 let quizScore = 0;
@@ -513,30 +505,73 @@ function loadAllQuestions() {
   const labels = ["A) ", "B) ", "C) ", "D) "];
   let html = "";
   quizData.forEach((qObj, qIdx) => {
-    html += `<div class="quiz-q-block" style="margin-bottom:30px; background: rgba(212,163,115,0.05); border-radius: 12px; padding: 20px;">
-        <h3 class="quiz-question" style="margin-bottom: 20px; font-size: 1.15rem;">${qIdx + 1}. ${qObj.q}</h3>
-        <div class="quiz-options-grid" id="opts-${qIdx}">`;
+    const displayStyle = qIdx === 0 ? "block" : "none";
+    html += `<div class="quiz-q-block" id="qblock-${qIdx}" style="display: ${displayStyle}; margin-bottom:30px; background: rgba(212,163,115,0.05); border-radius: 12px; padding: 20px; transition: opacity 0.4s; opacity: 1;">
+        <h3 class="quiz-question" style="margin-bottom: 20px; font-size: 1rem; color: var(--primary-dark);">Domanda ${qIdx + 1} di ${quizData.length}<br><br><span style="color:var(--text-color);">${qObj.q}</span></h3>
+        <div class="quiz-options-grid" id="opts-${qIdx}" style="display: grid; grid-template-columns: 1fr; gap: 10px;">`;
     qObj.opts.forEach((opt, idx) => {
-      html += `<button class="quiz-btn" onclick="selectQuizAnswer(${qIdx}, ${idx}, this)">${labels[idx]}${opt}</button>`;
+      html += `<button class="quiz-btn" style="min-height: 60px; word-break: break-word; white-space: normal;" onclick="selectQuizAnswer(${qIdx}, ${idx}, this)">${labels[idx]}${opt}</button>`;
     });
     html += `</div></div>`;
   });
   container.innerHTML = html;
+
+  const submitSec = document.getElementById("quiz-submit-section");
+  if (submitSec) submitSec.style.display = "none";
 }
 
 function selectQuizAnswer(qIdx, optIdx, btn) {
+  if (btn.parentElement.dataset.answered === "true") return;
+  btn.parentElement.dataset.answered = "true";
+
   userAnswers[qIdx] = optIdx;
   const allBtns = btn.parentElement.querySelectorAll('.quiz-btn');
   allBtns.forEach(b => { b.style.background = ''; b.style.color = ''; b.style.borderColor = ''; });
   btn.style.background = 'var(--primary-color)';
   btn.style.color = '#fff';
+
+  setTimeout(() => {
+    const currentBlock = document.getElementById(`qblock-${qIdx}`);
+    if (currentBlock) {
+      currentBlock.style.opacity = '0';
+      setTimeout(() => {
+        currentBlock.style.display = 'none';
+
+        if (qIdx + 1 < quizData.length) {
+          const nextBlock = document.getElementById(`qblock-${qIdx + 1}`);
+          if (nextBlock) {
+            nextBlock.style.display = 'block';
+            nextBlock.style.opacity = '0';
+            void nextBlock.offsetWidth;
+            nextBlock.style.opacity = '1';
+            nextBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        } else {
+          const submitSec = document.getElementById("quiz-submit-section");
+          if (submitSec) {
+            submitSec.style.display = "block";
+            submitSec.style.opacity = "0";
+            void submitSec.offsetWidth;
+            submitSec.style.opacity = "1";
+            submitSec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }
+      }, 400);
+    }
+  }, 500);
 }
 
 async function submitFullQuiz() {
-  const fullname = document.getElementById("quiz-username").value.trim();
+  const inputEl = document.getElementById("quiz-username");
+  const fullname = inputEl.value.trim();
+  const guestId = inputEl.dataset.id;
+
   if (!fullname) { showToast("Inserisci il tuo nome dalla lista prima di inviare!"); return; }
-  let found = guestsArray.some(g => g.toLowerCase() === fullname.toLowerCase());
-  if (!found) { showToast("Spiacenti, nome non in lista."); return; }
+
+  let match = guestsArray.find(g => g.name.toLowerCase() === fullname.toLowerCase());
+  const finalId = guestId || (match ? match.id : null);
+
+  if (!finalId) { showToast("Spiacenti, nome non in lista."); return; }
 
   if (Object.keys(userAnswers).length < quizData.length) { showToast("Rispondi a tutte le domande per continuare!"); return; }
 
@@ -546,22 +581,22 @@ async function submitFullQuiz() {
   quizUser = fullname;
 
   try {
-    const [nome, ...cognomeArr] = fullname.split(' ');
-    const cognome = cognomeArr.join(' ');
-
     const formData = new URLSearchParams();
     formData.append('action', 'quiz');
-    formData.append('nome', nome || '');
-    formData.append('cognome', cognome || '');
+    formData.append('id', finalId);
     formData.append('score', score);
 
-    await fetch('api.php', {
+    const response = await fetch('api.php', {
       method: 'POST',
       body: formData
     });
+    const result = await response.json();
+    if (result && result.rank) {
+      window.quizRank = result.rank;
+      window.quizLeaderboard = result.leaderboard;
+    }
   } catch (e) { }
 
-  // Update UI and highlight correct/wrong answers
   quizData.forEach((q, qIdx) => {
     const parent = document.getElementById(`opts-${qIdx}`);
     const btns = parent.querySelectorAll('.quiz-btn');
@@ -578,59 +613,130 @@ async function submitFullQuiz() {
   showQuizResult();
 }
 
+function createConfetti() {
+  for (let i = 0; i < 30; i++) {
+    const conf = document.createElement("div");
+    conf.innerText = "🎉";
+    conf.style.position = "fixed";
+    conf.style.left = Math.random() * 100 + "vw";
+    conf.style.top = Math.random() * -20 + "vh";
+    conf.style.fontSize = (Math.random() * 20 + 20) + "px";
+    conf.style.zIndex = "99999";
+    conf.style.pointerEvents = "none";
+    conf.style.transition = "transform 3s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 3s";
+    document.body.appendChild(conf);
+
+    setTimeout(() => {
+      conf.style.transform = `translateY(${window.innerHeight + 100}px) rotate(${Math.random() * 720}deg)`;
+      conf.style.opacity = "0";
+    }, 50);
+    setTimeout(() => conf.remove(), 3100);
+  }
+}
+
 function showQuizResult() {
   document.getElementById("quiz-result").classList.remove("hidden");
 
+  createConfetti();
+
+  let targetPercentage = Math.round((quizScore / quizData.length) * 100);
+
+  // Implement Progress Bar natively inside DOM structure mapping
+  const circleContainer = document.querySelector(".score-circle");
+  if (circleContainer) {
+    circleContainer.outerHTML = `
+      <div style="background: rgba(212,163,115,0.1); width: 100%; height: 40px; border-radius: 20px; overflow: hidden; margin: 30px 0; position: relative; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);">
+         <div id="quiz-progress-fill" style="width: 0%; height: 100%; background: var(--primary-color); border-radius: 20px; transition: width 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);"></div>
+         <span id="quiz-score" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: var(--primary-dark); font-weight: 800; font-size: 1.1rem; font-family: var(--font-sans); letter-spacing: 1px;">Risultato: 0%</span>
+      </div>
+    `;
+  }
+
   let visualScore = 0;
   const scoreInt = setInterval(() => {
-    document.getElementById("quiz-score").innerText = visualScore;
-    if (visualScore === quizScore) clearInterval(scoreInt);
-    visualScore++;
-  }, 100);
+    document.getElementById("quiz-score").innerHTML = `Risultato: ${visualScore}%`;
+    if (visualScore >= targetPercentage) {
+      document.getElementById("quiz-score").innerHTML = `Risultato: ${targetPercentage}%`;
+      clearInterval(scoreInt);
+    } else {
+      visualScore += 2;
+    }
+  }, 20);
+
+  setTimeout(() => {
+    document.getElementById("quiz-progress-fill").style.width = targetPercentage + "%";
+  }, 50);
 
   const reward = document.getElementById("quiz-reward");
   setTimeout(() => {
-    if (quizScore === quizData.length) {
-      reward.innerHTML = `Complimenti maestro <strong>${quizUser}</strong>!<br>Hai indovinato tutto! Reclama il tuo premio al ricevimento! 🥃`;
-    } else if (quizScore >= 2) {
-      reward.innerHTML = `Bravo <strong>${quizUser}</strong>, ci conosci abbastanza bene! Ma potevi fare di meglio... 😉`;
+    if (window.quizRank) {
+      reward.innerHTML = `<strong>${quizUser}</strong><br><br><span style="font-size:1.2rem; color: var(--primary-dark);">Sei <strong>${window.quizRank}°</strong> in classifica generale!</span>`;
     } else {
-      reward.innerHTML = `Ahi ahi <strong>${quizUser}</strong>... ci conosci per niente. Ti perdoniamo solo se ti scateni in pista! 🕺`;
+      reward.innerHTML = `Grazie <strong>${quizUser}</strong>! Risposte registrate.`;
     }
 
-    if (!quizScoreboard.some(e => e.name === quizUser)) {
-      quizScoreboard.push({ name: quizUser, score: quizScore });
-      quizScoreboard.sort((a, b) => b.score - a.score);
-      populateScoreboard();
+    const lbContainer = document.getElementById("scoreboard-list");
+    if (lbContainer && window.quizLeaderboard) {
+      lbContainer.innerHTML = '';
+      window.quizLeaderboard.forEach((user, index) => {
+        const pct = Math.round((user.score / quizData.length) * 100);
+        let medal = '';
+        if (index === 0) medal = '🥇 ';
+        if (index === 1) medal = '🥈 ';
+        if (index === 2) medal = '🥉 ';
+        lbContainer.innerHTML += `<li style="padding: 12px 10px; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; font-size:1.05rem;">
+           <span style="font-family:var(--font-sans); color:var(--text-color);">${medal}<strong>${user.name}</strong></span>
+           <span style="font-weight:800; color:var(--primary-dark); font-size:1.15rem;">${pct}%</span>
+         </li>`;
+      });
+      lbContainer.parentElement.style.display = 'block';
+    } else if (lbContainer) {
+      lbContainer.parentElement.style.display = 'none';
     }
-  }, 500);
-}
-
-function populateScoreboard() {
-  const list = document.getElementById("scoreboard-list");
-  if (!list) return;
-  list.innerHTML = "";
-  quizScoreboard.forEach((entry, idx) => {
-    list.innerHTML += `<li style="padding: 10px 15px; border-bottom: 1px solid #ebebeb; display: flex; justify-content: space-between; align-items: center; background: ${idx % 2 === 0 ? '#fff' : '#fcfcfc'};">
-       <span style="font-family:var(--font-sans); color:var(--text-color);"><strong>${idx + 1}.</strong> ${entry.name}</span>
-       <span style="color:var(--primary-color); font-weight:800; font-size:1.1rem;">${entry.score} pt</span>
-     </li>`;
-  });
+  }, 1000);
 }
 
 // --- RSVP LOGIC ---
 function sendWhatsApp(isComing) {
-  // Using a fallback number if none provided by the user. 
-  // It is recommended the user changes this to their actual number.
   const number = "393394001216";
-
   let text = isComing
-    ? "Ciao, confermo la mia presenza al vostro matrimonio! \u{1F60D}"
-    : "Ciao, purtroppo non posso partecipare al matrimonio. \u{1F614}";
-
+    ? "Ciao, confermo la mia presenza al vostro matrimonio! 😍"
+    : "Ciao, purtroppo non posso partecipare al matrimonio. 😔";
   const encodedText = encodeURIComponent(text);
   const url = `https://wa.me/${number}?text=${encodedText}`;
   window.open(url, '_blank');
+}
+
+async function markPresence(input, hintBoxId, isComing) {
+  const fullname = input.value.trim();
+  const guestId = input.dataset.id;
+
+  if (!fullname) {
+    showToast("Per favore, inserisci il tuo nome dalla lista.");
+    return;
+  }
+
+  let match = guestsArray.find(g => g.name.toLowerCase() === fullname.toLowerCase());
+  const finalId = guestId || (match ? match.id : null);
+
+  if (!finalId) {
+    showToast("Spiacenti, nome non in lista.");
+    return;
+  }
+
+  try {
+    const formData = new URLSearchParams();
+    formData.append('action', 'confirm');
+    formData.append('id', finalId);
+    formData.append('value', isComing ? 'true' : 'false');
+
+    await fetch('api.php', { method: 'POST', body: formData });
+  } catch (e) {
+    console.error("API error", e);
+  }
+
+  showToast("Preferenza registrata nel backend!");
+  setTimeout(() => sendWhatsApp(isComing), 2000);
 }
 
 function showToast(message) {

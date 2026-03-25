@@ -795,7 +795,7 @@ section {
   color: white;
   cursor: pointer;
   z-index: 10010;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
   padding: 10px;
 }
 
@@ -803,7 +803,7 @@ section {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   color: white;
   border: none;
   font-size: 30px;
@@ -814,13 +814,24 @@ section {
   transition: background 0.3s;
 }
 
-.lightbox-nav-btn:hover { background: rgba(0,0,0,0.8); }
-.lightbox-nav-btn.left { left: 20px; }
-.lightbox-nav-btn.right { right: 20px; }
+.lightbox-nav-btn:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.lightbox-nav-btn.left {
+  left: 20px;
+}
+
+.lightbox-nav-btn.right {
+  right: 20px;
+}
 
 @media (max-width: 768px) {
-  .lightbox-nav-btn { display: none; }
+  .lightbox-nav-btn {
+    display: none;
+  }
 }
+
 /* QUIZ */
 .quiz-section {
   text-align: center;
@@ -946,7 +957,7 @@ section {
   padding: 22px;
   border-radius: 16px;
   font-family: var(--font-sans);
-  font-size: 1.1rem;
+  font-size: 0.8rem;
   font-weight: 500;
   cursor: pointer;
   transition: var(--transition);
@@ -999,7 +1010,6 @@ section {
 /* RSVP */
 .rsvp-section {
   text-align: center;
-  margin-bottom: 100px;
 }
 
 .rsvp-form {
@@ -1307,19 +1317,16 @@ section {
 
 #gallery-sec {
   background-color: #f3eae0;
-  padding-bottom: 80px;
 }
 
 #quiz-sec {
   background-color: #faf5ee;
   padding-top: 40px;
   /* Reduced space as requested */
-  padding-bottom: 80px;
 }
 
 #rsvp-sec {
   background-color: #f3eae0;
-  padding-bottom: 80px;
 }
 
 
