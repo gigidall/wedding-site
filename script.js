@@ -65,7 +65,7 @@ function openInvite() {
           if (nav) nav.classList.remove("hidden");
         }, 500);
 
-        document.body.style.overflowY = 'auto'; // Re-enable scrolling
+        // Scrolling is now handled directly via CSS in #main
         main.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         startCountdown();
