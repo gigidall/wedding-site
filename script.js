@@ -596,3 +596,15 @@ function startPetals() {
     setTimeout(() => { if (petal.parentNode) petal.remove(); }, duration * 1000);
   }, 1200);
 }
+
+// --- AUTO-PAUSE BACKGROUND/STANDBY ---
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden && typeof wavesurfer !== 'undefined' && wavesurfer && wavesurfer.isPlaying()) {
+    wavesurfer.pause();
+    if (typeof musicPlaying !== 'undefined') musicPlaying = false;
+    const playIcon = document.getElementById("icon-play");
+    const pauseIcon = document.getElementById("icon-pause");
+    if (playIcon) playIcon.style.display = "block";
+    if (pauseIcon) pauseIcon.style.display = "none";
+  }
+});
