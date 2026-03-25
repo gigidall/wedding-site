@@ -288,7 +288,7 @@
       </div>
       <div class="gallery-nav fade-up" id="gallery-desktop-nav">
         <button class="gallery-arrow" onclick="scrollGallery(-1)" id="gal-prev">&#10094;</button>
-        <div class="gallery-dots" id="gallery-dots"></div>
+        <div id="gallery-counter" style="font-family: var(--font-sans); font-weight: 600; color: var(--primary-dark); font-size: 1.1rem; min-width: 80px; text-align: center;">1 / ...</div>
         <button class="gallery-arrow" onclick="scrollGallery(1)" id="gal-next">&#10095;</button>
       </div>
     </section>
@@ -360,8 +360,12 @@
   <div id="toast" class="toast"></div>
 
   <!-- LIGHTBOX GALLERY -->
-  <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+  <div id="lightbox" class="lightbox">
+    <div class="lightbox-close" onclick="closeLightbox()">&times;</div>
+    <div id="lightbox-counter" style="position: absolute; top: 30px; left: 30px; font-size: 1.2rem; color: white; z-index: 10010; font-family: var(--font-sans); font-weight: 600; text-shadow: 0 2px 10px rgba(0,0,0,0.8);"></div>
+    <button class="lightbox-nav-btn left" onclick="lightboxPrev(event)">&#10094;</button>
     <img id="lightbox-img" src="">
+    <button class="lightbox-nav-btn right" onclick="lightboxNext(event)">&#10095;</button>
   </div>
 
   <script src="script.js"></script>

@@ -349,26 +349,27 @@ window.setActiveTab = function (clickedTab, event) {
   }
 };
 
+
 // --- DYNAMIC GALLERY ---
+const globalImages = ["assets/images/09caf564-f9a8-4923-b17f-b6b7ca4daca5.jpg", "assets/images/1.jpg", "assets/images/20171209_172955.jpg", "assets/images/3.jpg", "assets/images/3fe22d62-5dba-4d47-a47e-bd315beacede.jpg", "assets/images/4.jpg", "assets/images/7202c811-e88e-4341-accd-fba18ddee299.jpg", "assets/images/75aea258-9415-407d-8a76-b9383efc61f4.jpg", "assets/images/7cdc9428-3a47-4212-be3c-bbd406005cac.jpg", "assets/images/IMG-20191101-WA0011.jpg", "assets/images/IMG-20221009-WA0184.jpg", "assets/images/IMG-20230101-WA0035.jpg", "assets/images/IMG-20230226-WA0000.jpg", "assets/images/IMG-20230226-WA0001.jpg", "assets/images/IMG_0282.HEIC", "assets/images/IMG_0352.HEIC", "assets/images/IMG_0474.HEIC", "assets/images/IMG_0479.HEIC", "assets/images/IMG_0486.HEIC", "assets/images/IMG_0488.HEIC", "assets/images/IMG_0496.HEIC", "assets/images/IMG_0508.HEIC", "assets/images/IMG_0528.HEIC", "assets/images/IMG_0542.HEIC", "assets/images/IMG_0630.HEIC", "assets/images/IMG_0692.HEIC", "assets/images/IMG_0693.HEIC", "assets/images/IMG_0694.HEIC", "assets/images/IMG_0756.HEIC", "assets/images/IMG_1075.HEIC", "assets/images/IMG_1094.HEIC", "assets/images/IMG_1622.HEIC", "assets/images/IMG_1654.HEIC", "assets/images/IMG_20190223_155855.jpg", "assets/images/IMG_20190223_161153.jpg", "assets/images/IMG_20190223_175007.jpg", "assets/images/IMG_20190224_153317.jpg", "assets/images/IMG_20190224_162820.jpg", "assets/images/IMG_20190303_163420.jpg", "assets/images/IMG_20191103_121436.jpg", "assets/images/IMG_20200809_192419.jpg", "assets/images/IMG_20210313_150259.jpg", "assets/images/IMG_20210313_150316.jpg", "assets/images/IMG_20210729_195638.jpg", "assets/images/IMG_20210729_200115.jpg", "assets/images/IMG_20210729_200159.jpg", "assets/images/IMG_20211031_130857.jpg", "assets/images/IMG_20211208_124056.jpg", "assets/images/IMG_20220106_161934.jpg", "assets/images/IMG_20220603_094950.jpg", "assets/images/IMG_20220603_104852.jpg", "assets/images/IMG_20220709_230224.jpg", "assets/images/IMG_20220731_170018.jpg", "assets/images/IMG_20220809_153902.jpg", "assets/images/IMG_20220809_202319.jpg", "assets/images/IMG_20220809_202329.jpg", "assets/images/IMG_20220809_202340.jpg", "assets/images/IMG_20220809_202433.jpg", "assets/images/IMG_20220809_202527.jpg", "assets/images/IMG_20220809_202544.jpg", "assets/images/IMG_20220812_135624.jpg", "assets/images/IMG_20220812_230221.jpg", "assets/images/IMG_20220812_235700.jpg", "assets/images/IMG_20220813_123552.jpg", "assets/images/IMG_20220813_125225.jpg", "assets/images/IMG_20220813_125927.jpg", "assets/images/IMG_20220813_165437.jpg", "assets/images/IMG_20220813_171708.jpg", "assets/images/IMG_20220813_173857.jpg", "assets/images/IMG_20220814_154154.jpg", "assets/images/IMG_20220815_164121.jpg", "assets/images/IMG_20220816_064357.jpg", "assets/images/IMG_20220816_121324.jpg", "assets/images/IMG_20220816_142406.jpg", "assets/images/IMG_20220817_191727.jpg", "assets/images/IMG_20220817_191755.jpg", "assets/images/IMG_20221008_222458.jpg", "assets/images/IMG_20221016_152235.jpg", "assets/images/IMG_20221029_182820.jpg", "assets/images/IMG_20221203_210504.jpg", "assets/images/IMG_20221211_125153.jpg", "assets/images/IMG_20221231_212322.jpg", "assets/images/IMG_20230218_182054.jpg", "assets/images/IMG_20230218_192246.jpg", "assets/images/IMG_2179.HEIC", "assets/images/IMG_2381.HEIC", "assets/images/IMG_2405.HEIC", "assets/images/IMG_2406.HEIC", "assets/images/IMG_2469.HEIC", "assets/images/IMG_2476.HEIC", "assets/images/IMG_2483.HEIC", "assets/images/IMG_2507.HEIC", "assets/images/IMG_2515.HEIC", "assets/images/IMG_2530.HEIC", "assets/images/IMG_2548.HEIC", "assets/images/IMG_2622.HEIC", "assets/images/IMG_2648.HEIC", "assets/images/IMG_2762.HEIC", "assets/images/IMG_3062.HEIC", "assets/images/IMG_3242.HEIC", "assets/images/IMG_3404.HEIC", "assets/images/IMG_3416.HEIC", "assets/images/IMG_3454.HEIC", "assets/images/IMG_3467.HEIC", "assets/images/IMG_3487.HEIC", "assets/images/IMG_3505.HEIC", "assets/images/IMG_3555.HEIC", "assets/images/IMG_3576.HEIC", "assets/images/IMG_4116.HEIC", "assets/images/IMG_4130.HEIC", "assets/images/IMG_4135.HEIC", "assets/images/IMG_4143.HEIC", "assets/images/IMG_4152.HEIC", "assets/images/IMG_4166.HEIC", "assets/images/IMG_4170.HEIC", "assets/images/IMG_4201.HEIC", "assets/images/IMG_4235.HEIC", "assets/images/IMG_4264.HEIC", "assets/images/IMG_4518.HEIC", "assets/images/IMG_4667.HEIC", "assets/images/IMG_4764.HEIC", "assets/images/IMG_4949.HEIC", "assets/images/IMG_4964.HEIC", "assets/images/IMG_4965.HEIC", "assets/images/IMG_5005.HEIC", "assets/images/IMG_5027.HEIC", "assets/images/IMG_5029.HEIC", "assets/images/IMG_5040.HEIC", "assets/images/IMG_5066.HEIC", "assets/images/IMG_5105.HEIC", "assets/images/IMG_5139.HEIC", "assets/images/IMG_5141.HEIC", "assets/images/IMG_5535.HEIC", "assets/images/IMG_5537.HEIC", "assets/images/IMG_5550.HEIC", "assets/images/IMG_5555.HEIC", "assets/images/IMG_5571.HEIC", "assets/images/IMG_5579.HEIC", "assets/images/IMG_5591.HEIC", "assets/images/IMG_5593.HEIC", "assets/images/IMG_5594.HEIC", "assets/images/IMG_5610.HEIC", "assets/images/IMG_5616.HEIC", "assets/images/IMG_5756.HEIC", "assets/images/IMG_5767.HEIC", "assets/images/IMG_5770.HEIC", "assets/images/IMG_5784.HEIC", "assets/images/IMG_5796.HEIC", "assets/images/IMG_5848.HEIC", "assets/images/IMG_5865.HEIC", "assets/images/IMG_5905.HEIC", "assets/images/IMG_5965.HEIC", "assets/images/IMG_5969.HEIC", "assets/images/IMG_5977.HEIC", "assets/images/IMG_6039.HEIC", "assets/images/IMG_6090.HEIC", "assets/images/IMG_6095.HEIC", "assets/images/IMG_6102.HEIC", "assets/images/IMG_6105.HEIC", "assets/images/IMG_6109.HEIC", "assets/images/IMG_6114.HEIC", "assets/images/ca8282d6-277a-4add-9046-c344fc0a0736.jpg"];
+
 function initExplicitGallery() {
   const container = document.getElementById('galleryContainer');
-  const dotsContainer = document.getElementById('gallery-dots');
+  const counter = document.getElementById('gallery-counter');
   if (!container) return;
 
-  const images = ["assets/images/09caf564-f9a8-4923-b17f-b6b7ca4daca5.jpg", "assets/images/1.jpg", "assets/images/20171209_172955.jpg", "assets/images/3.jpg", "assets/images/3fe22d62-5dba-4d47-a47e-bd315beacede.jpg", "assets/images/4.jpg", "assets/images/7202c811-e88e-4341-accd-fba18ddee299.jpg", "assets/images/75aea258-9415-407d-8a76-b9383efc61f4.jpg", "assets/images/7cdc9428-3a47-4212-be3c-bbd406005cac.jpg", "assets/images/IMG-20191101-WA0011.jpg", "assets/images/IMG-20221009-WA0184.jpg", "assets/images/IMG-20230101-WA0035.jpg", "assets/images/IMG-20230226-WA0000.jpg", "assets/images/IMG-20230226-WA0001.jpg", "assets/images/IMG_0282.HEIC", "assets/images/IMG_0352.HEIC", "assets/images/IMG_0474.HEIC", "assets/images/IMG_0479.HEIC", "assets/images/IMG_0486.HEIC", "assets/images/IMG_0488.HEIC", "assets/images/IMG_0496.HEIC", "assets/images/IMG_0508.HEIC", "assets/images/IMG_0528.HEIC", "assets/images/IMG_0542.HEIC", "assets/images/IMG_0630.HEIC", "assets/images/IMG_0692.HEIC", "assets/images/IMG_0693.HEIC", "assets/images/IMG_0694.HEIC", "assets/images/IMG_0756.HEIC", "assets/images/IMG_1075.HEIC", "assets/images/IMG_1094.HEIC", "assets/images/IMG_1622.HEIC", "assets/images/IMG_1654.HEIC", "assets/images/IMG_20190223_155855.jpg", "assets/images/IMG_20190223_161153.jpg", "assets/images/IMG_20190223_175007.jpg", "assets/images/IMG_20190224_153317.jpg", "assets/images/IMG_20190224_162820.jpg", "assets/images/IMG_20190303_163420.jpg", "assets/images/IMG_20191103_121436.jpg", "assets/images/IMG_20200809_192419.jpg", "assets/images/IMG_20210313_150259.jpg", "assets/images/IMG_20210313_150316.jpg", "assets/images/IMG_20210729_195638.jpg", "assets/images/IMG_20210729_200115.jpg", "assets/images/IMG_20210729_200159.jpg", "assets/images/IMG_20211031_130857.jpg", "assets/images/IMG_20211208_124056.jpg", "assets/images/IMG_20220106_161934.jpg", "assets/images/IMG_20220603_094950.jpg", "assets/images/IMG_20220603_104852.jpg", "assets/images/IMG_20220709_230224.jpg", "assets/images/IMG_20220731_170018.jpg", "assets/images/IMG_20220809_153902.jpg", "assets/images/IMG_20220809_202319.jpg", "assets/images/IMG_20220809_202329.jpg", "assets/images/IMG_20220809_202340.jpg", "assets/images/IMG_20220809_202433.jpg", "assets/images/IMG_20220809_202527.jpg", "assets/images/IMG_20220809_202544.jpg", "assets/images/IMG_20220812_135624.jpg", "assets/images/IMG_20220812_230221.jpg", "assets/images/IMG_20220812_235700.jpg", "assets/images/IMG_20220813_123552.jpg", "assets/images/IMG_20220813_125225.jpg", "assets/images/IMG_20220813_125927.jpg", "assets/images/IMG_20220813_165437.jpg", "assets/images/IMG_20220813_171708.jpg", "assets/images/IMG_20220813_173857.jpg", "assets/images/IMG_20220814_154154.jpg", "assets/images/IMG_20220815_164121.jpg", "assets/images/IMG_20220816_064357.jpg", "assets/images/IMG_20220816_121324.jpg", "assets/images/IMG_20220816_142406.jpg", "assets/images/IMG_20220817_191727.jpg", "assets/images/IMG_20220817_191755.jpg", "assets/images/IMG_20221008_222458.jpg", "assets/images/IMG_20221016_152235.jpg", "assets/images/IMG_20221029_182820.jpg", "assets/images/IMG_20221203_210504.jpg", "assets/images/IMG_20221211_125153.jpg", "assets/images/IMG_20221231_212322.jpg", "assets/images/IMG_20230218_182054.jpg", "assets/images/IMG_20230218_192246.jpg", "assets/images/IMG_2179.HEIC", "assets/images/IMG_2381.HEIC", "assets/images/IMG_2405.HEIC", "assets/images/IMG_2406.HEIC", "assets/images/IMG_2469.HEIC", "assets/images/IMG_2476.HEIC", "assets/images/IMG_2483.HEIC", "assets/images/IMG_2507.HEIC", "assets/images/IMG_2515.HEIC", "assets/images/IMG_2530.HEIC", "assets/images/IMG_2548.HEIC", "assets/images/IMG_2622.HEIC", "assets/images/IMG_2648.HEIC", "assets/images/IMG_2762.HEIC", "assets/images/IMG_3062.HEIC", "assets/images/IMG_3242.HEIC", "assets/images/IMG_3404.HEIC", "assets/images/IMG_3416.HEIC", "assets/images/IMG_3454.HEIC", "assets/images/IMG_3467.HEIC", "assets/images/IMG_3487.HEIC", "assets/images/IMG_3505.HEIC", "assets/images/IMG_3555.HEIC", "assets/images/IMG_3576.HEIC", "assets/images/IMG_4116.HEIC", "assets/images/IMG_4130.HEIC", "assets/images/IMG_4135.HEIC", "assets/images/IMG_4143.HEIC", "assets/images/IMG_4152.HEIC", "assets/images/IMG_4166.HEIC", "assets/images/IMG_4170.HEIC", "assets/images/IMG_4201.HEIC", "assets/images/IMG_4235.HEIC", "assets/images/IMG_4264.HEIC", "assets/images/IMG_4518.HEIC", "assets/images/IMG_4667.HEIC", "assets/images/IMG_4764.HEIC", "assets/images/IMG_4949.HEIC", "assets/images/IMG_4964.HEIC", "assets/images/IMG_4965.HEIC", "assets/images/IMG_5005.HEIC", "assets/images/IMG_5027.HEIC", "assets/images/IMG_5029.HEIC", "assets/images/IMG_5040.HEIC", "assets/images/IMG_5066.HEIC", "assets/images/IMG_5105.HEIC", "assets/images/IMG_5139.HEIC", "assets/images/IMG_5141.HEIC", "assets/images/IMG_5535.HEIC", "assets/images/IMG_5537.HEIC", "assets/images/IMG_5550.HEIC", "assets/images/IMG_5555.HEIC", "assets/images/IMG_5571.HEIC", "assets/images/IMG_5579.HEIC", "assets/images/IMG_5591.HEIC", "assets/images/IMG_5593.HEIC", "assets/images/IMG_5594.HEIC", "assets/images/IMG_5610.HEIC", "assets/images/IMG_5616.HEIC", "assets/images/IMG_5756.HEIC", "assets/images/IMG_5767.HEIC", "assets/images/IMG_5770.HEIC", "assets/images/IMG_5784.HEIC", "assets/images/IMG_5796.HEIC", "assets/images/IMG_5848.HEIC", "assets/images/IMG_5865.HEIC", "assets/images/IMG_5905.HEIC", "assets/images/IMG_5965.HEIC", "assets/images/IMG_5969.HEIC", "assets/images/IMG_5977.HEIC", "assets/images/IMG_6039.HEIC", "assets/images/IMG_6090.HEIC", "assets/images/IMG_6095.HEIC", "assets/images/IMG_6102.HEIC", "assets/images/IMG_6105.HEIC", "assets/images/IMG_6109.HEIC", "assets/images/IMG_6114.HEIC", "assets/images/ca8282d6-277a-4add-9046-c344fc0a0736.jpg"];
+  if (counter) counter.innerText = `1 / ${globalImages.length}`;
+
   let index = 0;
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('active-snap');
-        // Update dots
-        if (dotsContainer) {
+        if (counter) {
           const children = Array.from(container.children);
           const idx = children.indexOf(entry.target);
-          const dots = dotsContainer.querySelectorAll('.gallery-dot');
-          dots.forEach(d => d.classList.remove('active'));
-          if (dots[idx]) dots[idx].classList.add('active');
+          counter.innerText = `${idx + 1} / ${globalImages.length}`;
         }
       } else {
         entry.target.classList.remove('active-snap');
@@ -376,7 +377,7 @@ function initExplicitGallery() {
     });
   }, { root: container, threshold: 0.6 });
 
-  images.forEach((src) => {
+  globalImages.forEach((src, idx) => {
     const img = new Image();
     img.src = src;
     img.loading = "lazy";
@@ -389,44 +390,109 @@ function initExplicitGallery() {
     const item = document.createElement("div");
     item.className = "gallery-item";
 
-    img.onclick = () => openLightbox(img.src);
+    img.onclick = () => openLightbox(img.src, idx);
     item.appendChild(img);
 
     container.appendChild(item);
     observer.observe(item);
-
-    // Create dot
-    if (dotsContainer) {
-      const dot = document.createElement("div");
-      dot.className = "gallery-dot";
-      const currIdx = index++;
-      dot.onclick = () => {
-        const children = container.querySelectorAll('.gallery-item');
-        if (children[currIdx]) children[currIdx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-      };
-      dotsContainer.appendChild(dot);
-    }
   });
 }
 
-function scrollGallery(dir) {
-  const container = document.getElementById("galleryContainer");
-  if (container) {
-    // Get width of one item approximately
-    const itemWidth = container.querySelector('.gallery-item') ? container.querySelector('.gallery-item').offsetWidth : 300;
-    container.scrollBy({ left: dir * itemWidth, behavior: 'smooth' });
-  }
+let currentLightboxIndex = 0;
+
+function updateLightboxCounter() {
+  const lbcounter = document.getElementById("lightbox-counter");
+  if (lbcounter) lbcounter.innerText = `${currentLightboxIndex + 1} / ${globalImages.length}`;
 }
 
-function openLightbox(src) {
+function openLightbox(src, index) {
+  currentLightboxIndex = index;
   const lb = document.getElementById("lightbox");
   document.getElementById("lightbox-img").src = src;
+  updateLightboxCounter();
   lb.classList.add("show");
 }
 
 function closeLightbox() {
   document.getElementById("lightbox").classList.remove("show");
 }
+
+function lightboxPrev(e) {
+  if(e) e.stopPropagation();
+  if(currentLightboxIndex > 0) {
+    currentLightboxIndex--;
+    document.getElementById("lightbox-img").src = globalImages[currentLightboxIndex];
+    updateLightboxCounter();
+  }
+}
+
+function lightboxNext(e) {
+  if(e) e.stopPropagation();
+  if(currentLightboxIndex < globalImages.length - 1) {
+    currentLightboxIndex++;
+    document.getElementById("lightbox-img").src = globalImages[currentLightboxIndex];
+    updateLightboxCounter();
+  }
+}
+
+// Initialize swipe support for lightbox
+document.addEventListener("DOMContentLoaded", () => {
+  const lb = document.getElementById("lightbox");
+  let touchstartX = 0;
+  
+  lb.addEventListener('touchstart', e => {
+    touchstartX = e.changedTouches[0].screenX;
+  }, {passive: true});
+  
+  lb.addEventListener('touchend', e => {
+    const touchendX = e.changedTouches[0].screenX;
+    if (touchstartX - touchendX > 50) lightboxNext(); // swipe left -> next
+    if (touchendX - touchstartX > 50) lightboxPrev(); // swipe right -> prev
+  }, {passive: true});
+});
+
+let galleryAutoScrollInt;
+
+function startGalleryAutoScroll() {
+  if (galleryAutoScrollInt) clearInterval(galleryAutoScrollInt);
+  galleryAutoScrollInt = setInterval(() => {
+    const container = document.getElementById("galleryContainer");
+    if (!container) return;
+    
+    // Reset se siamo arrivati alla fine
+    if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 10) {
+      container.scrollTo({ left: 0, behavior: 'smooth' });
+    } else {
+      const itemWidth = container.querySelector('.gallery-item') ? container.querySelector('.gallery-item').offsetWidth : 300;
+      container.scrollBy({ left: itemWidth + 15, behavior: 'smooth' });
+    }
+  }, 3000);
+}
+
+function resetGalleryAutoScroll() {
+  if (galleryAutoScrollInt) clearInterval(galleryAutoScrollInt);
+  startGalleryAutoScroll();
+}
+
+function scrollGallery(dir) {
+  const container = document.getElementById("galleryContainer");
+  if (container) {
+    const itemWidth = container.querySelector('.gallery-item') ? container.querySelector('.gallery-item').offsetWidth : 300;
+    container.scrollBy({ left: dir * (itemWidth + 15), behavior: 'smooth' });
+    resetGalleryAutoScroll();
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  startGalleryAutoScroll();
+  const container = document.getElementById("galleryContainer");
+  if (container) {
+    container.addEventListener('touchstart', () => clearInterval(galleryAutoScrollInt), {passive: true});
+    container.addEventListener('touchend', () => startGalleryAutoScroll(), {passive: true});
+    container.addEventListener('wheel', resetGalleryAutoScroll, {passive: true});
+  }
+});
+
 
 // --- ADVANCED QUIZ UX ---
 const quizData = [
