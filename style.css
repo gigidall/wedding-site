@@ -1191,8 +1191,8 @@ footer {
   height: 100%;
   -webkit-tap-highlight-color: transparent;
   padding-top: 5px;
-  /* Sposta leggermente in alto icone e testi */
   padding-bottom: 5px;
+  position: relative;
 }
 
 .tab-item svg {
@@ -1200,6 +1200,7 @@ footer {
   height: 24px;
   transition: transform 0.3s;
   flex-shrink: 0;
+  overflow: visible;
 }
 
 .tab-item span {
@@ -1212,12 +1213,33 @@ footer {
 
 .tab-item:hover,
 .tab-item.active {
-  color: var(--primary-dark);
+  color: var(--primary-color);
+}
+
+.tab-item.active::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  width: 40px;
+  height: 40px;
+  background: rgba(212, 163, 115, 0.15);
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(212, 163, 115, 0.1);
+  z-index: 0;
+  transition: all 0.3s;
 }
 
 .tab-item.active svg {
-  transform: scale(1.1);
+  transform: scale(1.15) translateY(-3px);
   stroke-width: 2.5;
+  position: relative;
+  z-index: 1;
+}
+
+.tab-item.active span {
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
 }
 
 /* Add padding to the whole body so the footer/last content isn't covered by the 70px tab bar */
@@ -1245,20 +1267,24 @@ section {
 }
 
 #map-sec {
-  background-color: #fdfaf6;
+  background-color: #f6f4f2;
 }
 
 #gallery-sec {
   background-color: #f3eae0;
+  padding-bottom: 80px;
 }
 
 #quiz-sec {
-  background-color: #fdfaf6;
+  background-color: #faf5ee;
   padding-top: 40px;
+  /* Reduced space as requested */
+  padding-bottom: 80px;
 }
 
 #rsvp-sec {
   background-color: #f3eae0;
+  padding-bottom: 80px;
 }
 
 
