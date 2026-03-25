@@ -279,7 +279,7 @@ function startCountdown() {
   setInterval(updateTimer, 1000); // Ticking every second
 }
 
-// --// --- NARRATIVE MAP OBSERVERS ---
+// --- NARRATIVE MAP OBSERVERS & ACTIVE NAVIGATION ---
 function initScrollObservers() {
   const genericObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -291,7 +291,63 @@ function initScrollObservers() {
   }, { rootMargin: "0px", threshold: 0.1 });
 
   document.querySelectorAll(".fade-up").forEach(el => genericObserver.observe(el));
+
+  // Sync scroll with bottom tab bar Active State
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        document.querySelectorAll('.tab-item').forEach(tab => {
+          tab.classList.remove('active');
+          if (tab.getAttribute('href') === '#' + id) {
+            tab.classList.add('active');
+          }
+        });
+      }
+    });
+  }, { root: document.getElementById('main'), rootMargin: "-40% 0px -50% 0px" });
+
+  document.querySelectorAll('section').forEach(sec => navObserver.observe(sec));
 }
+
+window.setActiveTab = function (clickedTab, event) {
+  if (event) event.preventDefault();
+  document.querySelectorAll('.tab-item').forEach(tab => tab.classList.remove('active'));
+  if (clickedTab) clickedTab.classList.add('active');
+
+  const targetId = clickedTab.getAttribute('href').substring(1);
+  const targetSec = document.getElementById(targetId);
+  const main = document.getElementById('main');
+
+  if (targetSec && main) {
+    const startY = main.scrollTop;
+
+    // Rispetta lo scroll-margin-top impostato via CSS
+    const styleAttr = window.getComputedStyle(targetSec);
+    const scrollMarginTop = parseInt(styleAttr.scrollMarginTop) || 0;
+
+    const targetY = targetSec.offsetTop - scrollMarginTop;
+    const distance = targetY - startY;
+    const duration = 350; // Custom speed
+    let start = null;
+
+    window.requestAnimationFrame(function step(timestamp) {
+      if (!start) start = timestamp;
+      const progress = timestamp - start;
+      const easeInOutCubic = progress < duration / 2
+        ? 4 * Math.pow(progress / duration, 3)
+        : 1 - Math.pow(-2 * progress / duration + 2, 3) / 2;
+
+      main.scrollTop = startY + distance * easeInOutCubic;
+
+      if (progress < duration) {
+        window.requestAnimationFrame(step);
+      } else {
+        main.scrollTop = targetY;
+      }
+    });
+  }
+};
 
 // --- DYNAMIC GALLERY ---
 function initExplicitGallery() {
