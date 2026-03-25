@@ -42,8 +42,8 @@ h4,
 }
 
 h2 {
-  font-size: 3rem;
-  margin-bottom: 25px;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
   text-align: center;
   font-family: 'Allura', cursive;
 }
@@ -118,6 +118,8 @@ p {
   flex-direction: column;
   justify-content: center;
   gap: 4px;
+  width: 30vw;
+  margin: 0 auto;
 }
 
 /* API Canvas */
@@ -462,6 +464,14 @@ section {
   font-weight: 500;
 }
 
+.date-small {
+  font-size: 1rem;
+  color: var(--primary-dark);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
 /* COUNTDOWN WITH SECONDS */
 .countdown-section {
   text-align: center;
@@ -512,7 +522,6 @@ section {
 /* NARRATIVE MAP - VERTICAL TIMELINE */
 .map-section {
   text-align: center;
-  padding-top: 60px;
 }
 
 .timeline-container {
@@ -1204,7 +1213,7 @@ body {
 
 /* --- FIX OVERLAP E SFONDI ALTERNATI --- */
 section {
-  scroll-margin-top: 100px;
+  scroll-margin-top: 120px;
   padding-top: 50px;
   padding-bottom: 60px;
 }
@@ -1223,6 +1232,7 @@ section {
 
 #map-sec {
   background-color: #fdfaf6;
+  padding: 0 !important;
 }
 
 #gallery-sec {
@@ -1256,4 +1266,14 @@ section {
 .al .names {
   font-family: 'Allura', cursive;
   font-size: 34px;
+}
+
+#waveform {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+#waveform ::part(scroll) {
+  overflow-x: hidden !important;
 }

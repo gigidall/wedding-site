@@ -100,15 +100,17 @@ document.addEventListener("DOMContentLoaded", () => {
     waveColor: '#d4a373',
     progressColor: '#9F8672',
 
-    height: 35,
+    height: 30,
 
-    barWidth: 2,
+    barWidth: 1,
     barGap: 1,
     cursorWidth: 1,
-    barRadius: 3,
+    barRadius: 4,
+
+    minPxPerSec: 10,
 
     normalize: true,
-    responsive: true,
+    responsive: false,
   });
   wavesurfer.load('assets/Thinking Out Loud - Ed Sheeran.mp3');
 
