@@ -337,10 +337,12 @@
         <div id="quiz-submit-section" style="margin-top: 40px; position: relative; display: block;">
           <h4 style="font-family: var(--font-sans); margin-bottom: 10px; color: var(--primary-dark);">Inserisci il tuo
             nome per la classifica:</h4>
+        <div style="position: relative;">
           <input type="text" id="quiz-username" class="elegant-input" placeholder="Scrivi il tuo nome..."
             autocomplete="off" oninput="handleAutocomplete(this, 'quiz-hints')" onblur="blurAutocomplete('quiz-hints')"
             style="margin-bottom:0;">
           <div id="quiz-hints" class="autocomplete-list"></div>
+        </div>
           <button class="primary-btn" style="margin-top: 25px;" onclick="submitFullQuiz()">Invia Risposte</button>
         </div>
 

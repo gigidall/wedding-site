@@ -11,7 +11,7 @@ async function loadGuestsData() {
     const res = await fetch('api.php?action=search&q=');
     if (!res.ok) throw new Error("No API");
     const json = await res.json();
-    guestsArray = json.map(g => ({ id: g.id, name: g.nome + ' ' + g.cognome }));
+    guestsArray = json.map(g => ({ id: g.id, name: g.nome + ' ' + g.cognome + (g.alias ? ' - ' + g.alias : '') }));
   } catch (err) {
     guestsArray = [
       { id: "1", name: "Mario Rossi" },
@@ -233,11 +233,12 @@ function handleAutocomplete(input, listId) {
   const val = input.value.toLowerCase();
   const list = document.getElementById(listId);
   list.innerHTML = "";
-  if (!val) { list.classList.remove("show"); return; }
+  if (!val || val.length < 3) { list.classList.remove("show"); return; }
 
-  const matches = guestsArray.filter(g => g.toLowerCase().includes(val));
+  const matches = guestsArray.filter(gObj => gObj.name.toLowerCase().includes(val));
   if (matches.length > 0) {
-    matches.forEach(match => {
+    matches.forEach(matchObj => {
+      const match = matchObj.name;
       const div = document.createElement("div");
       div.className = "autocomplete-item";
       const start = match.toLowerCase().indexOf(val);
@@ -245,6 +246,7 @@ function handleAutocomplete(input, listId) {
       div.innerHTML = highlighted;
       div.onmousedown = function (e) {
         input.value = match;
+        input.dataset.id = matchObj.id;
         list.classList.remove("show");
       };
       list.appendChild(div);
@@ -803,9 +805,9 @@ function showQuizResult() {
       window.quizLeaderboard.forEach((user, index) => {
         const pct = Math.round((user.score / quizData.length) * 100);
         let medal = '';
-        if (index === 0) medal = '🥇 ';
-        if (index === 1) medal = '🥈 ';
-        if (index === 2) medal = '🥉 ';
+        if (user.rank === 1) medal = '🥇 ';
+        if (user.rank === 2) medal = '🥈 ';
+        if (user.rank === 3) medal = '🥉 ';
         lbContainer.innerHTML += `<li style="padding: 12px 10px; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; font-size:1.05rem;">
            <span style="font-family:var(--font-sans); color:var(--text-color);">${medal}<strong>${user.name}</strong></span>
            <span style="font-weight:800; color:var(--primary-dark); font-size:1.15rem;">${pct}%</span>

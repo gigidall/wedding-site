@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 0);
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
+
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
@@ -20,19 +23,21 @@ if ($method === 'GET') {
         $results = [];
         
         if (($handle = fopen($csvFile, "r")) !== FALSE) {
-            $header = fgetcsv($handle, 1000, ";");
-            while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
+            $header = fgetcsv($handle, 1000, ",");
+            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
                 if (count($data) >= 3) {
                     $id = trim($data[0]);
                     $nome = trim($data[1]);
                     $cognome = trim($data[2]);
-                    $fullnameStr = strtolower($nome . ' ' . $cognome);
+                    $alias = isset($data[3]) ? trim($data[3]) : '';
+                    $fullnameStr = strtolower($nome . ' ' . $cognome . ' ' . $alias);
                     
                     if ($q === '' || strpos($fullnameStr, $q) !== false) {
                         $results[] = [
                             "id" => $id,
                             "nome" => $nome,
-                            "cognome" => $cognome
+                            "cognome" => $cognome,
+                            "alias" => $alias
                         ];
                     }
                 }
@@ -121,22 +126,22 @@ if ($method === 'POST') {
         $updated = false;
         
         if (($handle = fopen($csvFile, "r")) !== FALSE) {
-            $header = fgetcsv($handle, 1000, ";");
-            if ($header === false || count($header) < 6) {
-                $header = ["id", "nome", "cognome", "relazione", "conferma", "quiz"];
+            $header = fgetcsv($handle, 1000, ",");
+            if ($header === false || count($header) < 8) {
+                $header = ["ID", "NOME", "COGNOME", "ALIAS", "GRUPPO", "RELAZIONE", "CONFERMA", "QUIZ"];
             }
             $rows[] = $header;
             
-            while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
-                while(count($data) < 6) { $data[] = ""; }
+            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                while(count($data) < 8) { $data[] = ""; }
                 
                 $rowId = trim($data[0]);
                 
                 if ($rowId !== "" && $rowId === $idTarget) {
                     if ($action === 'confirm') {
-                        $data[4] = isset($_POST['value']) ? trim($_POST['value']) : $data[4];
+                        $data[6] = isset($_POST['value']) ? trim($_POST['value']) : $data[6];
                     } else if ($action === 'quiz') {
-                        $data[5] = isset($_POST['score']) ? trim($_POST['score']) : $data[5];
+                        $data[7] = isset($_POST['score']) ? trim($_POST['score']) : $data[7];
                     }
                     $updated = true;
                 }
@@ -147,7 +152,7 @@ if ($method === 'POST') {
         
         if ($updated) {
             if (($handle = fopen($csvFile, "w")) !== FALSE) {
-                foreach ($rows as $row) { fputcsv($handle, $row, ";"); }
+                foreach ($rows as $row) { fputcsv($handle, $row, ","); }
                 fclose($handle);
             }
             
@@ -155,18 +160,35 @@ if ($method === 'POST') {
                 $scores = [];
                 $leaderboard = [];
                 foreach ($rows as $i => $row) {
-                    if ($i > 0 && isset($row[5]) && trim($row[5]) !== "") {
-                        $sc = (int)trim($row[5]);
+                    if ($i > 0 && isset($row[7]) && trim($row[7]) !== "") {
+                        $sc = (int)trim($row[7]);
                         $scores[] = $sc;
+                        $aliasStr = (isset($row[3]) && trim($row[3])!=="") ? " - " . trim($row[3]) : "";
                         $leaderboard[] = [
-                            "name" => ucwords(strtolower(trim($row[1]) . ' ' . trim($row[2]))),
+                            "name" => ucwords(strtolower(trim($row[1]) . ' ' . trim($row[2]))) . $aliasStr,
                             "score" => $sc
                         ];
                     }
                 }
                 
                 usort($leaderboard, function($a, $b) { return $b['score'] <=> $a['score']; });
-                $top5 = array_slice($leaderboard, 0, 5);
+                
+                $distinctScores = [];
+                foreach ($leaderboard as $entry) {
+                    if (!in_array($entry['score'], $distinctScores)) {
+                        $distinctScores[] = $entry['score'];
+                    }
+                }
+                $top3Scores = array_slice($distinctScores, 0, 3);
+                
+                $top3 = [];
+                foreach ($leaderboard as $entry) {
+                    if (in_array($entry['score'], $top3Scores)) {
+                        $pRank = array_search($entry['score'], $top3Scores) + 1;
+                        $entry['rank'] = $pRank;
+                        $top3[] = $entry;
+                    }
+                }
                 
                 rsort($scores);
                 $myScore = isset($_POST['score']) ? (int)$_POST['score'] : 0;
@@ -175,7 +197,7 @@ if ($method === 'POST') {
                     if ($myScore < $s) { $rank++; } else if ($myScore == $s) {} else { break; }
                 }
                 
-                echo json_encode(["status" => "ok", "rank" => $rank, "leaderboard" => $top5]);
+                echo json_encode(["status" => "ok", "rank" => $rank, "leaderboard" => $top3]);
                 exit;
             }
             echo json_encode(["status" => "ok"]);
