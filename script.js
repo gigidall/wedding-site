@@ -45,6 +45,7 @@ function openInvite() {
       setTimeout(() => {
         envelopeWrap.style.display = 'none';
         main.classList.remove("hidden");
+        setTimeout(drawOrganicTimeline, 50);
 
         // Show Audio Player with smooth slide down
         setTimeout(() => {
@@ -780,3 +781,38 @@ document.addEventListener("visibilitychange", () => {
     if (pauseIcon) pauseIcon.style.display = "none";
   }
 });
+
+function drawOrganicTimeline() {
+  const container = document.querySelector('.timeline-container');
+  const markers = document.querySelectorAll('.timeline-marker');
+  const svg = document.getElementById('organic-timeline-svg');
+  if (!container || markers.length === 0 || !svg) return;
+
+  const rectContainer = container.getBoundingClientRect();
+  svg.style.width = container.offsetWidth + 'px';
+  svg.style.height = container.offsetHeight + 'px';
+
+  let pathD = "";
+  for (let i = 0; i < markers.length; i++) {
+    const marker = markers[i];
+    const rect = marker.getBoundingClientRect();
+    const x = rect.left - rectContainer.left + (rect.width / 2);
+    const y = rect.top - rectContainer.top + (rect.height / 2);
+
+    if (i === 0) {
+      pathD += `M ${x} ${y} `;
+    } else {
+      const prevMarker = markers[i - 1];
+      const prevRect = prevMarker.getBoundingClientRect();
+      const prevX = prevRect.left - rectContainer.left + (rect.width / 2);
+      const prevY = prevRect.top - rectContainer.top + (rect.height / 2);
+
+      const midY = (prevY + y) / 2;
+      const wobble = ((i % 2 === 0) ? -35 : 35);
+      pathD += `C ${prevX + wobble} ${midY}, ${x - wobble} ${midY}, ${x} ${y} `;
+    }
+  }
+  const pathElement = svg.querySelector('path');
+  if (pathElement) { pathElement.setAttribute('d', pathD); }
+}
+window.addEventListener('resize', () => { setTimeout(drawOrganicTimeline, 100) });
