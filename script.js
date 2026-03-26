@@ -76,6 +76,8 @@ function openInvite() {
 
 // --- PREVENT SCROLL BEFORE OPENING & BIND EVENTS & WAVESURFER ---
 document.addEventListener("DOMContentLoaded", () => {
+
+
   document.body.style.overflowY = 'hidden';
   window.scrollTo(0, 0);
 
@@ -361,13 +363,23 @@ window.setActiveTab = function (clickedTab, event) {
 };
 
 
-// --- DYNAMIC GALLERY ---
-const globalImages = ["assets/images/09caf564-f9a8-4923-b17f-b6b7ca4daca5.jpg", "assets/images/1.jpg", "assets/images/20171209_172955.jpg", "assets/images/3.jpg", "assets/images/3fe22d62-5dba-4d47-a47e-bd315beacede.jpg", "assets/images/4.jpg", "assets/images/7202c811-e88e-4341-accd-fba18ddee299.jpg", "assets/images/75aea258-9415-407d-8a76-b9383efc61f4.jpg", "assets/images/7cdc9428-3a47-4212-be3c-bbd406005cac.jpg", "assets/images/IMG-20191101-WA0011.jpg", "assets/images/IMG-20221009-WA0184.jpg", "assets/images/IMG-20230101-WA0035.jpg", "assets/images/IMG-20230226-WA0000.jpg", "assets/images/IMG-20230226-WA0001.jpg", "assets/images/IMG_0282.HEIC", "assets/images/IMG_0352.HEIC", "assets/images/IMG_0474.HEIC", "assets/images/IMG_0479.HEIC", "assets/images/IMG_0486.HEIC", "assets/images/IMG_0488.HEIC", "assets/images/IMG_0496.HEIC", "assets/images/IMG_0508.HEIC", "assets/images/IMG_0528.HEIC", "assets/images/IMG_0542.HEIC", "assets/images/IMG_0630.HEIC", "assets/images/IMG_0692.HEIC", "assets/images/IMG_0693.HEIC", "assets/images/IMG_0694.HEIC", "assets/images/IMG_0756.HEIC", "assets/images/IMG_1075.HEIC", "assets/images/IMG_1094.HEIC", "assets/images/IMG_1622.HEIC", "assets/images/IMG_1654.HEIC", "assets/images/IMG_20190223_155855.jpg", "assets/images/IMG_20190223_161153.jpg", "assets/images/IMG_20190223_175007.jpg", "assets/images/IMG_20190224_153317.jpg", "assets/images/IMG_20190224_162820.jpg", "assets/images/IMG_20190303_163420.jpg", "assets/images/IMG_20191103_121436.jpg", "assets/images/IMG_20200809_192419.jpg", "assets/images/IMG_20210313_150259.jpg", "assets/images/IMG_20210313_150316.jpg", "assets/images/IMG_20210729_195638.jpg", "assets/images/IMG_20210729_200115.jpg", "assets/images/IMG_20210729_200159.jpg", "assets/images/IMG_20211031_130857.jpg", "assets/images/IMG_20211208_124056.jpg", "assets/images/IMG_20220106_161934.jpg", "assets/images/IMG_20220603_094950.jpg", "assets/images/IMG_20220603_104852.jpg", "assets/images/IMG_20220709_230224.jpg", "assets/images/IMG_20220731_170018.jpg", "assets/images/IMG_20220809_153902.jpg", "assets/images/IMG_20220809_202319.jpg", "assets/images/IMG_20220809_202329.jpg", "assets/images/IMG_20220809_202340.jpg", "assets/images/IMG_20220809_202433.jpg", "assets/images/IMG_20220809_202527.jpg", "assets/images/IMG_20220809_202544.jpg", "assets/images/IMG_20220812_135624.jpg", "assets/images/IMG_20220812_230221.jpg", "assets/images/IMG_20220812_235700.jpg", "assets/images/IMG_20220813_123552.jpg", "assets/images/IMG_20220813_125225.jpg", "assets/images/IMG_20220813_125927.jpg", "assets/images/IMG_20220813_165437.jpg", "assets/images/IMG_20220813_171708.jpg", "assets/images/IMG_20220813_173857.jpg", "assets/images/IMG_20220814_154154.jpg", "assets/images/IMG_20220815_164121.jpg", "assets/images/IMG_20220816_064357.jpg", "assets/images/IMG_20220816_121324.jpg", "assets/images/IMG_20220816_142406.jpg", "assets/images/IMG_20220817_191727.jpg", "assets/images/IMG_20220817_191755.jpg", "assets/images/IMG_20221008_222458.jpg", "assets/images/IMG_20221016_152235.jpg", "assets/images/IMG_20221029_182820.jpg", "assets/images/IMG_20221203_210504.jpg", "assets/images/IMG_20221211_125153.jpg", "assets/images/IMG_20221231_212322.jpg", "assets/images/IMG_20230218_182054.jpg", "assets/images/IMG_20230218_192246.jpg", "assets/images/IMG_2179.HEIC", "assets/images/IMG_2381.HEIC", "assets/images/IMG_2405.HEIC", "assets/images/IMG_2406.HEIC", "assets/images/IMG_2469.HEIC", "assets/images/IMG_2476.HEIC", "assets/images/IMG_2483.HEIC", "assets/images/IMG_2507.HEIC", "assets/images/IMG_2515.HEIC", "assets/images/IMG_2530.HEIC", "assets/images/IMG_2548.HEIC", "assets/images/IMG_2622.HEIC", "assets/images/IMG_2648.HEIC", "assets/images/IMG_2762.HEIC", "assets/images/IMG_3062.HEIC", "assets/images/IMG_3242.HEIC", "assets/images/IMG_3404.HEIC", "assets/images/IMG_3416.HEIC", "assets/images/IMG_3454.HEIC", "assets/images/IMG_3467.HEIC", "assets/images/IMG_3487.HEIC", "assets/images/IMG_3505.HEIC", "assets/images/IMG_3555.HEIC", "assets/images/IMG_3576.HEIC", "assets/images/IMG_4116.HEIC", "assets/images/IMG_4130.HEIC", "assets/images/IMG_4135.HEIC", "assets/images/IMG_4143.HEIC", "assets/images/IMG_4152.HEIC", "assets/images/IMG_4166.HEIC", "assets/images/IMG_4170.HEIC", "assets/images/IMG_4201.HEIC", "assets/images/IMG_4235.HEIC", "assets/images/IMG_4264.HEIC", "assets/images/IMG_4518.HEIC", "assets/images/IMG_4667.HEIC", "assets/images/IMG_4764.HEIC", "assets/images/IMG_4949.HEIC", "assets/images/IMG_4964.HEIC", "assets/images/IMG_4965.HEIC", "assets/images/IMG_5005.HEIC", "assets/images/IMG_5027.HEIC", "assets/images/IMG_5029.HEIC", "assets/images/IMG_5040.HEIC", "assets/images/IMG_5066.HEIC", "assets/images/IMG_5105.HEIC", "assets/images/IMG_5139.HEIC", "assets/images/IMG_5141.HEIC", "assets/images/IMG_5535.HEIC", "assets/images/IMG_5537.HEIC", "assets/images/IMG_5550.HEIC", "assets/images/IMG_5555.HEIC", "assets/images/IMG_5571.HEIC", "assets/images/IMG_5579.HEIC", "assets/images/IMG_5591.HEIC", "assets/images/IMG_5593.HEIC", "assets/images/IMG_5594.HEIC", "assets/images/IMG_5610.HEIC", "assets/images/IMG_5616.HEIC", "assets/images/IMG_5756.HEIC", "assets/images/IMG_5767.HEIC", "assets/images/IMG_5770.HEIC", "assets/images/IMG_5784.HEIC", "assets/images/IMG_5796.HEIC", "assets/images/IMG_5848.HEIC", "assets/images/IMG_5865.HEIC", "assets/images/IMG_5905.HEIC", "assets/images/IMG_5965.HEIC", "assets/images/IMG_5969.HEIC", "assets/images/IMG_5977.HEIC", "assets/images/IMG_6039.HEIC", "assets/images/IMG_6090.HEIC", "assets/images/IMG_6095.HEIC", "assets/images/IMG_6102.HEIC", "assets/images/IMG_6105.HEIC", "assets/images/IMG_6109.HEIC", "assets/images/IMG_6114.HEIC", "assets/images/ca8282d6-277a-4add-9046-c344fc0a0736.jpg"];
+// // --- DYNAMIC GALLERY ---
+// const globalImages = ["assets/images/09caf564-f9a8-4923-b17f-b6b7ca4daca5.jpg", "assets/images/1.jpg", "assets/images/20171209_172955.jpg", "assets/images/3.jpg", "assets/images/3fe22d62-5dba-4d47-a47e-bd315beacede.jpg", "assets/images/4.jpg", "assets/images/7202c811-e88e-4341-accd-fba18ddee299.jpg", "assets/images/75aea258-9415-407d-8a76-b9383efc61f4.jpg", "assets/images/7cdc9428-3a47-4212-be3c-bbd406005cac.jpg", "assets/images/IMG-20191101-WA0011.jpg", "assets/images/IMG-20221009-WA0184.jpg", "assets/images/IMG-20230101-WA0035.jpg", "assets/images/IMG-20230226-WA0000.jpg", "assets/images/IMG-20230226-WA0001.jpg", "assets/images/IMG_0282.HEIC", "assets/images/IMG_0352.HEIC", "assets/images/IMG_0474.HEIC", "assets/images/IMG_0479.HEIC", "assets/images/IMG_0486.HEIC", "assets/images/IMG_0488.HEIC", "assets/images/IMG_0496.HEIC", "assets/images/IMG_0508.HEIC", "assets/images/IMG_0528.HEIC", "assets/images/IMG_0542.HEIC", "assets/images/IMG_0630.HEIC", "assets/images/IMG_0692.HEIC", "assets/images/IMG_0693.HEIC", "assets/images/IMG_0694.HEIC", "assets/images/IMG_0756.HEIC", "assets/images/IMG_1075.HEIC", "assets/images/IMG_1094.HEIC", "assets/images/IMG_1622.HEIC", "assets/images/IMG_1654.HEIC", "assets/images/IMG_20190223_155855.jpg", "assets/images/IMG_20190223_161153.jpg", "assets/images/IMG_20190223_175007.jpg", "assets/images/IMG_20190224_153317.jpg", "assets/images/IMG_20190224_162820.jpg", "assets/images/IMG_20190303_163420.jpg", "assets/images/IMG_20191103_121436.jpg", "assets/images/IMG_20200809_192419.jpg", "assets/images/IMG_20210313_150259.jpg", "assets/images/IMG_20210313_150316.jpg", "assets/images/IMG_20210729_195638.jpg", "assets/images/IMG_20210729_200115.jpg", "assets/images/IMG_20210729_200159.jpg", "assets/images/IMG_20211031_130857.jpg", "assets/images/IMG_20211208_124056.jpg", "assets/images/IMG_20220106_161934.jpg", "assets/images/IMG_20220603_094950.jpg", "assets/images/IMG_20220603_104852.jpg", "assets/images/IMG_20220709_230224.jpg", "assets/images/IMG_20220731_170018.jpg", "assets/images/IMG_20220809_153902.jpg", "assets/images/IMG_20220809_202319.jpg", "assets/images/IMG_20220809_202329.jpg", "assets/images/IMG_20220809_202340.jpg", "assets/images/IMG_20220809_202433.jpg", "assets/images/IMG_20220809_202527.jpg", "assets/images/IMG_20220809_202544.jpg", "assets/images/IMG_20220812_135624.jpg", "assets/images/IMG_20220812_230221.jpg", "assets/images/IMG_20220812_235700.jpg", "assets/images/IMG_20220813_123552.jpg", "assets/images/IMG_20220813_125225.jpg", "assets/images/IMG_20220813_125927.jpg", "assets/images/IMG_20220813_165437.jpg", "assets/images/IMG_20220813_171708.jpg", "assets/images/IMG_20220813_173857.jpg", "assets/images/IMG_20220814_154154.jpg", "assets/images/IMG_20220815_164121.jpg", "assets/images/IMG_20220816_064357.jpg", "assets/images/IMG_20220816_121324.jpg", "assets/images/IMG_20220816_142406.jpg", "assets/images/IMG_20220817_191727.jpg", "assets/images/IMG_20220817_191755.jpg", "assets/images/IMG_20221008_222458.jpg", "assets/images/IMG_20221016_152235.jpg", "assets/images/IMG_20221029_182820.jpg", "assets/images/IMG_20221203_210504.jpg", "assets/images/IMG_20221211_125153.jpg", "assets/images/IMG_20221231_212322.jpg", "assets/images/IMG_20230218_182054.jpg", "assets/images/IMG_20230218_192246.jpg", "assets/images/IMG_2179.HEIC", "assets/images/IMG_2381.HEIC", "assets/images/IMG_2405.HEIC", "assets/images/IMG_2406.HEIC", "assets/images/IMG_2469.HEIC", "assets/images/IMG_2476.HEIC", "assets/images/IMG_2483.HEIC", "assets/images/IMG_2507.HEIC", "assets/images/IMG_2515.HEIC", "assets/images/IMG_2530.HEIC", "assets/images/IMG_2548.HEIC", "assets/images/IMG_2622.HEIC", "assets/images/IMG_2648.HEIC", "assets/images/IMG_2762.HEIC", "assets/images/IMG_3062.HEIC", "assets/images/IMG_3242.HEIC", "assets/images/IMG_3404.HEIC", "assets/images/IMG_3416.HEIC", "assets/images/IMG_3454.HEIC", "assets/images/IMG_3467.HEIC", "assets/images/IMG_3487.HEIC", "assets/images/IMG_3505.HEIC", "assets/images/IMG_3555.HEIC", "assets/images/IMG_3576.HEIC", "assets/images/IMG_4116.HEIC", "assets/images/IMG_4130.HEIC", "assets/images/IMG_4135.HEIC", "assets/images/IMG_4143.HEIC", "assets/images/IMG_4152.HEIC", "assets/images/IMG_4166.HEIC", "assets/images/IMG_4170.HEIC", "assets/images/IMG_4201.HEIC", "assets/images/IMG_4235.HEIC", "assets/images/IMG_4264.HEIC", "assets/images/IMG_4518.HEIC", "assets/images/IMG_4667.HEIC", "assets/images/IMG_4764.HEIC", "assets/images/IMG_4949.HEIC", "assets/images/IMG_4964.HEIC", "assets/images/IMG_4965.HEIC", "assets/images/IMG_5005.HEIC", "assets/images/IMG_5027.HEIC", "assets/images/IMG_5029.HEIC", "assets/images/IMG_5040.HEIC", "assets/images/IMG_5066.HEIC", "assets/images/IMG_5105.HEIC", "assets/images/IMG_5139.HEIC", "assets/images/IMG_5141.HEIC", "assets/images/IMG_5535.HEIC", "assets/images/IMG_5537.HEIC", "assets/images/IMG_5550.HEIC", "assets/images/IMG_5555.HEIC", "assets/images/IMG_5571.HEIC", "assets/images/IMG_5579.HEIC", "assets/images/IMG_5591.HEIC", "assets/images/IMG_5593.HEIC", "assets/images/IMG_5594.HEIC", "assets/images/IMG_5610.HEIC", "assets/images/IMG_5616.HEIC", "assets/images/IMG_5756.HEIC", "assets/images/IMG_5767.HEIC", "assets/images/IMG_5770.HEIC", "assets/images/IMG_5784.HEIC", "assets/images/IMG_5796.HEIC", "assets/images/IMG_5848.HEIC", "assets/images/IMG_5865.HEIC", "assets/images/IMG_5905.HEIC", "assets/images/IMG_5965.HEIC", "assets/images/IMG_5969.HEIC", "assets/images/IMG_5977.HEIC", "assets/images/IMG_6039.HEIC", "assets/images/IMG_6090.HEIC", "assets/images/IMG_6095.HEIC", "assets/images/IMG_6102.HEIC", "assets/images/IMG_6105.HEIC", "assets/images/IMG_6109.HEIC", "assets/images/IMG_6114.HEIC", "assets/images/ca8282d6-277a-4add-9046-c344fc0a0736.jpg"];
 
-function initExplicitGallery() {
+let globalImages = [];
+
+async function initExplicitGallery() {
   const container = document.getElementById('galleryContainer');
   const counter = document.getElementById('gallery-counter');
   if (!container) return;
+
+  try {
+    const res = await fetch('api.php?action=images');
+    const data = await res.json();
+    if (data.status === "ok") {
+      globalImages = data.images;
+    }
+  } catch (e) { console.error("Could not fetch gallery", e); }
 
   if (counter) counter.innerText = `1 / ${globalImages.length}`;
 
@@ -390,7 +402,7 @@ function initExplicitGallery() {
 
   globalImages.forEach((src, idx) => {
     const img = new Image();
-    img.src = src;
+    img.src = src + "?t=" + new Date().getTime(); // burst cache for new uploads
     img.loading = "lazy";
 
     img.onerror = function () {
@@ -448,6 +460,91 @@ function lightboxNext(e) {
 
 // Initialize swipe support for lightbox
 document.addEventListener("DOMContentLoaded", () => {
+  // UPLOAD FOTO
+  const photoBtn = document.getElementById("photo-upload-btn");
+  const photoInput = document.getElementById("photo-upload-input");
+  const uploadStatus = document.getElementById("upload-status");
+
+  if (photoBtn && photoInput) {
+    photoBtn.addEventListener("click", () => photoInput.click());
+
+    photoInput.addEventListener("change", async (e) => {
+      const files = e.target.files;
+      if (!files || files.length === 0) return;
+
+      uploadStatus.innerText = "Ottimizzazione in corso...";
+      uploadStatus.style.color = "var(--primary-dark)";
+      photoBtn.disabled = true;
+      photoBtn.style.opacity = '0.7';
+
+      let successCount = 0;
+      let errorCount = 0;
+
+      try {
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          uploadStatus.innerText = `Caricamento foto ${i + 1} di ${files.length}...`;
+
+          try {
+            const compressedFile = await compressImage(file, 1600);
+            const formData = new FormData();
+            formData.append("action", "upload");
+            formData.append("photo", compressedFile, file.name || "upload.jpg");
+
+            const res = await fetch("api.php", {
+              method: "POST",
+              body: formData
+            });
+            const data = await res.json();
+
+            if (data.status === "ok") {
+              successCount++;
+            } else {
+              errorCount++;
+            }
+          } catch (err) {
+            console.error("Upload error single", err);
+            errorCount++;
+          }
+        }
+
+        if (successCount > 0) {
+          uploadStatus.innerText = `${successCount} foto inviate con successo! Grazie ♥`;
+          if (errorCount > 0) uploadStatus.innerText += ` (${errorCount} errori)`;
+          uploadStatus.style.color = "#4caf50";
+
+          setTimeout(() => {
+            if (uploadStatus.innerText.includes("successo")) {
+              uploadStatus.innerText = "";
+            }
+          }, 3000);
+
+          if (typeof galleryAutoScrollInt !== 'undefined') clearInterval(galleryAutoScrollInt);
+
+          const containerElem = document.getElementById('galleryContainer');
+          if (containerElem) containerElem.innerHTML = '';
+          await initExplicitGallery();
+
+          setTimeout(() => {
+            if (typeof startGalleryAutoScroll === 'function') startGalleryAutoScroll();
+          }, 1500);
+
+        } else {
+          uploadStatus.innerText = "Errore durante l'invio. Riprova.";
+          uploadStatus.style.color = "#f44336";
+        }
+      } catch (err) {
+        console.error("Upload error global", err);
+        uploadStatus.innerText = "Si è verificato un errore critico.";
+        uploadStatus.style.color = "#f44336";
+      } finally {
+        photoBtn.disabled = false;
+        photoBtn.style.opacity = '1';
+        photoInput.value = ""; // Reset input
+      }
+    });
+  }
+
   const lb = document.getElementById("lightbox");
   let touchstartX = 0;
 
@@ -494,27 +591,29 @@ function scrollGallery(dir) {
   }
 }
 
+
+
 document.addEventListener("DOMContentLoaded", () => {
   startGalleryAutoScroll();
-  const container = document.getElementById("galleryContainer");
-  if (container) {
-    container.addEventListener('touchstart', () => clearInterval(galleryAutoScrollInt), { passive: true });
-    container.addEventListener('touchend', () => startGalleryAutoScroll(), { passive: true });
-    container.addEventListener('wheel', resetGalleryAutoScroll, { passive: true });
+  const galleryScrollContainer = document.getElementById("galleryContainer");
+  if (galleryScrollContainer) {
+    galleryScrollContainer.addEventListener('touchstart', () => clearInterval(galleryAutoScrollInt), { passive: true });
+    galleryScrollContainer.addEventListener('touchend', () => startGalleryAutoScroll(), { passive: true });
+    galleryScrollContainer.addEventListener('wheel', resetGalleryAutoScroll, { passive: true });
   }
 });
 
 
 // --- ADVANCED QUIZ UX ---
 const quizData = [
-  { q: "Qual è stata la nostra prima vacanza insieme?", opts: ["Barcellona", "Sicilia", "Puglia", "Roma"], ans: 3 },
-  { q: "Chi ha detto 'Ti amo' per primo?", opts: ["Antonella", "Mauro", "Insieme nello stesso momento", "Nessuno se lo ricorda"], ans: 4 },
-  { q: "Qual è il piatto forte di Mauro?", opts: ["Carbonara", "Lasagne", "Risotto ai funghi", "Nessuno, sa solo ordinare su Glovo"], ans: 4 },
-  { q: "Dove è avvenuta la proposta di matrimonio?", opts: ["Al ristorante", "Ad un concerto", "A casa nostra", "In montagna durante un'escursione"], ans: 2 },
-  { q: "Chi dei due è il più ritardatario cronico?", opts: ["Mauro", "Antonella", "Sono svizzeri entrambi", "Dipende dalla stagione"], ans: 2 },
-  { q: "Qual è la serie TV che hanno divorato insieme?", opts: ["Stranger Things", "La Casa di Carta", "Game of Thrones", "Breaking Bad"], ans: 4 },
-  { q: "Chi ha più pazienza quando si tratta di fare shopping?", opts: ["Mauro resiste per ore", "Antonella senza dubbio", "Entrambi odiano lo shopping", "Solo se ci sono sconti"], ans: 4 },
-  { q: "Qual è il loro vizio condiviso la sera?", opts: ["Bere una tisana", "Film su Netflix e divano", "Leggere un libro", "Addormentarsi alle 21:00"], ans: 2 }
+  { q: "Qual è stata la nostra prima vacanza insieme?", opts: ["Barcellona", "Sicilia", "Puglia", "Roma"], ans: 2 },
+  { q: "Chi ha detto 'Ti amo' per primo?", opts: ["Antonella", "Mauro", "Insieme nello stesso momento", "Nessuno se lo ricorda"], ans: 3 },
+  { q: "Qual è il piatto forte di Mauro?", opts: ["Carbonara", "Lasagne", "Risotto ai funghi", "Nessuno, sa solo ordinare su Glovo"], ans: 3 },
+  { q: "Dove è avvenuta la proposta di matrimonio?", opts: ["Al ristorante", "Ad un concerto", "A casa nostra", "In montagna durante un'escursione"], ans: 1 },
+  { q: "Chi dei due è il più ritardatario cronico?", opts: ["Mauro", "Antonella", "Sono svizzeri entrambi", "Dipende dalla stagione"], ans: 1 },
+  { q: "Qual è la serie TV che hanno divorato insieme?", opts: ["Stranger Things", "La Casa di Carta", "Game of Thrones", "Breaking Bad"], ans: 3 },
+  { q: "Chi ha più pazienza quando si tratta di fare shopping?", opts: ["Mauro resiste per ore", "Antonella senza dubbio", "Entrambi odiano lo shopping", "Solo se ci sono sconti"], ans: 3 },
+  { q: "Qual è il loro vizio condiviso la sera?", opts: ["Bere una tisana", "Film su Netflix e divano", "Leggere un libro", "Addormentarsi alle 21:00"], ans: 1 }
 ];
 let currentQ = 0;
 let quizScore = 0;
@@ -790,6 +889,39 @@ function startPetals() {
 
     setTimeout(() => { if (petal.parentNode) petal.remove(); }, duration * 1000);
   }, 1200);
+}
+
+// Helper: Frontend Compression to bypass generic PHP upload limits
+function compressImage(file, maxWidth) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob((blob) => {
+          resolve(blob);
+        }, "image/jpeg", 0.7);
+      };
+      img.onerror = (err) => reject(err);
+    };
+    reader.onerror = (err) => reject(err);
+  });
 }
 
 // --- AUTO-PAUSE BACKGROUND/STANDBY ---

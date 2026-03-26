@@ -42,11 +42,78 @@ if ($method === 'GET') {
         echo json_encode($results);
         exit;
     }
+    
+    if ($action === 'images') {
+        $images = [];
+        
+        $upload_dir = __DIR__ . "/assets/images_upload/";
+        if (is_dir($upload_dir)) {
+            $files = array_diff(scandir($upload_dir), array('.', '..'));
+            usort($files, function($a, $b) use ($upload_dir) {
+                return filemtime($upload_dir . $b) - filemtime($upload_dir . $a);
+            });
+            foreach ($files as $f) {
+                if (preg_match('/\.(jpg|jpeg|png|gif|webp|heic)$/i', $f)) {
+                    $images[] = "assets/images_upload/" . $f;
+                }
+            }
+        }
+        
+        $base_dir = __DIR__ . "/assets/images/";
+        if (is_dir($base_dir)) {
+            $files = array_diff(scandir($base_dir), array('.', '..'));
+            foreach ($files as $f) {
+                if (preg_match('/\.(jpg|jpeg|png|gif|webp|heic)$/i', $f)) {
+                    $images[] = "assets/images/" . $f;
+                }
+            }
+        }
+        
+        echo json_encode(["status" => "ok", "images" => $images]);
+        exit;
+    }
 }
 
 if ($method === 'POST') {
     $action = isset($_POST['action']) ? $_POST['action'] : '';
     
+        if ($action === 'upload') {
+        if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+            $target_dir = __DIR__ . "/assets/images_upload/";
+            if (!is_dir($target_dir)) {
+                mkdir($target_dir, 0777, true);
+            }
+            
+            $file = $_FILES['photo'];
+            $check = getimagesize($file["tmp_name"]);
+            if ($check === false) {
+                echo json_encode(["status" => "error", "message" => "Il file non è un'immagine."]);
+                exit;
+            }
+            
+            $ext = strtolower(pathinfo($file["name"], PATHINFO_EXTENSION));
+            $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic'];
+            if(!in_array($ext, $allowed)) {
+                echo json_encode(["status" => "error", "message" => "Formato non supportato."]);
+                exit;
+            }
+            
+            $new_name = uniqid("guest_") . "." . $ext;
+            $target_file = $target_dir . $new_name;
+            
+            if (move_uploaded_file($file["tmp_name"], $target_file)) {
+                echo json_encode(["status" => "ok", "file" => "assets/images_upload/" . $new_name]);
+                exit;
+            } else {
+                echo json_encode(["status" => "error", "message" => "Errore di salvataggio file."]);
+                exit;
+            }
+        } else {
+            echo json_encode(["status" => "error", "message" => "Nessun file o errore di caricamento."]);
+            exit;
+        }
+    }
+
     if ($action === 'confirm' || $action === 'quiz') {
         $idTarget = isset($_POST['id']) ? trim($_POST['id']) : '';
         

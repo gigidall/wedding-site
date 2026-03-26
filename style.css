@@ -815,9 +815,26 @@ section {
 
 .gallery-item img {
   width: 100%;
-  height: 350px;
+  height: 35vh;
+  max-height: 250px;
   object-fit: cover;
   display: block;
+}
+
+/* Telefoni medio-grandi (iPhone 12/13/14, Android moderni) */
+@media (min-height: 750px) {
+  .gallery-item img {
+    height: 40vh;
+    max-height: 320px;
+  }
+}
+
+/* Telefoni molto alti (Pro Max, Plus) */
+@media (min-height: 850px) {
+  .gallery-item img {
+    height: 45vh;
+    max-height: 380px;
+  }
 }
 
 @media (min-width: 992px) {
