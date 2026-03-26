@@ -101,7 +101,24 @@ document.addEventListener("DOMContentLoaded", () => {
     normalize: true,
     responsive: false,
   });
-  wavesurfer.load('assets/Thinking Out Loud - Ed Sheeran.mp3');
+
+  let currentTrackIndex = 0;
+  const playlist = [
+    'assets/Thinking Out Loud - Ed Sheeran.mp3',
+    'assets/Everything I Do - Bryan Adams.mp3'
+  ];
+
+  wavesurfer.load(playlist[currentTrackIndex]);
+
+  // Native UI sync per evitare lag durante il caricamento della seconda traccia
+  wavesurfer.on('play', () => {
+    musicPlaying = true;
+    updateAudioUI();
+  });
+  wavesurfer.on('pause', () => {
+    musicPlaying = false;
+    updateAudioUI();
+  });
 
   wavesurfer.on('ready', () => {
     document.getElementById('audio-total').innerText = formatTime(wavesurfer.getDuration());
@@ -116,8 +133,16 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   wavesurfer.on('finish', () => {
-    wavesurfer.seekTo(0);
-    wavesurfer.play();
+    currentTrackIndex++;
+    if (currentTrackIndex < playlist.length) {
+      wavesurfer.load(playlist[currentTrackIndex]);
+      wavesurfer.once('ready', () => {
+        wavesurfer.play();
+      });
+    } else {
+      musicPlaying = false;
+      updateAudioUI();
+    }
   });
 
   const sealBtn = document.getElementById("seal-btn");
@@ -171,12 +196,9 @@ function toggleMusic() {
 
   if (wavesurfer.isPlaying()) {
     wavesurfer.pause();
-    musicPlaying = false;
   } else {
     wavesurfer.play();
-    musicPlaying = true;
   }
-  updateAudioUI();
 }
 
 function updateAudioUI() {
@@ -485,14 +507,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // --- ADVANCED QUIZ UX ---
 const quizData = [
-  { q: "Qual è stata la nostra prima vacanza insieme?", opts: ["Barcellona", "Sicilia", "Puglia", "Roma"], ans: 2 },
-  { q: "Chi ha detto 'Ti amo' per primo?", opts: ["Antonella", "Mauro", "Insieme nello stesso momento", "Nessuno se lo ricorda"], ans: 1 },
-  { q: "Qual è il piatto forte di Mauro?", opts: ["Carbonara", "Lasagne", "Risotto ai funghi", "Nessuno, sa solo ordinare su Glovo"], ans: 0 },
-  { q: "Dove è avvenuta la proposta di matrimonio?", opts: ["Al ristorante", "Ad un concerto", "A casa nostra", "In montagna durante un'escursione"], ans: 1 },
-  { q: "Chi dei due è il più ritardatario cronico?", opts: ["Mauro", "Antonella", "Sono svizzeri entrambi", "Dipende dalla stagione"], ans: 1 },
-  { q: "Qual è la serie TV che hanno divorato insieme?", opts: ["Stranger Things", "La Casa di Carta", "Game of Thrones", "Breaking Bad"], ans: 0 },
-  { q: "Chi ha più pazienza quando si tratta di fare shopping?", opts: ["Mauro resiste per ore", "Antonella senza dubbio", "Entrambi odiano lo shopping", "Solo se ci sono sconti"], ans: 1 },
-  { q: "Qual è il loro vizio condiviso la sera?", opts: ["Bere una tisana", "Film su Netflix e divano", "Leggere un libro", "Addormentarsi alle 21:00"], ans: 1 }
+  { q: "Qual è stata la nostra prima vacanza insieme?", opts: ["Barcellona", "Sicilia", "Puglia", "Roma"], ans: 3 },
+  { q: "Chi ha detto 'Ti amo' per primo?", opts: ["Antonella", "Mauro", "Insieme nello stesso momento", "Nessuno se lo ricorda"], ans: 4 },
+  { q: "Qual è il piatto forte di Mauro?", opts: ["Carbonara", "Lasagne", "Risotto ai funghi", "Nessuno, sa solo ordinare su Glovo"], ans: 4 },
+  { q: "Dove è avvenuta la proposta di matrimonio?", opts: ["Al ristorante", "Ad un concerto", "A casa nostra", "In montagna durante un'escursione"], ans: 2 },
+  { q: "Chi dei due è il più ritardatario cronico?", opts: ["Mauro", "Antonella", "Sono svizzeri entrambi", "Dipende dalla stagione"], ans: 2 },
+  { q: "Qual è la serie TV che hanno divorato insieme?", opts: ["Stranger Things", "La Casa di Carta", "Game of Thrones", "Breaking Bad"], ans: 4 },
+  { q: "Chi ha più pazienza quando si tratta di fare shopping?", opts: ["Mauro resiste per ore", "Antonella senza dubbio", "Entrambi odiano lo shopping", "Solo se ci sono sconti"], ans: 4 },
+  { q: "Qual è il loro vizio condiviso la sera?", opts: ["Bere una tisana", "Film su Netflix e divano", "Leggere un libro", "Addormentarsi alle 21:00"], ans: 2 }
 ];
 let currentQ = 0;
 let quizScore = 0;

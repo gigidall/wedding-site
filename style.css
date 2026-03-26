@@ -646,7 +646,7 @@ section {
 }
 
 .timeline-event:nth-child(odd) .timeline-marker {
-  left: 80%;
+  left: 77%;
 }
 
 /* EVEN (Time 20% Left, Content 80% Right) */
@@ -669,7 +669,7 @@ section {
 }
 
 .timeline-event:nth-child(even) .timeline-marker {
-  left: 20%;
+  left: 23%;
 }
 
 /* Mobile Responsiveness */
