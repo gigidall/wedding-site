@@ -26,7 +26,6 @@ function openInvite() {
   const envelopeWrap = document.getElementById("envelope");
   const sealBtn = document.getElementById("seal-btn");
   const flap = document.getElementById("env-flap");
-  const letter = document.getElementById("letter-mock");
   const main = document.getElementById("main");
   const audioPlayer = document.getElementById("audio-player");
 
@@ -34,44 +33,51 @@ function openInvite() {
   if (flap) flap.classList.add("open");
   if (sealBtn) sealBtn.classList.add("open");
 
-  // Step 2: Letter slides up from inside
-  setTimeout(() => {
-    if (letter) letter.classList.add("open");
+  // Step 2: Unhide main layout BEHIND the envelope to allow a beautiful crossfade dissolve
+  main.classList.remove("hidden");
+  setTimeout(drawOrganicTimeline, 50);
 
-    // Step 3: Fade out envelope wrapper to reveal content
+  // Step 3: After the flap animation (1.2s), dissolve the envelope into the home page
+  setTimeout(() => {
+    // Cinematic scale and fade
+    const physical = document.querySelector('.envelope-physical');
+    if (physical) {
+      physical.style.transition = "opacity 1s ease-in-out, transform 1.2s ease-in-out";
+      physical.style.opacity = '0';
+      physical.style.transform = 'scale(1.2)';
+    }
+
+    envelopeWrap.style.transition = "background-color 1.2s ease-in-out, opacity 1.2s ease-in-out";
+    envelopeWrap.style.backgroundColor = "transparent";
+    envelopeWrap.style.opacity = '0';
+
+    // Start background animations immediately while crossfading
+    startCountdown();
+    startPetals();
+    initScrollObservers();
+    initExplicitGallery();
+
+    // Step 4: Complete cleanup and final UI reveal
     setTimeout(() => {
-      envelopeWrap.style.opacity = '0';
+      envelopeWrap.style.display = 'none';
 
       setTimeout(() => {
-        envelopeWrap.style.display = 'none';
-        main.classList.remove("hidden");
-        setTimeout(drawOrganicTimeline, 50);
+        audioPlayer.classList.remove("hidden");
+        const nav = document.getElementById("bottom-nav");
+        if (nav) nav.classList.remove("hidden");
+      }, 300);
 
-        // Show Audio Player with smooth slide down
-        setTimeout(() => {
-          audioPlayer.classList.remove("hidden");
-          const nav = document.getElementById("bottom-nav");
-          if (nav) nav.classList.remove("hidden");
-        }, 500);
+      main.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-        // Scrolling is now handled directly via CSS in #main
-        main.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-        startCountdown();
-        startPetals();
-        initScrollObservers();
-        initExplicitGallery();
-
-        // Play music
-        if (!musicPlaying && wavesurfer) {
-          wavesurfer.play();
-          musicPlaying = true;
-          document.getElementById("icon-play").style.display = "none";
-          document.getElementById("icon-pause").style.display = "block";
-        }
-      }, 500);
-    }, 1200);
-  }, 600);
+      // Play music if not already requested
+      if (!musicPlaying && wavesurfer) {
+        wavesurfer.play();
+        musicPlaying = true;
+        document.getElementById("icon-play").style.display = "none";
+        document.getElementById("icon-pause").style.display = "block";
+      }
+    }, 500); // Wait for dissolve
+  }, 200); // Wait for flap to fully open
 }
 
 // --- PREVENT SCROLL BEFORE OPENING & BIND EVENTS & WAVESURFER ---
