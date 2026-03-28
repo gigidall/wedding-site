@@ -47,15 +47,39 @@
   <!-- APERTURA BUSTA REALISTICA -->
   <div class="envelope-global-wrapper" id="envelope">
     <div class="envelope-physical">
-      <div class="envelope-flap" id="env-flap"></div>
+      <!-- Sfondo busta interno (Il foro della busta) -->
+      <div class="envelope-inside">
+        <div class="envelope-card-peek">
+          <div style="text-align: center; margin-top: 15%;">
+            <h3 style="font-family: 'Great Vibes', cursive; font-size: 3rem; color: #571621; margin-bottom: 2px;">
+              Antonella & Mauro</h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tasca frontale a V (Bottom pocket incrociata verso il basso) -->
+      <div class="envelope-front-wrapper">
+        <div class="envelope-front-shape"></div>
+      </div>
+
+      <!-- Testo Letterpress ripristinato in basso -->
+      <div class="envelope-letterpress">
+        <h3>Tocca il sigillo per aprire</h3>
+      </div>
+
+      <!-- Patta superiore rotante -->
+      <div class="envelope-flap-wrapper" id="env-flap">
+        <div class="envelope-flap-shape"></div>
+      </div>
+
+      <!-- Sigillo Ceralacca Reale -->
       <div class="wax-seal-container" id="seal-btn">
         <div class="wax-seal">
           <div class="wax-seal-inner">
-            <img src="assets/logo/AM.png" alt="AM Logo" class="initials" style="height: 30px;">
+            <span class="initials-letterpress">A&M</span>
           </div>
           <div class="wax-seal-ring"></div>
         </div>
-        <div class="tap-hint">Tocca il sigillo</div>
       </div>
     </div>
   </div>
@@ -337,12 +361,12 @@
         <div id="quiz-submit-section" style="margin-top: 40px; position: relative; display: block;">
           <h4 style="font-family: var(--font-sans); margin-bottom: 10px; color: var(--primary-dark);">Inserisci il tuo
             nome per la classifica:</h4>
-        <div style="position: relative;">
-          <input type="text" id="quiz-username" class="elegant-input" placeholder="Scrivi il tuo nome..."
-            autocomplete="off" oninput="handleAutocomplete(this, 'quiz-hints')" onblur="blurAutocomplete('quiz-hints')"
-            style="margin-bottom:0;">
-          <div id="quiz-hints" class="autocomplete-list"></div>
-        </div>
+          <div style="position: relative;">
+            <input type="text" id="quiz-username" class="elegant-input" placeholder="Scrivi il tuo nome..."
+              autocomplete="off" oninput="handleAutocomplete(this, 'quiz-hints')"
+              onblur="blurAutocomplete('quiz-hints')" style="margin-bottom:0;">
+            <div id="quiz-hints" class="autocomplete-list"></div>
+          </div>
           <button class="primary-btn" style="margin-top: 25px;" onclick="submitFullQuiz()">Invia Risposte</button>
         </div>
 
