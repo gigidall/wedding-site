@@ -76,8 +76,8 @@ function openInvite() {
         document.getElementById("icon-play").style.display = "none";
         document.getElementById("icon-pause").style.display = "block";
       }
-    }, 500); // Wait for dissolve
-  }, 200); // Wait for flap to fully open
+    }, 700); // Wait for dissolve
+  }, 100); // Wait for flap to fully open
 }
 
 // --- PREVENT SCROLL BEFORE OPENING & BIND EVENTS & WAVESURFER ---
