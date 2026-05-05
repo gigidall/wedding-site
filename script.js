@@ -4,14 +4,17 @@ let wavesurfer = null;
 
 // Globals
 let guestsArray = [];
-let quizScoreboard = [];
 
 async function loadGuestsData() {
   try {
     const res = await fetch('api.php?action=search&q=');
     if (!res.ok) throw new Error("No API");
     const json = await res.json();
-    guestsArray = json.map(g => ({ id: g.id, name: g.nome + ' ' + g.cognome + (g.alias ? ' - ' + g.alias : '') }));
+    guestsArray = json.map(g => ({ 
+      id: g.id, 
+      name: g.nome + ' ' + g.cognome + (g.alias ? ' - ' + g.alias : ''),
+      relazione: g.relazione || ''
+    }));
   } catch (err) {
     guestsArray = [
       { id: "1", name: "Mario Rossi" },
@@ -88,7 +91,6 @@ document.addEventListener("DOMContentLoaded", () => {
   window.scrollTo(0, 0);
 
   loadGuestsData();
-  loadAllQuestions();
 
   // SETUP WAVESURFER OBBLIGATORIO
   wavesurfer = WaveSurfer.create({
@@ -268,6 +270,70 @@ function blurAutocomplete(listId) {
     const list = document.getElementById(listId);
     if (list) list.classList.remove("show");
   }, 150);
+}
+
+function handleRsvpAutocomplete(input, listId) {
+  const val = input.value.toLowerCase();
+  const list = document.getElementById(listId);
+  list.innerHTML = "";
+  
+  document.getElementById("rsvp-related-guests").style.display = "none";
+  document.getElementById("rsvp-related-list").innerHTML = "";
+
+  if (!val || val.length < 3) { list.classList.remove("show"); return; }
+
+  const matches = guestsArray.filter(gObj => gObj.name.toLowerCase().includes(val));
+  if (matches.length > 0) {
+    matches.forEach(matchObj => {
+      const match = matchObj.name;
+      const div = document.createElement("div");
+      div.className = "autocomplete-item";
+      const start = match.toLowerCase().indexOf(val);
+      const highlighted = match.substring(0, start) + "<strong>" + match.substring(start, start + val.length) + "</strong>" + match.substring(start + val.length);
+      div.innerHTML = highlighted;
+      div.onmousedown = function (e) {
+        input.value = match;
+        input.dataset.id = matchObj.id;
+        list.classList.remove("show");
+        showRelatedGuests(matchObj);
+      };
+      list.appendChild(div);
+    });
+    list.classList.add("show");
+  } else {
+    list.classList.remove("show");
+  }
+}
+
+function showRelatedGuests(mainGuest) {
+  const relatedBox = document.getElementById("rsvp-related-guests");
+  const relatedList = document.getElementById("rsvp-related-list");
+  relatedList.innerHTML = "";
+
+  if (!mainGuest.relazione) return;
+
+  const relIds = mainGuest.relazione.split(',').map(id => id.trim()).filter(id => id !== mainGuest.id);
+  
+  if (relIds.length > 0) {
+    let hasRelated = false;
+    relIds.forEach(id => {
+      const g = guestsArray.find(x => x.id === id);
+      if (g) {
+        hasRelated = true;
+        const li = document.createElement("li");
+        li.style.marginBottom = "8px";
+        li.innerHTML = `<label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+          <input type="checkbox" class="related-guest-cb" value="${g.name}" checked>
+          <span>${g.name}</span>
+        </label>`;
+        relatedList.appendChild(li);
+      }
+    });
+
+    if (hasRelated) {
+      relatedBox.style.display = "block";
+    }
+  }
 }
 
 // --- HORIZONTAL COUNTDOWN WITH SECONDS ---
@@ -612,226 +678,46 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// --- ADVANCED QUIZ UX ---
-const quizData = [
-  { q: "Qual è stata la nostra prima vacanza insieme?", opts: ["Barcellona", "Sicilia", "Puglia", "Roma"], ans: 2 },
-  { q: "Chi ha detto 'Ti amo' per primo?", opts: ["Antonella", "Mauro", "Insieme nello stesso momento", "Nessuno se lo ricorda"], ans: 3 },
-  { q: "Qual è il piatto forte di Mauro?", opts: ["Carbonara", "Lasagne", "Risotto ai funghi", "Nessuno, sa solo ordinare su Glovo"], ans: 3 },
-  { q: "Dove è avvenuta la proposta di matrimonio?", opts: ["Al ristorante", "Ad un concerto", "A casa nostra", "In montagna durante un'escursione"], ans: 1 },
-  { q: "Chi dei due è il più ritardatario cronico?", opts: ["Mauro", "Antonella", "Sono svizzeri entrambi", "Dipende dalla stagione"], ans: 1 },
-  { q: "Qual è la serie TV che hanno divorato insieme?", opts: ["Stranger Things", "La Casa di Carta", "Game of Thrones", "Breaking Bad"], ans: 3 },
-  { q: "Chi ha più pazienza quando si tratta di fare shopping?", opts: ["Mauro resiste per ore", "Antonella senza dubbio", "Entrambi odiano lo shopping", "Solo se ci sono sconti"], ans: 3 },
-  { q: "Qual è il loro vizio condiviso la sera?", opts: ["Bere una tisana", "Film su Netflix e divano", "Leggere un libro", "Addormentarsi alle 21:00"], ans: 1 }
-];
-let currentQ = 0;
-let quizScore = 0;
-let quizUser = "";
-let userAnswers = {};
 
-function loadAllQuestions() {
-  const container = document.getElementById("quiz-questions-list");
-  if (!container) return;
-
-  const labels = ["A) ", "B) ", "C) ", "D) "];
-  let html = "";
-  quizData.forEach((qObj, qIdx) => {
-    const displayStyle = qIdx === 0 ? "block" : "none";
-    html += `<div class="quiz-q-block" id="qblock-${qIdx}" style="display: ${displayStyle}; margin-bottom:30px; background: rgba(212,163,115,0.05); border-radius: 12px; padding: 20px; transition: opacity 0.4s; opacity: 1;">
-        <h3 class="quiz-question" style="margin-bottom: 20px; font-size: 1rem; color: var(--primary-dark);">Domanda ${qIdx + 1} di ${quizData.length}<br><br><span style="color:var(--text-color);">${qObj.q}</span></h3>
-        <div class="quiz-options-grid" id="opts-${qIdx}" style="display: grid; grid-template-columns: 1fr; gap: 10px;">`;
-    qObj.opts.forEach((opt, idx) => {
-      html += `<button class="quiz-btn" style="min-height: 60px; word-break: break-word; white-space: normal;" onclick="selectQuizAnswer(${qIdx}, ${idx}, this)">${labels[idx]}${opt}</button>`;
-    });
-    html += `</div></div>`;
-  });
-  container.innerHTML = html;
-
-  const submitSec = document.getElementById("quiz-submit-section");
-  if (submitSec) submitSec.style.display = "none";
-}
-
-function selectQuizAnswer(qIdx, optIdx, btn) {
-  if (btn.parentElement.dataset.answered === "true") return;
-  btn.parentElement.dataset.answered = "true";
-
-  userAnswers[qIdx] = optIdx;
-  const allBtns = btn.parentElement.querySelectorAll('.quiz-btn');
-  allBtns.forEach(b => { b.style.background = ''; b.style.color = ''; b.style.borderColor = ''; });
-  btn.style.background = 'var(--primary-color)';
-  btn.style.color = '#fff';
-
-  setTimeout(() => {
-    const currentBlock = document.getElementById(`qblock-${qIdx}`);
-    if (currentBlock) {
-      currentBlock.style.opacity = '0';
-      setTimeout(() => {
-        currentBlock.style.display = 'none';
-
-        if (qIdx + 1 < quizData.length) {
-          const nextBlock = document.getElementById(`qblock-${qIdx + 1}`);
-          if (nextBlock) {
-            nextBlock.style.display = 'block';
-            nextBlock.style.opacity = '0';
-            void nextBlock.offsetWidth;
-            nextBlock.style.opacity = '1';
-            nextBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-        } else {
-          const submitSec = document.getElementById("quiz-submit-section");
-          if (submitSec) {
-            submitSec.style.display = "block";
-            submitSec.style.opacity = "0";
-            void submitSec.offsetWidth;
-            submitSec.style.opacity = "1";
-            submitSec.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-        }
-      }, 400);
-    }
-  }, 500);
-}
-
-async function submitFullQuiz() {
-  const inputEl = document.getElementById("quiz-username");
-  const fullname = inputEl.value.trim();
-  const guestId = inputEl.dataset.id;
-
-  if (!fullname) { showToast("Inserisci il tuo nome dalla lista prima di inviare!"); return; }
-
-  let match = guestsArray.find(g => g.name.toLowerCase() === fullname.toLowerCase());
-  const finalId = guestId || (match ? match.id : null);
-
-  if (!finalId) { showToast("Spiacenti, nome non in lista."); return; }
-
-  if (Object.keys(userAnswers).length < quizData.length) { showToast("Rispondi a tutte le domande per continuare!"); return; }
-
-  let score = 0;
-  quizData.forEach((q, idx) => { if (userAnswers[idx] === q.ans) score++; });
-  quizScore = score;
-  quizUser = fullname;
-
-  try {
-    const formData = new URLSearchParams();
-    formData.append('action', 'quiz');
-    formData.append('id', finalId);
-    formData.append('score', score);
-
-    const response = await fetch('api.php', {
-      method: 'POST',
-      body: formData
-    });
-    const result = await response.json();
-    if (result && result.rank) {
-      window.quizRank = result.rank;
-      window.quizLeaderboard = result.leaderboard;
-    }
-  } catch (e) { }
-
-  quizData.forEach((q, qIdx) => {
-    const parent = document.getElementById(`opts-${qIdx}`);
-    const btns = parent.querySelectorAll('.quiz-btn');
-    btns.forEach(b => { b.disabled = true; b.style.background = ''; });
-    if (userAnswers[qIdx] === q.ans) {
-      btns[userAnswers[qIdx]].classList.add('selected-correct');
-    } else {
-      btns[userAnswers[qIdx]].classList.add('selected-wrong');
-      btns[q.ans].classList.add('selected-correct');
-    }
-  });
-
-  document.getElementById("quiz-submit-section").style.display = 'none';
-  showQuizResult();
-}
-
-function createConfetti() {
-  for (let i = 0; i < 30; i++) {
-    const conf = document.createElement("div");
-    conf.innerText = "🎉";
-    conf.style.position = "fixed";
-    conf.style.left = Math.random() * 100 + "vw";
-    conf.style.top = Math.random() * -20 + "vh";
-    conf.style.fontSize = (Math.random() * 20 + 20) + "px";
-    conf.style.zIndex = "99999";
-    conf.style.pointerEvents = "none";
-    conf.style.transition = "transform 3s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 3s";
-    document.body.appendChild(conf);
-
-    setTimeout(() => {
-      conf.style.transform = `translateY(${window.innerHeight + 100}px) rotate(${Math.random() * 720}deg)`;
-      conf.style.opacity = "0";
-    }, 50);
-    setTimeout(() => conf.remove(), 3100);
-  }
-}
-
-function showQuizResult() {
-  document.getElementById("quiz-result").classList.remove("hidden");
-
-  createConfetti();
-
-  let targetPercentage = Math.round((quizScore / quizData.length) * 100);
-
-  // Implement Progress Bar natively inside DOM structure mapping
-  const circleContainer = document.querySelector(".score-circle");
-  if (circleContainer) {
-    circleContainer.outerHTML = `
-      <div style="background: rgba(212,163,115,0.1); width: 100%; height: 40px; border-radius: 20px; overflow: hidden; margin: 30px 0; position: relative; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);">
-         <div id="quiz-progress-fill" style="width: 0%; height: 100%; background: var(--primary-color); border-radius: 20px; transition: width 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);"></div>
-         <span id="quiz-score" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: var(--primary-dark); font-weight: 800; font-size: 1.1rem; font-family: var(--font-sans); letter-spacing: 1px;">Risultato: 0%</span>
-      </div>
-    `;
-  }
-
-  let visualScore = 0;
-  const scoreInt = setInterval(() => {
-    document.getElementById("quiz-score").innerHTML = `Risultato: ${visualScore}%`;
-    if (visualScore >= targetPercentage) {
-      document.getElementById("quiz-score").innerHTML = `Risultato: ${targetPercentage}%`;
-      clearInterval(scoreInt);
-    } else {
-      visualScore += 2;
-    }
-  }, 20);
-
-  setTimeout(() => {
-    document.getElementById("quiz-progress-fill").style.width = targetPercentage + "%";
-  }, 50);
-
-  const reward = document.getElementById("quiz-reward");
-  setTimeout(() => {
-    if (window.quizRank) {
-      reward.innerHTML = `<strong>${quizUser}</strong><br><br><span style="font-size:1.2rem; color: var(--primary-dark);">Sei <strong>${window.quizRank}°</strong> in classifica generale!</span>`;
-    } else {
-      reward.innerHTML = `Grazie <strong>${quizUser}</strong>! Risposte registrate.`;
-    }
-
-    const lbContainer = document.getElementById("scoreboard-list");
-    if (lbContainer && window.quizLeaderboard) {
-      lbContainer.innerHTML = '';
-      window.quizLeaderboard.forEach((user, index) => {
-        const pct = Math.round((user.score / quizData.length) * 100);
-        let medal = '';
-        if (user.rank === 1) medal = '🥇 ';
-        if (user.rank === 2) medal = '🥈 ';
-        if (user.rank === 3) medal = '🥉 ';
-        lbContainer.innerHTML += `<li style="padding: 12px 10px; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; font-size:1.05rem;">
-           <span style="font-family:var(--font-sans); color:var(--text-color);">${medal}<strong>${user.name}</strong></span>
-           <span style="font-weight:800; color:var(--primary-dark); font-size:1.15rem;">${pct}%</span>
-         </li>`;
-      });
-      lbContainer.parentElement.style.display = 'block';
-    } else if (lbContainer) {
-      lbContainer.parentElement.style.display = 'none';
-    }
-  }, 1000);
-}
 
 // --- RSVP LOGIC ---
 function sendWhatsApp(isComing) {
+  const inputEl = document.getElementById("rsvp-username");
+  const intolleranzeEl = document.getElementById("rsvp-intolleranze");
+  const fullname = inputEl ? inputEl.value.trim() : "";
+  const intolleranze = intolleranzeEl ? intolleranzeEl.value.trim() : "";
+
+  if (!fullname) { 
+    showToast("Inserisci il tuo nome prima di confermare!"); 
+    return; 
+  }
+
+  let guestNames = [fullname];
+  const cbs = document.querySelectorAll('.related-guest-cb:checked');
+  cbs.forEach(cb => {
+    guestNames.push(cb.value);
+  });
+
   const number = "393394001216";
-  let text = isComing
-    ? "Ciao, confermo la mia presenza al vostro matrimonio! 😍"
-    : "Ciao, purtroppo non posso partecipare al matrimonio. 😔";
+  
+  let text = "";
+  if (isComing) {
+    if (guestNames.length > 1) {
+      text = "Ciao, confermiamo la nostra presenza al vostro matrimonio! 😍\\n" + guestNames.join(", ");
+    } else {
+      text = "Ciao, confermo la mia presenza al vostro matrimonio! 😍\\n" + guestNames[0];
+    }
+    if (intolleranze) {
+      text += "\\n\\nIntolleranze / Note: " + intolleranze;
+    }
+  } else {
+    if (guestNames.length > 1) {
+      text = "Ciao, purtroppo non possiamo partecipare al matrimonio. 😔\\n" + guestNames.join(", ");
+    } else {
+      text = "Ciao, purtroppo non posso partecipare al matrimonio. 😔\\n" + guestNames[0];
+    }
+  }
+
   const encodedText = encodeURIComponent(text);
   const url = `https://wa.me/${number}?text=${encodedText}`;
   window.open(url, '_blank');

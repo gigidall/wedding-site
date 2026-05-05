@@ -37,7 +37,8 @@ if ($method === 'GET') {
                             "id" => $id,
                             "nome" => $nome,
                             "cognome" => $cognome,
-                            "alias" => $alias
+                            "alias" => $alias,
+                            "relazione" => isset($data[5]) ? trim($data[5]) : ''
                         ];
                     }
                 }
