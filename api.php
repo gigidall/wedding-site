@@ -38,6 +38,7 @@ if ($method === 'GET') {
                             "nome" => $nome,
                             "cognome" => $cognome,
                             "alias" => $alias,
+                            "gruppo" => isset($data[4]) ? trim($data[4]) : '',
                             "relazione" => isset($data[5]) ? trim($data[5]) : ''
                         ];
                     }

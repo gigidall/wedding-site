@@ -13,6 +13,7 @@ async function loadGuestsData() {
     guestsArray = json.map(g => ({ 
       id: g.id, 
       name: g.nome + ' ' + g.cognome + (g.alias ? ' - ' + g.alias : ''),
+      gruppo: g.gruppo || '',
       relazione: g.relazione || ''
     }));
   } catch (err) {
@@ -405,7 +406,7 @@ function showRelatedGuests(mainGuest) {
         .then(res => res.json())
         .then(json => {
           if(json.status === "ok") {
-            const newG = { id: json.new_guest.id, name: newFullName, relazione: json.new_guest.relazione };
+            const newG = { id: json.new_guest.id, name: newFullName, gruppo: mainGuest.gruppo, relazione: json.new_guest.relazione };
             guestsArray.push(newG);
             renderGuest(newG);
             showToast("Partecipante aggiunto correttamente!");
@@ -782,7 +783,11 @@ function sendWhatsApp(isComing) {
     guestNames.push(cb.value);
   });
 
-  const number = "393394001216";
+  const mainGuestObj = guestsArray.find(g => g.name === fullname);
+  let number = "393394001216"; // Mauro default
+  if (mainGuestObj && mainGuestObj.gruppo === "Antonella") {
+    number = "393881947158";
+  }
   
   let text = "";
   if (isComing) {
