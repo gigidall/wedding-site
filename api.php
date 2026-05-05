@@ -120,7 +120,75 @@ if ($method === 'POST') {
         }
     }
 
-    if ($action === 'confirm' || $action === 'quiz') {
+    if ($action === 'add_guest') {
+        $mainId = isset($_POST['main_id']) ? trim($_POST['main_id']) : '';
+        $nome = isset($_POST['nome']) ? trim($_POST['nome']) : '';
+        $cognome = isset($_POST['cognome']) ? trim($_POST['cognome']) : '';
+        
+        $rows = [];
+        $maxId = 0;
+        $relazioneStr = "";
+        $gruppo = "";
+        
+        if (($handle = fopen($csvFile, "r")) !== FALSE) {
+            $header = fgetcsv($handle, 1000, ",");
+            if ($header === false || count($header) < 8) {
+                $header = ["ID", "NOME", "COGNOME", "ALIAS", "GRUPPO", "RELAZIONE", "CONFERMA", "QUIZ"];
+            }
+            $rows[] = $header;
+            
+            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                while(count($data) < 8) { $data[] = ""; }
+                $rowId = trim($data[0]);
+                if (is_numeric($rowId) && (int)$rowId > $maxId) {
+                    $maxId = (int)$rowId;
+                }
+                if ($rowId === $mainId) {
+                    $relazioneStr = trim($data[5]);
+                    $gruppo = trim($data[4]);
+                }
+                $rows[] = $data;
+            }
+            fclose($handle);
+        }
+        
+        if ($mainId !== "" && $nome !== "") {
+            $newId = (string)($maxId + 1);
+            
+            $relArr = [];
+            if ($relazioneStr !== "") {
+                $relArr = array_map('trim', explode(',', $relazioneStr));
+            }
+            if (!in_array($mainId, $relArr)) {
+                $relArr[] = $mainId;
+            }
+            $relArr[] = $newId;
+            $newRelazioneStr = implode(',', $relArr);
+            
+            foreach ($rows as &$row) {
+                if ($row[0] !== "ID" && in_array(trim($row[0]), $relArr)) {
+                    $row[5] = $newRelazioneStr;
+                }
+            }
+            unset($row);
+            
+            $newRow = [$newId, $nome, $cognome, "", $gruppo, $newRelazioneStr, "FALSE", ""];
+            $rows[] = $newRow;
+            
+            if (($handle = fopen($csvFile, "w")) !== FALSE) {
+                foreach ($rows as $row) { fputcsv($handle, $row, ","); }
+                fclose($handle);
+            }
+            echo json_encode(["status" => "ok", "new_guest" => [
+                "id" => $newId, "nome" => $nome, "cognome" => $cognome, "relazione" => $newRelazioneStr
+            ]]);
+            exit;
+        }
+        echo json_encode(["status" => "error", "message" => "Dati mancanti"]);
+        exit;
+    }
+
+    if ($action === 'confirm' || $action === 'quiz' || $action === 'update_name') {
         $idTarget = isset($_POST['id']) ? trim($_POST['id']) : '';
         
         $rows = [];
@@ -143,6 +211,9 @@ if ($method === 'POST') {
                         $data[6] = isset($_POST['value']) ? trim($_POST['value']) : $data[6];
                     } else if ($action === 'quiz') {
                         $data[7] = isset($_POST['score']) ? trim($_POST['score']) : $data[7];
+                    } else if ($action === 'update_name') {
+                        $data[1] = isset($_POST['nome']) ? trim($_POST['nome']) : $data[1];
+                        $data[2] = isset($_POST['cognome']) ? trim($_POST['cognome']) : $data[2];
                     }
                     $updated = true;
                 }

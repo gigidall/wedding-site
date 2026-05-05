@@ -310,30 +310,114 @@ function showRelatedGuests(mainGuest) {
   const relatedList = document.getElementById("rsvp-related-list");
   relatedList.innerHTML = "";
 
-  if (!mainGuest.relazione) return;
-
-  const relIds = mainGuest.relazione.split(',').map(id => id.trim()).filter(id => id !== mainGuest.id);
-  
-  if (relIds.length > 0) {
-    let hasRelated = false;
-    relIds.forEach(id => {
-      const g = guestsArray.find(x => x.id === id);
-      if (g) {
-        hasRelated = true;
-        const li = document.createElement("li");
-        li.style.marginBottom = "8px";
-        li.innerHTML = `<label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-          <input type="checkbox" class="related-guest-cb" value="${g.name}" checked>
-          <span>${g.name}</span>
-        </label>`;
-        relatedList.appendChild(li);
+  const renderGuest = (g) => {
+    const li = document.createElement("li");
+    li.style.marginBottom = "8px";
+    li.style.display = "flex";
+    li.style.alignItems = "center";
+    li.style.justifyContent = "space-between";
+    
+    const labelBox = document.createElement("div");
+    labelBox.style.flex = "1";
+    labelBox.innerHTML = `<label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+      <input type="checkbox" class="related-guest-cb" value="${g.name}" checked>
+      <span class="related-name-span">${g.name}</span>
+    </label>`;
+    
+    const editBtn = document.createElement("span");
+    editBtn.innerHTML = "✏️ <span style='font-size:0.8rem; text-decoration:underline;'>Rinomina</span>";
+    editBtn.style.cursor = "pointer";
+    editBtn.style.color = "var(--primary-dark)";
+    editBtn.style.fontSize = "0.95rem";
+    editBtn.style.marginLeft = "10px";
+    editBtn.title = "Modifica nome e cognome";
+    
+    editBtn.onclick = function() {
+      const newFullName = prompt("Modifica nome e cognome:", g.name);
+      if (newFullName && newFullName.trim() !== "" && newFullName !== g.name) {
+        const parts = newFullName.trim().split(" ");
+        const newName = parts[0];
+        const newSurname = parts.slice(1).join(" ");
+        
+        labelBox.querySelector(".related-name-span").textContent = newFullName;
+        labelBox.querySelector(".related-guest-cb").value = newFullName;
+        g.name = newFullName;
+        
+        const formData = new FormData();
+        formData.append("action", "update_name");
+        formData.append("id", g.id);
+        formData.append("nome", newName);
+        formData.append("cognome", newSurname);
+        fetch("api.php", { method: "POST", body: formData })
+          .then(res => res.json())
+          .then(json => {
+            if(json.status === "ok") showToast("Nome aggiornato correttamente!");
+            else showToast("Errore durante l'aggiornamento.");
+          }).catch(() => showToast("Errore di rete."));
       }
-    });
-
-    if (hasRelated) {
-      relatedBox.style.display = "block";
+    };
+    li.appendChild(labelBox);
+    li.appendChild(editBtn);
+    
+    const addBtn = relatedList.querySelector(".add-participant-btn");
+    if (addBtn) {
+      relatedList.insertBefore(li, addBtn);
+    } else {
+      relatedList.appendChild(li);
     }
-  }
+  };
+
+  const relIds = mainGuest.relazione ? mainGuest.relazione.split(',').map(id => id.trim()).filter(id => id !== mainGuest.id) : [];
+  
+  relIds.forEach(id => {
+    const g = guestsArray.find(x => x.id === id);
+    if (g) renderGuest(g);
+  });
+
+  const addBtn = document.createElement("button");
+  addBtn.className = "add-participant-btn";
+  addBtn.textContent = "+ Aggiungi partecipante";
+  addBtn.style.marginTop = "10px";
+  addBtn.style.background = "none";
+  addBtn.style.border = "1px dashed rgba(212, 163, 115, 0.8)";
+  addBtn.style.color = "var(--primary-dark)";
+  addBtn.style.padding = "6px 12px";
+  addBtn.style.borderRadius = "8px";
+  addBtn.style.cursor = "pointer";
+  addBtn.style.width = "100%";
+  addBtn.style.fontSize = "0.9rem";
+  
+  addBtn.onclick = function(e) {
+    e.preventDefault();
+    const newFullName = prompt("Inserisci Nome e Cognome del nuovo partecipante:");
+    if (newFullName && newFullName.trim() !== "") {
+      const parts = newFullName.trim().split(" ");
+      const newName = parts[0];
+      const newSurname = parts.slice(1).join(" ");
+      
+      const formData = new FormData();
+      formData.append("action", "add_guest");
+      formData.append("main_id", mainGuest.id);
+      formData.append("nome", newName);
+      formData.append("cognome", newSurname);
+      
+      fetch("api.php", { method: "POST", body: formData })
+        .then(res => res.json())
+        .then(json => {
+          if(json.status === "ok") {
+            const newG = { id: json.new_guest.id, name: newFullName, relazione: json.new_guest.relazione };
+            guestsArray.push(newG);
+            renderGuest(newG);
+            showToast("Partecipante aggiunto correttamente!");
+          } else {
+            showToast("Errore durante l'aggiunta.");
+          }
+        }).catch(() => showToast("Errore di rete."));
+    }
+  };
+
+  relatedList.appendChild(addBtn);
+  relatedBox.style.display = "block";
 }
 
 // --- HORIZONTAL COUNTDOWN WITH SECONDS ---
