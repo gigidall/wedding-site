@@ -127,7 +127,7 @@ ID,NOME,COGNOME,ALIAS,GRUPPO,RELAZIONE,CONFERMA,QUIZ
 126,Lorenzo,"De Mauro",,Mauro,"126,127",FALSE,
 127,Arianna,,,Mauro,"126,127",FALSE,
 128,Luca,Lanotte,,Mauro,"128,129",FALSE,
-129,Fidanzata,,,Mauro,"128,129",FALSE,
+129,+1,,,Mauro,"128,129",FALSE,
 130,Giacomo,Pennacchia,,Mauro,130,FALSE,
 132,Salvatore,Iannicella,,Mauro,"132,133",FALSE,
 133,Giovanna,Cristella,,Mauro,"132,133",FALSE,
