@@ -22,7 +22,8 @@
       padding: 40px 20px;
     }
     .container {
-      max-width: 800px;
+      max-width: 1400px;
+      overflow-x: auto;
       margin: 0 auto;
       background: #fff;
       padding: 40px;
@@ -104,6 +105,12 @@
     .status-declined { background-color: #f44336; }
     .status-false { background-color: #9e9e9e; }
     
+    td[contenteditable="true"]:focus {
+      outline: 2px solid var(--primary-color);
+      background-color: #fff9f2;
+      border-radius: 4px;
+    }
+    
     .back-nav {
       position: absolute;
       top: 20px;
@@ -139,17 +146,32 @@
         <p>Confermati</p>
       </div>
       <div class="stat-card">
+        <h3 id="declinati" style="color: #f44336;">0</h3>
+        <p>Non Partecipanti</p>
+      </div>
+      <div class="stat-card">
         <h3 id="mancanti">0</h3>
         <p>Da Confermare</p>
       </div>
+    </div>
+    
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
+      <h2 style="margin:0; font-family:var(--font-serif); color:var(--text-color);">Dettaglio</h2>
+      <button onclick="saveCSV()" style="padding: 10px 20px; background: #4caf50; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-family: var(--font-sans); font-weight: 600; font-size:0.9rem;">💾 Salva Modifiche</button>
     </div>
 
     <table id="guests-table">
       <thead>
         <tr>
           <th onclick="sortGuests('stato')">Stato ↕</th>
+          <th onclick="sortGuests('id')">ID ↕</th>
           <th onclick="sortGuests('nome')">Nome ↕</th>
           <th onclick="sortGuests('cognome')">Cognome ↕</th>
+          <th onclick="sortGuests('alias')">Alias ↕</th>
+          <th onclick="sortGuests('gruppo')">Gruppo ↕</th>
+          <th onclick="sortGuests('relazione')">Relazione ↕</th>
+          <th onclick="sortGuests('conferma')">Conferma ↕</th>
+          <th>Azioni</th>
         </tr>
       </thead>
       <tbody>
@@ -160,13 +182,14 @@
 
   <script>
     let allGuests = [];
-    let currentSort = 'stato';
+    let currentSort = 'id';
     let sortAsc = true;
 
     async function loadStats() {
       allGuests = [];
       let total = 0;
       let confirmed = 0;
+      let declined = 0;
       
       try {
         const response = await fetch('data/guests.csv');
@@ -179,20 +202,42 @@
         for(let i=1; i<lines.length; i++) {
           if (!lines[i].trim()) continue;
           
-          // Basic CSV split, ignores quotes (ok for this simple format)
-          const parts = lines[i].split(',');
+          let parts = [];
+          let current = '';
+          let inQuotes = false;
+          for (let c of lines[i]) {
+              if (c === '"') {
+                  inQuotes = !inQuotes;
+              } else if (c === ',' && !inQuotes) {
+                  parts.push(current.trim());
+                  current = '';
+              } else {
+                  current += c;
+              }
+          }
+          parts.push(current.trim());
+          
           if(parts.length >= 7) {
-            const nome = parts[1].trim();
-            const cognome = parts[2].trim();
-            const confirmVal = parts[6].trim().toUpperCase();
+            const guestObj = {
+                id: parts[0],
+                nome: parts[1],
+                cognome: parts[2],
+                alias: parts[3],
+                gruppo: parts[4],
+                relazione: parts[5],
+                conferma: parts[6],
+                quiz: parts[7] !== undefined ? parts[7] : ''
+            };
             
-            let isConfirmed = confirmVal === 'TRUE';
-            let isDeclined = confirmVal === 'FALSE';
+            const confirmVal = guestObj.conferma.toUpperCase();
+            guestObj.isConfirmed = confirmVal === 'TRUE';
+            guestObj.isDeclined = confirmVal === 'FALSE';
             
-            allGuests.push({ nome, cognome, isConfirmed, isDeclined });
+            allGuests.push(guestObj);
             
             total++;
-            if(isConfirmed) confirmed++;
+            if(guestObj.isConfirmed) confirmed++;
+            if(guestObj.isDeclined) declined++;
           }
         }
       } catch(e) {
@@ -215,7 +260,8 @@
       // Update UI
       document.getElementById('totale').innerText = total;
       document.getElementById('confermati').innerText = confirmed;
-      document.getElementById('mancanti').innerText = total - confirmed;
+      document.getElementById('declinati').innerText = declined;
+      document.getElementById('mancanti').innerText = total - confirmed - declined;
 
       renderTable();
     }
@@ -244,12 +290,12 @@
         if (currentSort === 'stato') {
           valA = a.isConfirmed ? 1 : (a.isDeclined ? 3 : 2);
           valB = b.isConfirmed ? 1 : (b.isDeclined ? 3 : 2);
-        } else if (currentSort === 'nome') {
-          valA = a.nome.toLowerCase();
-          valB = b.nome.toLowerCase();
+        } else if (currentSort === 'id') {
+          valA = parseInt(a.id) || 0;
+          valB = parseInt(b.id) || 0;
         } else {
-          valA = a.cognome.toLowerCase();
-          valB = b.cognome.toLowerCase();
+          valA = (a[currentSort] || '').toLowerCase();
+          valB = (b[currentSort] || '').toLowerCase();
         }
 
         if (valA < valB) return sortAsc ? -1 : 1;
@@ -269,10 +315,19 @@
             statusLabel = 'Non partecipa';
         }
         
+        tr.dataset.quiz = g.quiz;
         tr.innerHTML = `
           <td><span class="status-dot ${statusClass}" title="${statusLabel}"></span><span style="font-size:0.85rem; color:#888;">${statusLabel}</span></td>
-          <td style="font-weight: 500;">${g.nome}</td>
-          <td>${g.cognome}</td>
+          <td contenteditable="true" data-field="id">${g.id}</td>
+          <td contenteditable="true" data-field="nome" style="font-weight: 500;">${g.nome}</td>
+          <td contenteditable="true" data-field="cognome">${g.cognome}</td>
+          <td contenteditable="true" data-field="alias">${g.alias}</td>
+          <td contenteditable="true" data-field="gruppo">${g.gruppo}</td>
+          <td contenteditable="true" data-field="relazione">${g.relazione}</td>
+          <td contenteditable="true" data-field="conferma">${g.conferma}</td>
+          <td style="text-align: center;">
+            <button onclick="deleteRow(this)" style="background: none; border: none; color: #f44336; cursor: pointer; font-size: 1.2rem; padding: 4px;" title="Elimina riga">🗑️</button>
+          </td>
         `;
         tbody.appendChild(tr);
       });
@@ -280,6 +335,60 @@
     
     function capitalize(s) {
         return s.charAt(0).toUpperCase() + s.slice(1);
+    }
+    
+    function deleteRow(btn) {
+        if (confirm("Sei sicuro di voler eliminare questo invitato?")) {
+            const tr = btn.closest("tr");
+            tr.remove();
+        }
+    }
+    
+    async function saveCSV() {
+      const tbody = document.querySelector("#guests-table tbody");
+      const rows = Array.from(tbody.querySelectorAll("tr"));
+      
+      if(rows.length === 0 || (rows.length === 1 && rows[0].innerText.includes("Nessun dato"))) return;
+      
+      let csvContent = "ID,NOME,COGNOME,ALIAS,GRUPPO,RELAZIONE,CONFERMA,QUIZ\n";
+      
+      rows.forEach(tr => {
+        const getVal = (field) => {
+            const td = tr.querySelector(`[data-field="${field}"]`);
+            return td ? td.innerText.trim() : '';
+        };
+        
+        const id = getVal('id');
+        const nome = getVal('nome');
+        const cognome = getVal('cognome');
+        const alias = getVal('alias');
+        const gruppo = getVal('gruppo');
+        let relazione = getVal('relazione');
+        if (relazione.includes(',')) {
+            relazione = '"' + relazione.replace(/"/g, '""') + '"';
+        }
+        const conferma = getVal('conferma');
+        const quiz = tr.dataset.quiz || '';
+        
+        csvContent += `${id},${nome},${cognome},${alias},${gruppo},${relazione},${conferma},${quiz}\n`;
+      });
+
+      const formData = new URLSearchParams();
+      formData.append('action', 'save_csv');
+      formData.append('csv_data', csvContent);
+
+      try {
+        const res = await fetch('api.php', { method: 'POST', body: formData });
+        const json = await res.json();
+        if (json.status === 'ok') {
+            alert('Dati salvati con successo su AlterVista!');
+            loadStats();
+        } else {
+            alert('Errore nel salvataggio: ' + json.message);
+        }
+      } catch (e) {
+        alert('Errore di connessione o server.');
+      }
     }
 
     // Run on load

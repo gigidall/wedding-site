@@ -6,7 +6,7 @@ header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 
-$csvFile = 'data/guests.csv';
+$csvFile = __DIR__ . '/data/guests.csv';
 
 if (!file_exists($csvFile)) {
     if (!is_dir('data')) { mkdir('data', 0755, true); }
@@ -39,7 +39,8 @@ if ($method === 'GET') {
                             "cognome" => $cognome,
                             "alias" => $alias,
                             "gruppo" => isset($data[4]) ? trim($data[4]) : '',
-                            "relazione" => isset($data[5]) ? trim($data[5]) : ''
+                            "relazione" => isset($data[5]) ? trim($data[5]) : '',
+                            "conferma" => isset($data[6]) ? trim($data[6]) : ''
                         ];
                     }
                 }
@@ -189,6 +190,20 @@ if ($method === 'POST') {
         exit;
     }
 
+    if ($action === 'save_csv') {
+        $content = isset($_POST['csv_data']) ? $_POST['csv_data'] : '';
+        if ($content !== '') {
+            if (file_put_contents($csvFile, $content) !== FALSE) {
+                echo json_encode(["status" => "ok"]);
+            } else {
+                echo json_encode(["status" => "error", "message" => "Errore di scrittura"]);
+            }
+        } else {
+            echo json_encode(["status" => "error", "message" => "Dati vuoti"]);
+        }
+        exit;
+    }
+
     if ($action === 'confirm_multiple') {
         $idsStr = isset($_POST['ids']) ? trim($_POST['ids']) : '';
         $value = isset($_POST['value']) ? trim($_POST['value']) : '';
@@ -222,8 +237,10 @@ if ($method === 'POST') {
             if (($handle = fopen($csvFile, "w")) !== FALSE) {
                 foreach ($rows as $row) { fputcsv($handle, $row, ","); }
                 fclose($handle);
+                echo json_encode(["status" => "ok"]);
+            } else {
+                echo json_encode(["status" => "error", "message" => "Errore permessi in scrittura su Altervista"]);
             }
-            echo json_encode(["status" => "ok"]);
             exit;
         } else {
             echo json_encode(["status" => "error", "message" => "Nessun ID aggiornato"]);

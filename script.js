@@ -14,7 +14,8 @@ async function loadGuestsData() {
       id: g.id,
       name: g.nome + ' ' + g.cognome + (g.alias ? ' - ' + g.alias : ''),
       gruppo: g.gruppo || '',
-      relazione: g.relazione || ''
+      relazione: g.relazione || '',
+      conferma: g.conferma || ''
     }));
   } catch (err) {
     guestsArray = [
@@ -291,7 +292,12 @@ function handleRsvpAutocomplete(input, listId) {
       div.className = "autocomplete-item";
       const start = match.toLowerCase().indexOf(val);
       const highlighted = match.substring(0, start) + "<strong>" + match.substring(start, start + val.length) + "</strong>" + match.substring(start + val.length);
-      div.innerHTML = highlighted;
+      
+      let statusIcon = "";
+      if (matchObj.conferma && matchObj.conferma.toUpperCase() === "TRUE") statusIcon = " <span title='Già confermato' style='font-size:0.9em;'>✅</span>";
+      if (matchObj.conferma && matchObj.conferma.toUpperCase() === "FALSE") statusIcon = " <span title='Già declinato' style='font-size:0.9em;'>❌</span>";
+      
+      div.innerHTML = highlighted + statusIcon;
       div.onmousedown = function (e) {
         input.value = match;
         input.dataset.id = matchObj.id;
@@ -320,9 +326,13 @@ function showRelatedGuests(mainGuest) {
 
     const labelBox = document.createElement("div");
     labelBox.style.flex = "1";
+    let statusIcon = "";
+    if (g.conferma && g.conferma.toUpperCase() === "TRUE") statusIcon = " <span title='Già confermato' style='font-size:0.9em;'>✅</span>";
+    if (g.conferma && g.conferma.toUpperCase() === "FALSE") statusIcon = " <span title='Già declinato' style='font-size:0.9em;'>❌</span>";
+
     labelBox.innerHTML = `<label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
       <input type="checkbox" class="related-guest-cb" value="${g.name}" data-id="${g.id}" checked>
-      <span class="related-name-span">${g.name}</span>
+      <span class="related-name-span">${g.name}${statusIcon}</span>
     </label>`;
 
     const editBtn = document.createElement("span");
@@ -803,18 +813,18 @@ function sendWhatsApp(isComing) {
   let text = "";
   if (isComing) {
     if (guestNames.length > 1) {
-      text = "Ciao, confermiamo la nostra presenza al vostro matrimonio! \\n" + guestNames.join(", ");
+      text = "Ciao, confermiamo la nostra presenza al vostro matrimonio!\n" + guestNames.join(", ");
     } else {
-      text = "Ciao, confermo la mia presenza al vostro matrimonio! \\n" + guestNames[0];
+      text = "Ciao, confermo la mia presenza al vostro matrimonio!\n" + guestNames[0];
     }
     if (intolleranze) {
-      text += "\\n\\nIntolleranze / Note: " + intolleranze;
+      text += "\n\nIntolleranze / Note: " + intolleranze;
     }
   } else {
     if (guestNames.length > 1) {
-      text = "Ciao, purtroppo non possiamo partecipare al matrimonio. \\n" + guestNames.join(", ");
+      text = "Ciao, purtroppo non possiamo partecipare al matrimonio.\n" + guestNames.join(", ");
     } else {
-      text = "Ciao, purtroppo non posso partecipare al matrimonio. \\n" + guestNames[0];
+      text = "Ciao, purtroppo non posso partecipare al matrimonio.\n" + guestNames[0];
     }
   }
 
