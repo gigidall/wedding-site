@@ -173,7 +173,7 @@ if ($method === 'POST') {
             }
             unset($row);
             
-            $newRow = [$newId, $nome, $cognome, "", $gruppo, $newRelazioneStr, "FALSE", ""];
+            $newRow = [$newId, $nome, $cognome, "", $gruppo, $newRelazioneStr, "", ""];
             $rows[] = $newRow;
             
             if (($handle = fopen($csvFile, "w")) !== FALSE) {
@@ -187,6 +187,48 @@ if ($method === 'POST') {
         }
         echo json_encode(["status" => "error", "message" => "Dati mancanti"]);
         exit;
+    }
+
+    if ($action === 'confirm_multiple') {
+        $idsStr = isset($_POST['ids']) ? trim($_POST['ids']) : '';
+        $value = isset($_POST['value']) ? trim($_POST['value']) : '';
+        $ids = explode(',', $idsStr);
+        
+        $rows = [];
+        $updated = false;
+        
+        if (($handle = fopen($csvFile, "r")) !== FALSE) {
+            $header = fgetcsv($handle, 1000, ",");
+            if ($header === false || count($header) < 8) {
+                $header = ["ID", "NOME", "COGNOME", "ALIAS", "GRUPPO", "RELAZIONE", "CONFERMA", "QUIZ"];
+            }
+            $rows[] = $header;
+            
+            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                while(count($data) < 8) { $data[] = ""; }
+                
+                $rowId = trim($data[0]);
+                
+                if ($rowId !== "" && in_array($rowId, $ids)) {
+                    $data[6] = $value;
+                    $updated = true;
+                }
+                $rows[] = $data;
+            }
+            fclose($handle);
+        }
+        
+        if ($updated) {
+            if (($handle = fopen($csvFile, "w")) !== FALSE) {
+                foreach ($rows as $row) { fputcsv($handle, $row, ","); }
+                fclose($handle);
+            }
+            echo json_encode(["status" => "ok"]);
+            exit;
+        } else {
+            echo json_encode(["status" => "error", "message" => "Nessun ID aggiornato"]);
+            exit;
+        }
     }
 
     if ($action === 'confirm' || $action === 'quiz' || $action === 'update_name') {

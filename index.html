@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="preload" href="assets/embossed_paper.png" as="image">
   <link rel="preload" href="assets/images/1.jpg" as="image">
+  <link rel="icon" type="image/png" href="assets/logo/AM_original.png">
   <title>Antonella & Mauro | 05 Ottobre 2026</title>
   <script src="https://unpkg.com/wavesurfer.js"></script>
 </head>
@@ -166,9 +167,9 @@
     <!-- NEW ADVANCED TIMELINE NARRATIVE MAP SECTION -->
     <hr class="section-divider fade-up">
     <section class="map-section fade-up" id="map-sec">
-      <h2>Seguici passo dopo passo</h2>
+      <h2 style="margin-bottom: 10px;">Seguici passo dopo passo</h2>
 
-      <div class="timeline-container fade-up" style="margin-top: 30px;">
+      <div class="timeline-container fade-up" style="margin-top: 15px;">
         <svg id="organic-timeline-svg"
           style="position: absolute; top:0; left:0; width: 100%; height: 100%; pointer-events: none; z-index: 0;">
           <path d="" fill="none" stroke="rgba(212, 163, 115, 0.4)" stroke-width="3" stroke-linecap="round"
@@ -284,40 +285,58 @@
     <hr class="section-divider fade-up">
     <section class="rsvp-section fade-up" id="rsvp-sec">
       <h2>Ci sarai?</h2>
-      <p style="margin-bottom: 35px; font-size:1.1rem; line-height: 1.5; color: var(--text-color);">Non vediamo l'ora di
-        festeggiare con te.</p>
 
       <div style="margin-bottom: 25px; position: relative; text-align: left; width: 100%;">
-        <h4 style="font-family: var(--font-sans); margin-bottom: 10px; color: var(--primary-dark);">Chi sei?</h4>
         <div style="position: relative;">
           <input type="text" id="rsvp-username" class="elegant-input" placeholder="Inizia a scrivere il tuo nome..."
             autocomplete="off" oninput="handleRsvpAutocomplete(this, 'rsvp-hints')"
             onblur="blurAutocomplete('rsvp-hints')" style="margin-bottom:0; width: 100%; box-sizing: border-box;">
           <div id="rsvp-hints" class="autocomplete-list"></div>
         </div>
-        <div id="rsvp-related-guests" style="margin-top: 15px; display: none; background: rgba(212,163,115,0.05); padding: 15px; border-radius: 8px;">
-          <p style="font-size: 0.95rem; font-weight: 600; color: var(--primary-dark); margin-bottom: 5px;">Includi anche:</p>
-          <ul id="rsvp-related-list" style="list-style: none; padding: 0; margin: 0; font-size: 0.95rem; color: var(--text-color);"></ul>
+        <div id="rsvp-related-guests"
+          style="margin-top: 15px; display: none; background: rgba(212,163,115,0.05); padding: 15px; border-radius: 8px;">
+          <p style="font-size: 0.95rem; font-weight: 600; color: var(--primary-dark); margin-bottom: 5px;">Includi
+            anche:</p>
+          <ul id="rsvp-related-list"
+            style="list-style: none; padding: 0; margin: 0; font-size: 0.95rem; color: var(--text-color);"></ul>
         </div>
       </div>
 
       <div style="margin-bottom: 35px; text-align: left; width: 100%;">
-        <h4 style="font-family: var(--font-sans); margin-bottom: 10px; color: var(--primary-dark);">Eventuali intolleranze alimentari / Note</h4>
-        <textarea id="rsvp-intolleranze" class="elegant-input" placeholder="Es. Celiachia, allergia alle noci, nessuna..." rows="2" style="resize: none; width: 100%; box-sizing: border-box;"></textarea>
+        <h4 style="font-family: var(--font-sans); margin-bottom: 10px; color: var(--primary-dark);">Eventuali
+          intolleranze alimentari / Note</h4>
+        <textarea id="rsvp-intolleranze" class="elegant-input"
+          placeholder="Es. Celiachia, allergia alle noci, nessuna..." rows="2"
+          style="resize: none; width: 100%; box-sizing: border-box;"></textarea>
       </div>
 
-      <div class="rsvp-buttons"
-        style="display:contents; justify-content:center; gap:20px; align-items:center; flex-wrap: nowrap; width: 100%;">
-        <button class="primary-btn" style="flex:1; white-space:nowrap; font-size:0.9rem; margin: 10px;"
+      <div class="rsvp-buttons" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; width: 100%;">
+        <button class="primary-btn" style="font-size:0.85rem; padding: 10px; width: 100%; box-sizing: border-box;"
           onclick="sendWhatsApp(true)">Sì, ci sarò! 😍</button>
         <button class="primary-btn outline"
-          style="flex:1; white-space:nowrap; font-size:0.9rem; background:transparent; border: 2px solid var(--primary-color); color:var(--primary-color); margin: 10px;"
+          style="font-size:0.85rem; padding: 10px; width: 100%; box-sizing: border-box; background:transparent; border: 2px solid var(--primary-color); color:var(--primary-color);"
           onclick="sendWhatsApp(false)">No, mi dispiace 😔</button>
       </div>
     </section>
 
-    <footer style="background-color: var(--bg-color);">
-      <h2 style="color: #333;">Vi aspettiamo con gioia<br>Antonella & Mauro</h2>
+    <footer style="background-color: var(--bg-color); padding-bottom: calc(90px + env(safe-area-inset-bottom));">
+      <div style="margin-bottom: 40px; color: black; font-size: 1rem; line-height: 1.2;">
+        <p
+          style="margin: 0; font-family: var(--font-sans); font-size: 1rem; color: var(--text-color); display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <span>IBAN: <strong>IT81S0538704002000004697853</strong></span>
+          <button onclick="copyToClipboard('IT81S0538704002000004697853')"
+            style="background: none; border: none; cursor: pointer; font-size: 1.2rem; padding: 0; color: var(--primary-color);"
+            title="Copia IBAN">📋</button>
+        </p>
+        <p
+          style="margin: 10px 0 0 0; color: black; display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <span>Intestato a: <strong>Soldo Mauro, Uricchio Antonella</strong></span>
+          <button onclick="copyToClipboard('Soldo Mauro, Uricchio Antonella')"
+            style="background: none; border: none; cursor: pointer; font-size: 1.2rem; padding: 0; color: var(--primary-color);"
+            title="Copia Intestatari">📋</button>
+        </p>
+      </div>
+      <h2 style="color: #333;">Vi aspettiamo con gioia</h2>
       <img src="assets/logo/AM.png" alt="AM Logo" style="height: 70px;">
     </footer>
 

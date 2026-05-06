@@ -10,8 +10,8 @@ async function loadGuestsData() {
     const res = await fetch('api.php?action=search&q=');
     if (!res.ok) throw new Error("No API");
     const json = await res.json();
-    guestsArray = json.map(g => ({ 
-      id: g.id, 
+    guestsArray = json.map(g => ({
+      id: g.id,
       name: g.nome + ' ' + g.cognome + (g.alias ? ' - ' + g.alias : ''),
       gruppo: g.gruppo || '',
       relazione: g.relazione || ''
@@ -277,7 +277,7 @@ function handleRsvpAutocomplete(input, listId) {
   const val = input.value.toLowerCase();
   const list = document.getElementById(listId);
   list.innerHTML = "";
-  
+
   document.getElementById("rsvp-related-guests").style.display = "none";
   document.getElementById("rsvp-related-list").innerHTML = "";
 
@@ -317,14 +317,14 @@ function showRelatedGuests(mainGuest) {
     li.style.display = "flex";
     li.style.alignItems = "center";
     li.style.justifyContent = "space-between";
-    
+
     const labelBox = document.createElement("div");
     labelBox.style.flex = "1";
     labelBox.innerHTML = `<label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-      <input type="checkbox" class="related-guest-cb" value="${g.name}" checked>
+      <input type="checkbox" class="related-guest-cb" value="${g.name}" data-id="${g.id}" checked>
       <span class="related-name-span">${g.name}</span>
     </label>`;
-    
+
     const editBtn = document.createElement("span");
     editBtn.innerHTML = "✏️ <span style='font-size:0.8rem; text-decoration:underline;'>Rinomina</span>";
     editBtn.style.cursor = "pointer";
@@ -332,18 +332,18 @@ function showRelatedGuests(mainGuest) {
     editBtn.style.fontSize = "0.95rem";
     editBtn.style.marginLeft = "10px";
     editBtn.title = "Modifica nome e cognome";
-    
-    editBtn.onclick = function() {
+
+    editBtn.onclick = function () {
       const newFullName = prompt("Modifica nome e cognome:", g.name);
       if (newFullName && newFullName.trim() !== "" && newFullName !== g.name) {
         const parts = newFullName.trim().split(" ");
         const newName = parts[0];
         const newSurname = parts.slice(1).join(" ");
-        
+
         labelBox.querySelector(".related-name-span").textContent = newFullName;
         labelBox.querySelector(".related-guest-cb").value = newFullName;
         g.name = newFullName;
-        
+
         const formData = new FormData();
         formData.append("action", "update_name");
         formData.append("id", g.id);
@@ -352,14 +352,14 @@ function showRelatedGuests(mainGuest) {
         fetch("api.php", { method: "POST", body: formData })
           .then(res => res.json())
           .then(json => {
-            if(json.status === "ok") showToast("Nome aggiornato correttamente!");
+            if (json.status === "ok") showToast("Nome aggiornato correttamente!");
             else showToast("Errore durante l'aggiornamento.");
           }).catch(() => showToast("Errore di rete."));
       }
     };
     li.appendChild(labelBox);
     li.appendChild(editBtn);
-    
+
     const addBtn = relatedList.querySelector(".add-participant-btn");
     if (addBtn) {
       relatedList.insertBefore(li, addBtn);
@@ -369,7 +369,7 @@ function showRelatedGuests(mainGuest) {
   };
 
   const relIds = mainGuest.relazione ? mainGuest.relazione.split(',').map(id => id.trim()).filter(id => id !== mainGuest.id) : [];
-  
+
   relIds.forEach(id => {
     const g = guestsArray.find(x => x.id === id);
     if (g) renderGuest(g);
@@ -387,25 +387,25 @@ function showRelatedGuests(mainGuest) {
   addBtn.style.cursor = "pointer";
   addBtn.style.width = "100%";
   addBtn.style.fontSize = "0.9rem";
-  
-  addBtn.onclick = function(e) {
+
+  addBtn.onclick = function (e) {
     e.preventDefault();
     const newFullName = prompt("Inserisci Nome e Cognome del nuovo partecipante:");
     if (newFullName && newFullName.trim() !== "") {
       const parts = newFullName.trim().split(" ");
       const newName = parts[0];
       const newSurname = parts.slice(1).join(" ");
-      
+
       const formData = new FormData();
       formData.append("action", "add_guest");
       formData.append("main_id", mainGuest.id);
       formData.append("nome", newName);
       formData.append("cognome", newSurname);
-      
+
       fetch("api.php", { method: "POST", body: formData })
         .then(res => res.json())
         .then(json => {
-          if(json.status === "ok") {
+          if (json.status === "ok") {
             const newG = { id: json.new_guest.id, name: newFullName, gruppo: mainGuest.gruppo, relazione: json.new_guest.relazione };
             guestsArray.push(newG);
             renderGuest(newG);
@@ -772,38 +772,49 @@ function sendWhatsApp(isComing) {
   const fullname = inputEl ? inputEl.value.trim() : "";
   const intolleranze = intolleranzeEl ? intolleranzeEl.value.trim() : "";
 
-  if (!fullname) { 
-    showToast("Inserisci il tuo nome prima di confermare!"); 
-    return; 
+  if (!fullname) {
+    showToast("Inserisci il tuo nome prima di confermare!");
+    return;
   }
 
   let guestNames = [fullname];
+  let guestIds = [];
+  const mainGuestObj = guestsArray.find(g => g.name === fullname);
+  if (mainGuestObj) { guestIds.push(mainGuestObj.id); }
+
   const cbs = document.querySelectorAll('.related-guest-cb:checked');
   cbs.forEach(cb => {
     guestNames.push(cb.value);
+    if (cb.dataset.id) guestIds.push(cb.dataset.id);
   });
 
-  const mainGuestObj = guestsArray.find(g => g.name === fullname);
+  if (guestIds.length > 0) {
+    const formData = new URLSearchParams();
+    formData.append('action', 'confirm_multiple');
+    formData.append('ids', guestIds.join(','));
+    formData.append('value', isComing ? 'TRUE' : 'FALSE');
+    fetch('api.php', { method: 'POST', body: formData }).catch(e => console.error(e));
+  }
   let number = "393394001216"; // Mauro default
   if (mainGuestObj && mainGuestObj.gruppo === "Antonella") {
     number = "393881947158";
   }
-  
+
   let text = "";
   if (isComing) {
     if (guestNames.length > 1) {
-      text = "Ciao, confermiamo la nostra presenza al vostro matrimonio! 😍\\n" + guestNames.join(", ");
+      text = "Ciao, confermiamo la nostra presenza al vostro matrimonio! \\n" + guestNames.join(", ");
     } else {
-      text = "Ciao, confermo la mia presenza al vostro matrimonio! 😍\\n" + guestNames[0];
+      text = "Ciao, confermo la mia presenza al vostro matrimonio! \\n" + guestNames[0];
     }
     if (intolleranze) {
       text += "\\n\\nIntolleranze / Note: " + intolleranze;
     }
   } else {
     if (guestNames.length > 1) {
-      text = "Ciao, purtroppo non possiamo partecipare al matrimonio. 😔\\n" + guestNames.join(", ");
+      text = "Ciao, purtroppo non possiamo partecipare al matrimonio. \\n" + guestNames.join(", ");
     } else {
-      text = "Ciao, purtroppo non posso partecipare al matrimonio. 😔\\n" + guestNames[0];
+      text = "Ciao, purtroppo non posso partecipare al matrimonio. \\n" + guestNames[0];
     }
   }
 
@@ -953,3 +964,12 @@ function drawOrganicTimeline() {
   if (pathElement) { pathElement.setAttribute('d', pathD); }
 }
 window.addEventListener('resize', () => { setTimeout(drawOrganicTimeline, 100) });
+
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    showToast("Copiato negli appunti!");
+  }).catch(err => {
+    console.error("Errore nella copia: ", err);
+    showToast("Errore durante la copia");
+  });
+}

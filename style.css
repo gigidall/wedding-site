@@ -1034,11 +1034,11 @@ section {
 
 .elegant-input {
   width: 100%;
-  padding: 20px;
+  padding: 10px 15px;
   border: 1px solid rgba(212, 163, 115, 0.4);
   border-radius: 12px;
   font-family: var(--font-sans);
-  font-size: 1.05rem;
+  font-size: 1rem;
   text-align: center;
   transition: var(--transition);
   background: #fafafa;
@@ -1464,10 +1464,7 @@ footer {
   z-index: 1;
 }
 
-/* Add padding to the whole body so the footer/last content isn't covered by the 70px tab bar */
-#main {
-  padding-bottom: calc(100px + env(safe-area-inset-bottom));
-}
+/* Removed #main padding in favor of footer padding */
 
 /* --- FIX OVERLAP E SFONDI ALTERNATI --- */
 section {
