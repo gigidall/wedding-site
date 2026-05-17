@@ -683,7 +683,7 @@ section {
 }
 
 .timeline-content::after {
-  content: "📍 Clicca per aprire la mappa";
+  content: "📍Visualizza sulla mappa";
   display: inline-block;
   margin-top: 12px;
   font-size: 0.8rem;
@@ -700,7 +700,7 @@ section {
 .timeline-event.clickable:hover .timeline-content::after {
   background: rgba(212, 163, 115, 0.25);
   transform: translateX(4px);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .timeline-content p {

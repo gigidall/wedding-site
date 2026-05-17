@@ -60,7 +60,6 @@ function openInvite() {
     startCountdown();
     startPetals();
     initScrollObservers();
-    initExplicitGallery();
 
     // Step 4: Complete cleanup and final UI reveal
     setTimeout(() => {
@@ -93,6 +92,21 @@ document.addEventListener("DOMContentLoaded", () => {
   window.scrollTo(0, 0);
 
   loadGuestsData();
+  
+  // PRELOAD ASSETS IMMEDIATELY (Requested by USER)
+  initExplicitGallery();
+  
+  const playlist = [
+    'assets/Thinking Out Loud - Ed Sheeran.mp3',
+    'assets/Everything I Do - Bryan Adams.mp3'
+  ];
+  
+  // Eager load Audio via Background DOM Nodes to populate cache
+  playlist.forEach(track => {
+    const preloader = new Audio();
+    preloader.preload = "auto";
+    preloader.src = track;
+  });
 
   // SETUP WAVESURFER OBBLIGATORIO
   wavesurfer = WaveSurfer.create({
@@ -115,10 +129,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   let currentTrackIndex = 0;
-  const playlist = [
-    'assets/Thinking Out Loud - Ed Sheeran.mp3',
-    'assets/Everything I Do - Bryan Adams.mp3'
-  ];
 
   wavesurfer.load(playlist[currentTrackIndex]);
 
@@ -572,7 +582,7 @@ async function initExplicitGallery() {
   globalImages.forEach((src, idx) => {
     const img = new Image();
     img.src = src + "?t=" + new Date().getTime(); // burst cache for new uploads
-    img.loading = "lazy";
+    img.loading = "eager"; // Eager loading as requested
 
     img.onerror = function () {
       this.parentElement.style.display = 'none';
