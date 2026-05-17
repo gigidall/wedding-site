@@ -92,21 +92,13 @@ document.addEventListener("DOMContentLoaded", () => {
   window.scrollTo(0, 0);
 
   loadGuestsData();
-  
-  // PRELOAD ASSETS IMMEDIATELY (Requested by USER)
-  initExplicitGallery();
-  
   const playlist = [
     'assets/Thinking Out Loud - Ed Sheeran.mp3',
     'assets/Everything I Do - Bryan Adams.mp3'
   ];
   
-  // Eager load Audio via Background DOM Nodes to populate cache
-  playlist.forEach(track => {
-    const preloader = new Audio();
-    preloader.preload = "auto";
-    preloader.src = track;
-  });
+  let hasPreloadedAssets = false;
+
 
   // SETUP WAVESURFER OBBLIGATORIO
   wavesurfer = WaveSurfer.create({
@@ -144,6 +136,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   wavesurfer.on('ready', () => {
     document.getElementById('audio-total').innerText = formatTime(wavesurfer.getDuration());
+    
+    // START HEAVY PRELOADING ONLY AFTER FIRST TRACK IS READY
+    if (!hasPreloadedAssets) {
+      hasPreloadedAssets = true;
+      initExplicitGallery();
+      playlist.forEach((track, idx) => {
+        if (idx > 0) {
+          const preloader = new Audio();
+          preloader.preload = "auto";
+          preloader.src = track;
+        }
+      });
+    }
   });
 
   wavesurfer.on('audioprocess', () => {
