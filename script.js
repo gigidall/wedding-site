@@ -552,6 +552,45 @@ window.setActiveTab = function (clickedTab, event) {
 
 let globalImages = [];
 
+// --- DOWNLOAD IMAGE UTILITY ---
+function downloadImage(url) {
+  // Remove cache-busting param for cleaner filename
+  const cleanUrl = url.split('?')[0];
+  const filename = cleanUrl.split('/').pop() || 'photo.jpg';
+
+  fetch(cleanUrl)
+    .then(response => {
+      if (!response.ok) throw new Error('Network error');
+      return response.blob();
+    })
+    .then(blob => {
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
+    })
+    .catch(() => {
+      // Fallback: open in new tab
+      const a = document.createElement('a');
+      a.href = cleanUrl;
+      a.download = filename;
+      a.target = '_blank';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
+}
+
+function downloadCurrentLightboxImage() {
+  if (globalImages.length > 0 && globalImages[currentLightboxIndex]) {
+    downloadImage(globalImages[currentLightboxIndex]);
+  }
+}
+
 async function initExplicitGallery() {
   const container = document.getElementById('galleryContainer');
   const counter = document.getElementById('gallery-counter');
@@ -599,6 +638,17 @@ async function initExplicitGallery() {
 
     img.onclick = () => openLightbox(img.src, idx);
     item.appendChild(img);
+
+    // Download button overlay
+    const dlBtn = document.createElement('button');
+    dlBtn.className = 'gallery-download-btn';
+    dlBtn.title = 'Scarica foto';
+    dlBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>';
+    dlBtn.onclick = (e) => {
+      e.stopPropagation();
+      downloadImage(src);
+    };
+    item.appendChild(dlBtn);
 
     container.appendChild(item);
     observer.observe(item);
@@ -990,9 +1040,19 @@ function drawOrganicTimeline() {
 }
 window.addEventListener('resize', () => { setTimeout(drawOrganicTimeline, 100) });
 
-function copyToClipboard(text) {
+function copyToClipboard(text, btn) {
   navigator.clipboard.writeText(text).then(() => {
     showToast("Copiato negli appunti!");
+    if (btn) {
+      const label = btn.querySelector('span');
+      const originalText = label ? label.textContent : '';
+      btn.classList.add('copied');
+      if (label) label.textContent = 'Copiato ✓';
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        if (label) label.textContent = originalText;
+      }, 2000);
+    }
   }).catch(err => {
     console.error("Errore nella copia: ", err);
     showToast("Errore durante la copia");

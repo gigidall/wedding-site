@@ -322,18 +322,20 @@
     <footer style="background-color: var(--bg-color); padding-bottom: calc(90px + env(safe-area-inset-bottom));">
       <div style="margin-bottom: 40px; color: black; font-size: 1rem; line-height: 1.2;">
         <p
-          style="margin: 0; font-family: var(--font-sans); font-size: 1rem; color: var(--text-color); display: flex; align-items: center; justify-content: center; gap: 8px;">
+          style="margin: 0; font-family: var(--font-sans); font-size: 1rem; color: var(--text-color); display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;">
           <span>IBAN: <strong>IT81S0538704002000004697853</strong></span>
-          <button onclick="copyToClipboard('IT81S0538704002000004697853')"
-            style="background: none; border: none; cursor: pointer; font-size: 1.2rem; padding: 0; color: var(--primary-color);"
-            title="Copia IBAN">📋</button>
+          <button class="copy-btn" onclick="copyToClipboard('IT81S0538704002000004697853', this)">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span>Copia</span>
+          </button>
         </p>
         <p
-          style="margin: 10px 0 0 0; color: black; display: flex; align-items: center; justify-content: center; gap: 8px;">
+          style="margin: 10px 0 0 0; color: black; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;">
           <span>Intestato a: <strong>Soldo Mauro, Uricchio Antonella</strong></span>
-          <button onclick="copyToClipboard('Soldo Mauro, Uricchio Antonella')"
-            style="background: none; border: none; cursor: pointer; font-size: 1.2rem; padding: 0; color: var(--primary-color);"
-            title="Copia Intestatari">📋</button>
+          <button class="copy-btn" onclick="copyToClipboard('Soldo Mauro, Uricchio Antonella', this)">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span>Copia</span>
+          </button>
         </p>
       </div>
       <h2 style="color: #333;">Vi aspettiamo con gioia</h2>
@@ -347,6 +349,13 @@
 
   <!-- LIGHTBOX GALLERY -->
   <div id="lightbox" class="lightbox">
+    <div class="lightbox-download" onclick="downloadCurrentLightboxImage()" title="Scarica foto">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="7 10 12 15 17 10"></polyline>
+        <line x1="12" y1="15" x2="12" y2="3"></line>
+      </svg>
+    </div>
     <div class="lightbox-close" onclick="closeLightbox()">&times;</div>
     <div id="lightbox-counter"
       style="position: absolute; top: 30px; left: 30px; font-size: 1.2rem; color: white; z-index: 10010; font-family: var(--font-sans); font-weight: 600; text-shadow: 0 2px 10px rgba(0,0,0,0.8);">
