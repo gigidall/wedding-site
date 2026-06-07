@@ -84,6 +84,46 @@ if ($method === 'GET') {
 
 if ($method === 'POST') {
     $action = isset($_POST['action']) ? $_POST['action'] : '';
+
+    // --- RSVP: Save responses to risposte.csv + Google Sheets ---
+    if ($action === 'save_rsvp') {
+        $risposteFile = __DIR__ . '/data/risposte.csv';
+        $risposta = isset($_POST['risposta']) ? trim($_POST['risposta']) : '';
+        $guestsJson = isset($_POST['guests']) ? $_POST['guests'] : '[]';
+        $guests = json_decode($guestsJson, true);
+        
+        if (!is_array($guests) || count($guests) === 0) {
+            echo json_encode(["status" => "error", "message" => "Nessun ospite"]);
+            exit;
+        }
+
+        // Create file with header if it doesn't exist
+        if (!file_exists($risposteFile)) {
+            file_put_contents($risposteFile, "Timestamp,Nome,Cognome,Tipo,Risposta,Note,Menu\n");
+        }
+
+        date_default_timezone_set('Europe/Rome');
+        $timestamp = date('Y-m-d H:i:s');
+        $handle = fopen($risposteFile, "a");
+        if ($handle) {
+            foreach ($guests as $g) {
+                $row = [
+                    $timestamp,
+                    isset($g['nome']) ? $g['nome'] : '',
+                    isset($g['cognome']) ? $g['cognome'] : '',
+                    isset($g['tipo']) ? $g['tipo'] : '',
+                    $risposta,
+                    isset($g['note']) ? $g['note'] : '',
+                    isset($g['menu']) ? $g['menu'] : 'Adulto'
+                ];
+                fputcsv($handle, $row);
+            }
+            fclose($handle);
+        }
+
+        echo json_encode(["status" => "ok"]);
+        exit;
+    }
     
         if ($action === 'upload') {
         if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {

@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
     'assets/Thinking Out Loud - Ed Sheeran.mp3',
     'assets/Everything I Do - Bryan Adams.mp3'
   ];
-  
+
   let hasPreloadedAssets = false;
 
 
@@ -136,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   wavesurfer.on('ready', () => {
     document.getElementById('audio-total').innerText = formatTime(wavesurfer.getDuration());
-    
+
     // START HEAVY PRELOADING ONLY AFTER FIRST TRACK IS READY
     if (!hasPreloadedAssets) {
       hasPreloadedAssets = true;
@@ -307,11 +307,11 @@ function handleRsvpAutocomplete(input, listId) {
       div.className = "autocomplete-item";
       const start = match.toLowerCase().indexOf(val);
       const highlighted = match.substring(0, start) + "<strong>" + match.substring(start, start + val.length) + "</strong>" + match.substring(start + val.length);
-      
+
       let statusIcon = "";
       if (matchObj.conferma && matchObj.conferma.toUpperCase() === "TRUE") statusIcon = " <span title='Già confermato' style='font-size:0.9em;'>✅</span>";
       if (matchObj.conferma && matchObj.conferma.toUpperCase() === "FALSE") statusIcon = " <span title='Già declinato' style='font-size:0.9em;'>❌</span>";
-      
+
       div.innerHTML = highlighted + statusIcon;
       div.onmousedown = function (e) {
         input.value = match;
@@ -841,61 +841,114 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // --- RSVP LOGIC ---
-function sendWhatsApp(isComing) {
-  const inputEl = document.getElementById("rsvp-username");
-  const intolleranzeEl = document.getElementById("rsvp-intolleranze");
-  const fullname = inputEl ? inputEl.value.trim() : "";
-  const intolleranze = intolleranzeEl ? intolleranzeEl.value.trim() : "";
+let companionCounter = 0;
 
-  if (!fullname) {
-    showToast("Inserisci il tuo nome prima di confermare!");
+function addCompanion() {
+  companionCounter++;
+  const container = document.getElementById('companions-container');
+  const div = document.createElement('div');
+  div.className = 'companion-block';
+  div.id = 'companion-' + companionCounter;
+  div.style.cssText = 'width:100%; text-align:left; margin-top:15px; padding-top:15px; border-top:1px dashed rgba(212,163,115,0.4); position:relative;';
+  div.innerHTML = `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+      <p style="font-family:var(--font-sans); font-size:0.85rem; font-weight:600; color:var(--primary-dark); margin:0;">👤 Accompagnatore</p>
+      <button type="button" onclick="removeCompanion(${companionCounter})" style="background:none; border:none; color:#c0392b; font-size:1.2rem; cursor:pointer; padding:0 5px;" title="Rimuovi">✕</button>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+      <input type="text" class="elegant-input comp-nome" placeholder="Nome" style="margin-bottom:0; width:100%; box-sizing:border-box;">
+      <input type="text" class="elegant-input comp-cognome" placeholder="Cognome" style="margin-bottom:0; width:100%; box-sizing:border-box;">
+    </div>
+    <textarea class="elegant-input comp-note" placeholder="Allergie / Intolleranze / Note (opzionale)" rows="2" style="resize:none; width:100%; box-sizing:border-box; margin-bottom:0;"></textarea>
+    <div class="baby-options">
+      <label class="baby-check"><input type="radio" name="menu-comp-${companionCounter}" value="Adulto" checked> 🍽️ Adulto</label>
+      <label class="baby-check"><input type="radio" name="menu-comp-${companionCounter}" value="Baby"> 🍼 Baby</label>
+      <label class="baby-check"><input type="radio" name="menu-comp-${companionCounter}" value="Seggiolone"> 🪑 Seggiolone</label>
+    </div>
+  `;
+  container.appendChild(div);
+}
+
+function removeCompanion(id) {
+  const el = document.getElementById('companion-' + id);
+  if (el) el.remove();
+}
+
+function collectGuests() {
+  const guests = [];
+  const nome = (document.getElementById("rsvp-nome").value || "").trim();
+  const cognome = (document.getElementById("rsvp-cognome").value || "").trim();
+  const note = (document.getElementById("rsvp-intolleranze").value || "").trim();
+  const menuMain = document.querySelector('input[name="menu-main"]:checked');
+  const menu = menuMain ? menuMain.value : 'Adulto';
+  if (nome && cognome) {
+    guests.push({ nome, cognome, note, menu, tipo: 'Principale' });
+  }
+  document.querySelectorAll('.companion-block').forEach(block => {
+    const n = (block.querySelector('.comp-nome').value || "").trim();
+    const c = (block.querySelector('.comp-cognome').value || "").trim();
+    const nt = (block.querySelector('.comp-note').value || "").trim();
+    const radioChecked = block.querySelector('input[type="radio"]:checked');
+    const m = radioChecked ? radioChecked.value : 'Adulto';
+    if (n && c) {
+      guests.push({ nome: n, cognome: c, note: nt, menu: m, tipo: 'Accompagnatore' });
+    }
+  });
+  return guests;
+}
+
+function sendWhatsApp(isComing) {
+  const guests = collectGuests();
+
+  if (guests.length === 0) {
+    showToast("Inserisci nome e cognome prima di confermare!");
     return;
   }
 
-  let guestNames = [fullname];
-  let guestIds = [];
-  const mainGuestObj = guestsArray.find(g => g.name === fullname);
-  if (mainGuestObj) { guestIds.push(mainGuestObj.id); }
+  const risposta = isComing ? 'Sì' : 'No';
 
-  const cbs = document.querySelectorAll('.related-guest-cb:checked');
-  cbs.forEach(cb => {
-    guestNames.push(cb.value);
-    if (cb.dataset.id) guestIds.push(cb.dataset.id);
+  // Save to CSV via API
+  const formData = new URLSearchParams();
+  formData.append('action', 'save_rsvp');
+  formData.append('risposta', risposta);
+  formData.append('guests', JSON.stringify(guests));
+  fetch('api.php', { method: 'POST', body: formData }).catch(e => console.error(e));
+
+  // Save to Google Sheets
+  const GSHEET_URL = 'https://script.google.com/macros/s/AKfycbwPjC9RVCtOfUSnRNOaCMSricdvic5SBCVdD15yNHmJ9E2f3metfEVKjM_vgsQY6Uey/exec';
+  fetch(GSHEET_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ timestamp: new Date().toLocaleString('sv-SE', { timeZone: 'Europe/Rome' }).replace('T',' '), risposta, guests })
+  }).catch(e => console.error('Google Sheets error:', e));
+
+  // Build WhatsApp message
+  const names = guests.map(g => g.nome + ' ' + g.cognome);
+  const extras = [];
+  guests.forEach(g => {
+    const parts = [];
+    if (g.note) parts.push(g.note);
+    if (g.menu && g.menu !== 'Adulto') parts.push('Menu: ' + g.menu);
+    if (parts.length > 0) extras.push(g.nome + ' ' + g.cognome + ': ' + parts.join(', '));
   });
-
-  if (guestIds.length > 0) {
-    const formData = new URLSearchParams();
-    formData.append('action', 'confirm_multiple');
-    formData.append('ids', guestIds.join(','));
-    formData.append('value', isComing ? 'TRUE' : 'FALSE');
-    fetch('api.php', { method: 'POST', body: formData }).catch(e => console.error(e));
-  }
-  let number = "393394001216"; // Mauro default
-  if (mainGuestObj && mainGuestObj.gruppo === "Antonella") {
-    number = "393881947158";
-  }
-
+  let number = "393881947158";
   let text = "";
+
   if (isComing) {
-    if (guestNames.length > 1) {
-      text = "Ciao, confermiamo la nostra presenza al vostro matrimonio!\n" + guestNames.join(", ");
-    } else {
-      text = "Ciao, confermo la mia presenza al vostro matrimonio!\n" + guestNames[0];
-    }
-    if (intolleranze) {
-      text += "\n\nIntolleranze / Note: " + intolleranze;
+    text = names.length > 1
+      ? "Ciao, confermiamo la nostra presenza al vostro matrimonio!\n" + names.join(", ")
+      : "Ciao, confermo la mia presenza al vostro matrimonio!\n" + names[0];
+    if (extras.length > 0) {
+      text += "\n\nNote:\n" + extras.join("\n");
     }
   } else {
-    if (guestNames.length > 1) {
-      text = "Ciao, purtroppo non possiamo partecipare al matrimonio.\n" + guestNames.join(", ");
-    } else {
-      text = "Ciao, purtroppo non posso partecipare al matrimonio.\n" + guestNames[0];
-    }
+    text = names.length > 1
+      ? "Ciao, purtroppo non possiamo partecipare al matrimonio.\n" + names.join(", ")
+      : "Ciao, purtroppo non posso partecipare al matrimonio.\n" + names[0];
   }
 
-  const encodedText = encodeURIComponent(text);
-  const url = `https://wa.me/${number}?text=${encodedText}`;
-  window.open(url, '_blank');
+  window.open(`https://wa.me/${number}?text=${encodeURIComponent(text)}`, '_blank');
 }
 
 async function markPresence(input, hintBoxId, isComing) {

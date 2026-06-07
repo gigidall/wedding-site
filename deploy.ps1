@@ -3,7 +3,7 @@ $ftpUser = "weddingmauroantonella"
 $ftpPass = "B2KpzYUjUp4N"
 
 $sourceDir = "c:\devRS\wedding-site"
-$itemsToUpload = @("index.html", "statistics.html", "style.css", "script.js", "api.php", "data", "assets")
+$itemsToUpload = @("index.html", "risposte.html", "style.css", "script.js", "api.php", "data", "assets")
 
 function Upload-Ftp {
     param (
