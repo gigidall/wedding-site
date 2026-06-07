@@ -1041,7 +1041,7 @@ function drawOrganicTimeline() {
 window.addEventListener('resize', () => { setTimeout(drawOrganicTimeline, 100) });
 
 function copyToClipboard(text, btn) {
-  navigator.clipboard.writeText(text).then(() => {
+  function onSuccess() {
     showToast("Copiato negli appunti!");
     if (btn) {
       const label = btn.querySelector('span');
@@ -1053,8 +1053,28 @@ function copyToClipboard(text, btn) {
         if (label) label.textContent = originalText;
       }, 2000);
     }
-  }).catch(err => {
-    console.error("Errore nella copia: ", err);
-    showToast("Errore durante la copia");
-  });
+  }
+
+  function fallbackCopy(text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+    try {
+      document.execCommand('copy');
+      onSuccess();
+    } catch (err) {
+      showToast("Tieni premuto sull'IBAN per copiare");
+    }
+    document.body.removeChild(textarea);
+  }
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(onSuccess).catch(() => fallbackCopy(text));
+  } else {
+    fallbackCopy(text);
+  }
 }

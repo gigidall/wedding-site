@@ -792,6 +792,108 @@ section {
   }
 }
 
+/* PARKING INLINE (inside Castello card) */
+.castello-content::after {
+  display: none !important;
+}
+
+.map-link-inline {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 0.8rem;
+  font-family: var(--font-sans);
+  color: var(--primary-dark);
+  font-weight: 700;
+  background: rgba(212, 163, 115, 0.15);
+  padding: 6px 12px;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(212, 163, 115, 0.3);
+  text-decoration: none;
+}
+
+.map-link-inline:hover {
+  background: rgba(212, 163, 115, 0.25);
+  transform: translateX(4px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.parking-badges {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.parking-badges-label {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+  white-space: nowrap;
+}
+
+.parking-badge {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: -0.5px;
+  border-radius: 50%;
+  text-decoration: none;
+  box-shadow: 0 3px 10px rgba(59, 130, 246, 0.3);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+}
+
+.parking-badge:hover,
+.parking-badge:active {
+  transform: scale(1.15);
+  box-shadow: 0 5px 18px rgba(59, 130, 246, 0.45);
+}
+
+@media (max-width: 600px) {
+  .parking-badge {
+    width: 34px;
+    height: 34px;
+    font-size: 0.8rem;
+  }
+}
+
+/* HEART ARROW ANIMATION */
+.heart-arrow-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.heart-arrow-img {
+  width: 130px;
+  height: auto;
+  mix-blend-mode: multiply;
+  transform: rotate(20deg);
+  animation: heartFloat 3s ease-in-out infinite;
+}
+
+@keyframes heartFloat {
+
+  0%,
+  100% {
+    transform: rotate(20deg) translateY(0);
+  }
+
+  50% {
+    transform: rotate(20deg) translateY(-5px);
+  }
+}
+
 /* GALLERY NATIVE SNAP */
 .gallery-section {
   text-align: center;
@@ -1333,7 +1435,7 @@ section {
   background: rgba(212, 163, 115, 0.1);
   border: 1.5px solid rgba(212, 163, 115, 0.5);
   border-radius: 20px;
-  padding: 5px 14px;
+  padding: 3px 6px;
   cursor: pointer;
   font-family: var(--font-sans);
   font-size: 0.8rem;
@@ -1385,13 +1487,15 @@ footer {
   transform: translateX(-50%);
   background: var(--text-color);
   color: #fff;
-  padding: 18px 30px;
+  padding: 12px 24px;
   border-radius: 40px;
-  font-size: 1.05rem;
+  font-size: 0.85rem;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
   transition: bottom 0.5s;
   z-index: 3000;
   font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
 }
 
 .toast.show {

@@ -196,15 +196,27 @@
           </div>
         </a>
 
-        <a href="https://www.google.com/maps/search/?api=1&query=Castello+del+Malconsiglio+Miglionico" target="_blank"
-          class="timeline-event clickable fade-up">
+        <div class="timeline-event clickable fade-up"
+          onclick="window.open('https://www.google.com/maps/search/?api=1&query=Castello+del+Malconsiglio+Miglionico','_blank')">
           <div class="timeline-time">10:30</div>
           <div class="timeline-marker">🏰</div>
-          <div class="timeline-content">
+          <div class="timeline-content castello-content">
             <h4>Raduno al Castello</h4>
             <p>Verso la Chiesa con la sposa</p>
+            <a href="https://www.google.com/maps/search/?api=1&query=Castello+del+Malconsiglio+Miglionico"
+              target="_blank" class="map-link-inline" onclick="event.stopPropagation()">📍Visualizza sulla mappa</a>
+            <div class="parking-badges" onclick="event.stopPropagation()">
+              <span class="parking-badges-label">🅿️archeggi:</span>
+              <a href="https://www.google.com/maps/search/?api=1&query=2+Via+Quaranta,+Miglionico" target="_blank"
+                class="parking-badge" title="Via Quaranta, 2">P1</a>
+              <a href="https://www.google.com/maps/search/?api=1&query=Parcheggio+comunale+Miglionico" target="_blank"
+                class="parking-badge" title="Parcheggio Comunale">P2</a>
+              <a href="https://www.google.com/maps/search/?api=1&query=35+Via+Pietro+de+Ruggieri,+Miglionico"
+                target="_blank" class="parking-badge" title="Via P. de Ruggieri, 35">P3</a>
+            </div>
           </div>
-        </a>
+        </div>
+
 
         <a href="https://www.google.com/maps/search/?api=1&query=Chiesa+Madre+Santa+Maria+Maggiore+Miglionico"
           target="_blank" class="timeline-event clickable fade-up">
@@ -311,21 +323,33 @@
       </div>
 
       <div class="rsvp-buttons" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; width: 100%;">
-        <button class="primary-btn" style="font-size:0.85rem; padding: 10px; width: 100%; box-sizing: border-box;"
+        <button class="primary-btn" style="font-size:0.7rem; padding: 10px; width: 100%; box-sizing: border-box;"
           onclick="sendWhatsApp(true)">Sì, ci sarò! 😍</button>
         <button class="primary-btn outline"
-          style="font-size:0.85rem; padding: 10px; width: 100%; box-sizing: border-box; background:transparent; border: 2px solid var(--primary-color); color:var(--primary-color);"
+          style="font-size:0.7rem; padding: 10px; width: 100%; box-sizing: border-box; background:transparent; border: 2px solid var(--primary-color); color:var(--primary-color);"
           onclick="sendWhatsApp(false)">No, mi dispiace 😔</button>
       </div>
     </section>
 
     <footer style="background-color: var(--bg-color); padding-bottom: calc(90px + env(safe-area-inset-bottom));">
-      <div style="margin-bottom: 40px; color: black; font-size: 1rem; line-height: 1.2;">
+      <p
+        style="text-align: center; font-family: var(--font-serif); font-size: 1.1rem; color: var(--text-color); line-height: 1.7; max-width: 500px; margin: 0 auto; padding: 0 20px; font-style: italic;">
+        Ogni sorriso e ogni abbraccio renderanno speciale questo giorno. Se vorrete accompagnarci nei nostri progetti
+        futuri, accoglieremo con gioia il vostro pensiero.
+      </p>
+      <div class="heart-arrow-wrapper">
+        <img src="assets/heart-airplane.png" alt="" class="heart-arrow-img">
+      </div>
+      <div style="margin-bottom: 40px; color: black; font-size: 0.8rem; line-height: 1.2;">
         <p
-          style="margin: 0; font-family: var(--font-sans); font-size: 1rem; color: var(--text-color); display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;">
+          style="margin: 0; font-family: var(--font-sans); color: var(--text-color); display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;">
           <span>IBAN: <strong>IT81S0538704002000004697853</strong></span>
           <button class="copy-btn" onclick="copyToClipboard('IT81S0538704002000004697853', this)">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
             <span>Copia</span>
           </button>
         </p>
@@ -333,7 +357,11 @@
           style="margin: 10px 0 0 0; color: black; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;">
           <span>Intestato a: <strong>Soldo Mauro, Uricchio Antonella</strong></span>
           <button class="copy-btn" onclick="copyToClipboard('Soldo Mauro, Uricchio Antonella', this)">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
             <span>Copia</span>
           </button>
         </p>
@@ -350,7 +378,8 @@
   <!-- LIGHTBOX GALLERY -->
   <div id="lightbox" class="lightbox">
     <div class="lightbox-download" onclick="downloadCurrentLightboxImage()" title="Scarica foto">
-      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
         <polyline points="7 10 12 15 17 10"></polyline>
         <line x1="12" y1="15" x2="12" y2="3"></line>
