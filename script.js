@@ -214,9 +214,9 @@ document.addEventListener("DOMContentLoaded", () => {
           wavesurfer.play().then(() => {
             musicPlaying = true;
             updateAudioUI();
-          }).catch(() => {});
+          }).catch(() => { });
         });
-      }, 500);
+      }, 200);
     }
   } else {
     console.error("Sigillo o audio non trovati nel DOM");
@@ -946,7 +946,7 @@ function sendWhatsApp(isComing) {
     method: 'POST',
     mode: 'no-cors',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ timestamp: new Date().toLocaleString('sv-SE', { timeZone: 'Europe/Rome' }).replace('T',' '), risposta, guests })
+    body: JSON.stringify({ timestamp: new Date().toLocaleString('sv-SE', { timeZone: 'Europe/Rome' }).replace('T', ' '), risposta, guests })
   }).catch(e => console.error('Google Sheets error:', e));
 
   // Build WhatsApp message
