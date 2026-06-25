@@ -71,7 +71,18 @@ function openInvite() {
         if (nav) nav.classList.remove("hidden");
       }, 300);
 
-      main.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Se c'è un hash nell'URL (es. #gallery-sec), scrolla a quella sezione
+      const hash = window.location.hash;
+      if (hash) {
+        const target = document.querySelector(hash);
+        if (target) {
+          setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
+        } else {
+          main.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      } else {
+        main.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
 
       // Play music if not already requested
       if (!musicPlaying && wavesurfer) {
@@ -192,6 +203,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       openInvite();
     });
+
+    // Auto-apertura se l'URL contiene un hash di sezione (es. da QR code)
+    if (window.location.hash) {
+      wavesurfer.once('ready', () => {
+        sealBtn.click();
+      });
+    }
   } else {
     console.error("Sigillo o audio non trovati nel DOM");
   }
@@ -862,7 +880,7 @@ function addCompanion() {
     <textarea class="elegant-input comp-note" placeholder="Allergie / Intolleranze / Note (opzionale)" rows="2" style="resize:none; width:100%; box-sizing:border-box; margin-bottom:0;"></textarea>
     <div class="baby-options">
       <label class="baby-check"><input type="radio" name="menu-comp-${companionCounter}" value="Adulto" checked> 🍽️ Adulto</label>
-      <label class="baby-check"><input type="radio" name="menu-comp-${companionCounter}" value="Baby"> 🍼 Baby</label>
+      <label class="baby-check"><input type="radio" name="menu-comp-${companionCounter}" value="Baby"> 🍟 Baby</label>
       <label class="baby-check"><input type="radio" name="menu-comp-${companionCounter}" value="Seggiolone"> 🪑 Seggiolone</label>
     </div>
   `;
