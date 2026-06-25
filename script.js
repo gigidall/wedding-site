@@ -206,9 +206,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Auto-apertura se l'URL contiene un hash di sezione (es. da QR code)
     if (window.location.hash) {
-      wavesurfer.once('ready', () => {
-        sealBtn.click();
-      });
+      // Apri subito senza aspettare l'audio
+      setTimeout(() => {
+        openInvite();
+        // L'audio parte appena è pronto, in background
+        wavesurfer.once('ready', () => {
+          wavesurfer.play().then(() => {
+            musicPlaying = true;
+            updateAudioUI();
+          }).catch(() => {});
+        });
+      }, 500);
     }
   } else {
     console.error("Sigillo o audio non trovati nel DOM");
