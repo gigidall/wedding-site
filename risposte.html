@@ -107,6 +107,153 @@
     .back-nav:hover {
       color: var(--primary-color);
     }
+
+    /* Delete button styles */
+    .btn-delete {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 8px;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-delete svg {
+      width: 18px;
+      height: 18px;
+      fill: #bbb;
+      transition: all 0.25s ease;
+    }
+    .btn-delete:hover {
+      background: rgba(244, 67, 54, 0.08);
+    }
+    .btn-delete:hover svg {
+      fill: #f44336;
+      transform: scale(1.15);
+    }
+    .btn-delete:active svg {
+      transform: scale(0.95);
+    }
+    th.col-azioni {
+      text-align: center;
+      width: 70px;
+    }
+    td.col-azioni {
+      text-align: center;
+      width: 70px;
+    }
+
+    /* Confirmation modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.2s ease;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal-box {
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px 36px;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      text-align: center;
+      animation: slideUp 0.3s ease;
+    }
+    .modal-box .modal-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(244, 67, 54, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+    .modal-box .modal-icon svg {
+      width: 28px;
+      height: 28px;
+      fill: #f44336;
+    }
+    .modal-box h3 {
+      font-family: var(--font-serif);
+      font-size: 1.3rem;
+      margin: 0 0 8px;
+      color: var(--text-color);
+    }
+    .modal-box p {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin: 0 0 24px;
+      line-height: 1.5;
+    }
+    .modal-box .guest-name {
+      font-weight: 600;
+      color: var(--text-color);
+    }
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+    .modal-actions button {
+      padding: 10px 24px;
+      border-radius: 10px;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+    }
+    .btn-cancel {
+      background: #f0f0f0;
+      color: var(--text-color);
+    }
+    .btn-cancel:hover {
+      background: #e0e0e0;
+    }
+    .btn-confirm-delete {
+      background: #f44336;
+      color: #fff;
+    }
+    .btn-confirm-delete:hover {
+      background: #d32f2f;
+      box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+    }
+
+    /* Row fade-out animation */
+    tr.deleting {
+      animation: rowFadeOut 0.4s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes rowFadeOut {
+      to {
+        opacity: 0;
+        transform: translateX(30px);
+        height: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+    }
   </style>
 </head>
 <body>
@@ -147,7 +294,7 @@
     <h2 style="margin: 30px 0 10px 0; font-family: var(--font-serif); color: #4caf50;">✅ Confermati</h2>
     <table id="rsvp-table-si">
       <thead>
-        <tr><th>Nome</th><th>Cognome</th><th>Tipo</th><th>Menu</th><th>Note</th><th>Data</th></tr>
+        <tr><th>Nome</th><th>Cognome</th><th>Tipo</th><th>Menu</th><th>Note</th><th>Data</th><th class="col-azioni">Azioni</th></tr>
       </thead>
       <tbody></tbody>
     </table>
@@ -155,13 +302,31 @@
     <h2 style="margin: 40px 0 10px 0; font-family: var(--font-serif); color: #f44336;">❌ Non Partecipanti</h2>
     <table id="rsvp-table-no">
       <thead>
-        <tr><th>Nome</th><th>Cognome</th><th>Tipo</th><th>Menu</th><th>Note</th><th>Data</th></tr>
+        <tr><th>Nome</th><th>Cognome</th><th>Tipo</th><th>Menu</th><th>Note</th><th>Data</th><th class="col-azioni">Azioni</th></tr>
       </thead>
       <tbody></tbody>
     </table>
   </div>
 
+  <!-- Confirmation Modal -->
+  <div class="modal-overlay" id="delete-modal">
+    <div class="modal-box">
+      <div class="modal-icon">
+        <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+      </div>
+      <h3>Eliminare questo invitato?</h3>
+      <p>Stai per eliminare <span class="guest-name" id="modal-guest-name"></span>. Questa azione non può essere annullata.</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="modal-cancel">Annulla</button>
+        <button class="btn-confirm-delete" id="modal-confirm">Elimina</button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // Delete state
+    let pendingDelete = null;
+
     function parseCSVLine(line) {
       const parts = [];
       let current = '';
@@ -219,7 +384,7 @@
       const tbody = document.querySelector(`#${tableId} tbody`);
       tbody.innerHTML = '';
       if (rows.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:20px; color:#999;">Nessuna risposta</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px; color:#999;">Nessuna risposta</td></tr>`;
         return;
       }
       rows.forEach(r => {
@@ -239,12 +404,86 @@
           <td>${menuBadge}</td>
           <td style="font-size:0.85rem;color:#666;max-width:250px;">${r.note || '—'}</td>
           <td style="font-size:0.8rem;color:#999;">${r.timestamp}</td>
+          <td class="col-azioni">
+            <button class="btn-delete" title="Elimina invitato" data-timestamp="${r.timestamp}" data-nome="${r.nome}" data-cognome="${r.cognome}">
+              <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8.46 11.88l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4h-3.5z"/></svg>
+            </button>
+          </td>
         `;
         tbody.appendChild(tr);
       });
     }
 
+    // Event delegation for delete buttons
+    document.addEventListener('click', function(e) {
+      const btn = e.target.closest('.btn-delete');
+      if (!btn) return;
+      
+      const { timestamp, nome, cognome } = btn.dataset;
+      pendingDelete = { timestamp, nome, cognome, row: btn.closest('tr') };
+      
+      document.getElementById('modal-guest-name').textContent = `${nome} ${cognome}`;
+      document.getElementById('delete-modal').classList.add('active');
+    });
+
+    // Modal cancel
+    document.getElementById('modal-cancel').addEventListener('click', function() {
+      document.getElementById('delete-modal').classList.remove('active');
+      pendingDelete = null;
+    });
+
+    // Click outside modal to close
+    document.getElementById('delete-modal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        this.classList.remove('active');
+        pendingDelete = null;
+      }
+    });
+
+    // Modal confirm delete
+    document.getElementById('modal-confirm').addEventListener('click', async function() {
+      if (!pendingDelete) return;
+      
+      const btn = this;
+      btn.disabled = true;
+      btn.textContent = 'Eliminando...';
+      
+      try {
+        const formData = new FormData();
+        formData.append('action', 'delete_rsvp');
+        formData.append('timestamp', pendingDelete.timestamp);
+        formData.append('nome', pendingDelete.nome);
+        formData.append('cognome', pendingDelete.cognome);
+
+        const res = await fetch('api.php', { method: 'POST', body: formData });
+        const data = await res.json();
+
+        if (data.status === 'ok') {
+          // Animate the row out
+          if (pendingDelete.row) {
+            pendingDelete.row.classList.add('deleting');
+          }
+          document.getElementById('delete-modal').classList.remove('active');
+          
+          // Reload data after animation
+          setTimeout(() => {
+            loadRsvpResponses();
+          }, 450);
+        } else {
+          alert('Errore: ' + (data.message || 'Impossibile eliminare'));
+        }
+      } catch (err) {
+        alert('Errore di connessione');
+        console.error(err);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Elimina';
+        pendingDelete = null;
+      }
+    });
+
     loadRsvpResponses();
   </script>
 </body>
 </html>
+

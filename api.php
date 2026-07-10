@@ -124,6 +124,49 @@ if ($method === 'POST') {
         echo json_encode(["status" => "ok"]);
         exit;
     }
+
+    // --- RSVP: Delete a single response from risposte.csv ---
+    if ($action === 'delete_rsvp') {
+        $risposteFile = __DIR__ . '/data/risposte.csv';
+        $timestamp = isset($_POST['timestamp']) ? trim($_POST['timestamp']) : '';
+        $nome = isset($_POST['nome']) ? trim($_POST['nome']) : '';
+        $cognome = isset($_POST['cognome']) ? trim($_POST['cognome']) : '';
+
+        if (!file_exists($risposteFile)) {
+            echo json_encode(["status" => "error", "message" => "File risposte non trovato"]);
+            exit;
+        }
+
+        $rows = [];
+        $deleted = false;
+        if (($handle = fopen($risposteFile, "r")) !== FALSE) {
+            $header = fgetcsv($handle, 2000, ",");
+            $rows[] = $header;
+            while (($data = fgetcsv($handle, 2000, ",")) !== FALSE) {
+                if (!$deleted && count($data) >= 3 
+                    && trim($data[0]) === $timestamp 
+                    && trim($data[1]) === $nome 
+                    && trim($data[2]) === $cognome) {
+                    $deleted = true;
+                    continue; // Skip this row (delete it)
+                }
+                $rows[] = $data;
+            }
+            fclose($handle);
+        }
+
+        if ($deleted) {
+            $handle = fopen($risposteFile, "w");
+            foreach ($rows as $row) {
+                fputcsv($handle, $row);
+            }
+            fclose($handle);
+            echo json_encode(["status" => "ok"]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Riga non trovata"]);
+        }
+        exit;
+    }
     
         if ($action === 'upload') {
         if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
