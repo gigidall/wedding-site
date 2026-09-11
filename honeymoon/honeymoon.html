@@ -1,54 +1,303 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giappone 2026 - Viaggio di Nozze - Mauro & Antonella</title>
     <style>
-        :root { --primary: #d11919; --secondary: #2c3e50; --bg-light: #f8f9fa; --accent-food: #e67e22; --accent-hotel: #2980b9; --accent-qr: #27ae60; --accent-transport: #8e44ad; --accent-ticket: #f39c12; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f4f6f7; margin: 0; padding: 0; }
-        header { background: linear-gradient(135deg, var(--secondary), var(--primary)); color: white; text-align: center; padding: 2.5rem 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        header h1 { margin: 0; font-size: 2.2rem; font-weight: 700; }
-        header p { margin: 0.5rem 0 0 0; font-size: 1.1rem; opacity: 0.9; }
-        .badge-couple { background: rgba(255, 255, 255, 0.2); padding: 0.3rem 1rem; border-radius: 20px; display: inline-block; margin-top: 0.8rem; font-size: 0.9rem; }
-        .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
-        
+        :root {
+            --primary: #d11919;
+            --secondary: #2c3e50;
+            --bg-light: #f8f9fa;
+            --accent-food: #e67e22;
+            --accent-hotel: #2980b9;
+            --accent-qr: #27ae60;
+            --accent-transport: #8e44ad;
+            --accent-ticket: #f39c12;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f6f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: white;
+            text-align: center;
+            padding: 2.5rem 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+
+        header p {
+            margin: 0.5rem 0 0 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .badge-couple {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
         /* Modifiche per i menu a tendina (Collapsible) */
-        details > summary { cursor: pointer; list-style: none; outline: none; }
-        details > summary::-webkit-details-marker { display: none; }
-        .toggle-header { font-size: 1.4rem; font-weight: 700; color: var(--secondary); display: flex; justify-content: space-between; align-items: center; margin: 0; }
-        .toggle-icon::after { content: '▼'; font-size: 1.1rem; color: #888; }
-        details[open] > summary .toggle-icon::after { content: '▲'; }
-        
-        .transport-box { background-color: #f4ecf7; border-left: 5px solid var(--accent-transport); color: #4a235a; padding: 0.8rem 1rem; border-radius: 4px; margin: 1rem 0; font-size: 0.9rem; }
-        .doc-section { background: white; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid var(--secondary); }
-        .ticket-section { background: white; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid var(--accent-ticket); }
-        .hotel-card { background: white; border-left: 5px solid var(--accent-hotel); padding: 1rem; border-radius: 4px; margin-bottom: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .hotel-card h3 { margin-top: 0; color: var(--accent-hotel); }
-        .day-card { background: white; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 4px solid var(--primary); transition: all 0.3s; }
-        
+        details>summary {
+            cursor: pointer;
+            list-style: none;
+            outline: none;
+        }
+
+        details>summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .toggle-header {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0;
+        }
+
+        .toggle-icon::after {
+            content: '▼';
+            font-size: 1.1rem;
+            color: #888;
+        }
+
+        details[open]>summary .toggle-icon::after {
+            content: '▲';
+        }
+
+        .transport-box {
+            background-color: #f4ecf7;
+            border-left: 5px solid var(--accent-transport);
+            color: #4a235a;
+            padding: 0.8rem 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        .doc-section {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid var(--secondary);
+        }
+
+        .ticket-section {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid var(--accent-ticket);
+        }
+
+        .hotel-card {
+            background: white;
+            border-left: 5px solid var(--accent-hotel);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .hotel-card h3 {
+            margin-top: 0;
+            color: var(--accent-hotel);
+        }
+
+        .day-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-top: 4px solid var(--primary);
+            transition: all 0.3s;
+        }
+
         /* Struttura per i giorni chiudibili */
-        .day-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; }
-        details[open] > .day-header { border-bottom: 2px solid var(--bg-light); margin-bottom: 1rem; }
-        .day-header-info { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.5rem 1rem; }
-        
-        .day-title { font-size: 1.3rem; color: var(--primary); font-weight: bold; margin: 0; }
-        .day-date { font-size: 1rem; color: #666; font-weight: 600; }
-        .section-title { font-weight: 700; color: var(--secondary); margin: 1rem 0 0.3rem 0; display: flex; align-items: center; font-size: 1.05rem; }
-        .maps-link { display: inline-flex; align-items: center; background-color: #e8f4fd; color: #1da1f2; padding: 0.2rem 0.6rem; border-radius: 4px; text-decoration: none; font-size: 0.85rem; font-weight: 600; margin-left: 0.5rem; border: 1px solid #bce0fd; }
-        .maps-link:hover { background-color: #d2e9fc; }
-        .btn-doc { display: inline-block; background-color: var(--secondary); color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; font-weight: 600; margin-top: 0.5rem; margin-right: 0.5rem; border: none; cursor: pointer; }
-        .btn-doc:hover { background-color: #1a252f; }
-        .food-box { background-color: #fff8f2; border: 1px dashed var(--accent-food); padding: 1rem; border-radius: 6px; margin-top: 1rem; }
-        .food-title { color: var(--accent-food); font-weight: 700; margin: 0 0 0.5rem 0; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px; }
-        .qr-container { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1rem; }
-        .qr-box { background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px; padding: 1rem; text-align: center; flex: 1; min-width: 250px; }
-        .qr-box h4 { margin: 0 0 0.5rem 0; color: var(--secondary); }
-        footer { text-align: center; padding: 2rem 1rem; color: #777; font-size: 0.9rem; }
-        ul.custom-list { margin-top: 0.5rem; padding-left: 1.5rem; }
-        ul.custom-list li { margin-bottom: 0.5rem; }
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 0.5rem;
+        }
+
+        details[open]>.day-header {
+            border-bottom: 2px solid var(--bg-light);
+            margin-bottom: 1rem;
+        }
+
+        .day-header-info {
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 0.5rem 1rem;
+        }
+
+        .day-title {
+            font-size: 1.3rem;
+            color: var(--primary);
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .day-date {
+            font-size: 1rem;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-weight: 700;
+            color: var(--secondary);
+            margin: 1rem 0 0.3rem 0;
+            display: flex;
+            align-items: center;
+            font-size: 1.05rem;
+        }
+
+        .maps-link {
+            display: inline-flex;
+            align-items: center;
+            background-color: #e8f4fd;
+            color: #1da1f2;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+            border: 1px solid #bce0fd;
+        }
+
+        .maps-link:hover {
+            background-color: #d2e9fc;
+        }
+
+        .ticket-link {
+            display: inline-flex;
+            align-items: center;
+            background-color: #fff3e0;
+            color: #d35400;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+            border: 1px solid #ffe0b2;
+        }
+
+        .ticket-link:hover {
+            background-color: #ffe0b2;
+        }
+
+        .btn-doc {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            margin-right: 0.5rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-doc:hover {
+            background-color: #1a252f;
+        }
+
+        .food-box {
+            background-color: #fff8f2;
+            border: 1px dashed var(--accent-food);
+            padding: 1rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+        }
+
+        .food-title {
+            color: var(--accent-food);
+            font-weight: 700;
+            margin: 0 0 0.5rem 0;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .qr-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .qr-box {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 1rem;
+            text-align: center;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .qr-box h4 {
+            margin: 0 0 0.5rem 0;
+            color: var(--secondary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        ul.custom-list {
+            margin-top: 0.5rem;
+            padding-left: 1.5rem;
+        }
+
+        ul.custom-list li {
+            margin-bottom: 0.5rem;
+        }
     </style>
 </head>
+
 <body>
 
     <header>
@@ -66,10 +315,49 @@
                 <span class="toggle-icon"></span>
             </summary>
             <div style="margin-top: 1rem;">
-                <p>Clicca sui pulsanti sottostanti per visualizzare rapidamente i biglietti e le certificazioni ufficiali:</p>
-                <button class="btn-doc" onclick="window.open('Boarding-Pass-Bari-Rome-Fiumicino-Airport-3378645273.pdf', '_blank')">🎫 Andata: FlixBus Bari-Roma</button>
-                <button class="btn-doc" onclick="window.open('EF3ZKB_260727115441867.pdf', '_blank')">🎫 Ritorno: Itabus Roma-Bari</button>
-                <button class="btn-doc" onclick="window.open('Certificato pubblicazioni.pdf', '_blank')">📜 Certificato Pubblicazioni Matrimonio</button>
+                <p style="margin-bottom: 1rem;">Tutti i documenti, contratti, biglietti e assicurazioni a portata di
+                    mano in un click:</p>
+
+                <div style="margin-bottom: 1.2rem;">
+                    <div style="font-weight: 700; color: var(--secondary); margin-bottom: 0.4rem; font-size: 0.95rem;">
+                        ✈️ Biglietti e Trasporti:</div>
+                    <button class="btn-doc"
+                        onclick="window.open('Travel Reservation October 08 for ANTONELLA URICCHIO.pdf', '_blank')">✈️
+                        Biglietti Voli China Eastern (Andata & Ritorno)</button>
+                    <button class="btn-doc"
+                        onclick="window.open('Boarding-Pass-Bari-Rome-Fiumicino-Airport-3378645273.pdf', '_blank')">🎫
+                        Andata: FlixBus Bari-Roma</button>
+                    <button class="btn-doc" onclick="window.open('EF3ZKB_260727115441867.pdf', '_blank')">🎫 Ritorno:
+                        Itabus Roma-Bari</button>
+                    <button class="btn-doc" style="background-color: var(--accent-ticket);"
+                        onclick="window.open('Biglietti-Tokyo-Skytree-10-Ottobre.pdf', '_blank')">🗼
+                        Tokyo Skytree (Sab 10 Ott, Ore 16:30 - QR Code)</button>
+                </div>
+
+                <div style="margin-bottom: 1.2rem;">
+                    <div style="font-weight: 700; color: var(--secondary); margin-bottom: 0.4rem; font-size: 0.95rem;">
+                        📋 Pratica & Contratti CartOrange:</div>
+                    <button class="btn-doc" onclick="window.open('Preventivo_260513_222411.pdf', '_blank')">📋
+                        Preventivo & Programma Dettagliato</button>
+                    <button class="btn-doc"
+                        onclick="window.open('Proposta_16214_Soldo_Mauro_260513_222411_16262_1.pdf', '_blank')">📝
+                        Proposta Compravendita Pacchetto</button>
+                    <button class="btn-doc"
+                        onclick="window.open('Conferma_16214_Soldo_Mauro_260616_153247_16262_1.pdf', '_blank')">📑
+                        Conferma Accettazione Pacchetto</button>
+                    <button class="btn-doc" onclick="window.open('Modulo_informativo_260513_222411.pdf', '_blank')">ℹ️
+                        Condizioni Generali di Vendita</button>
+                </div>
+
+                <div>
+                    <div style="font-weight: 700; color: var(--secondary); margin-bottom: 0.4rem; font-size: 0.95rem;">
+                        🛡️ Assicurazione & Certificati:</div>
+                    <button class="btn-doc"
+                        onclick="window.open('UnipolSai_polizza VIAGGI PROTETTO_annullamento medico bagaglio_preventivo.pdf', '_blank')">🛡️
+                        Polizza UnipolSai Viaggi Protetto</button>
+                    <button class="btn-doc" onclick="window.open('Certificato pubblicazioni.pdf', '_blank')">📜
+                        Certificato Pubblicazioni Matrimonio</button>
+                </div>
             </div>
         </details>
 
@@ -80,54 +368,78 @@
                 <span class="toggle-icon"></span>
             </summary>
             <div style="margin-top: 1rem;">
-                <p>Per ottimizzare il tempo e non rischiare il tutto esaurito, acquistate questi ingressi in anticipo (es. tramite Klook o GetYourGuide):</p>
+                <p>Per ottimizzare il tempo e non rischiare il tutto esaurito, acquistate questi ingressi in anticipo
+                    (es. tramite Klook o GetYourGuide):</p>
                 <ul class="custom-list">
-                    <li><strong>Shibuya Sky (Giorno 5):</strong> 🔴 <em>Prenotazione Obbligatoria.</em> I biglietti escono 28 giorni prima. Puntate alla fascia oraria 16:00/16:30 per godervi il tramonto.</li>
-                    <li><strong>Tokyo Skytree (Giorno 3):</strong> 🔴 <em>Prenotazione Obbligatoria.</em> Nel weekend le code in biglietteria superano le ore, il QR code online vi manda dritti ai tornelli.</li>
-                    <li><strong>Cerimonia del Tè a Kyoto (Giorno 7):</strong> 🔴 <em>Prenotazione Obbligatoria.</em> I posti nei tradizionali Machiya sono limitatissimi.</li>
-                    <li><strong>Castello di Osaka & Umeda Sky Building (Giorni 10 e 11):</strong> 🟡 <em>Altamente Consigliata.</em> Vi fa saltare istantaneamente le lunghissime code alle casse esterne.</li>
+                    <li><strong>Shibuya Sky (Giorno 5 - 12 Ottobre):</strong> 🔴 <em>Prenotazione Obbligatoria.</em>
+                        Acquistabile da <strong>2 settimane prima</strong> (a partire da <strong>Lunedì 28 Settembre
+                            2026</strong>). Puntate alla fascia oraria 16:00/16:30 per godervi il tramonto. <a
+                            class="ticket-link" href="https://www.klook.com/it/activity/70672-shibuya-sky-tokyo/"
+                            target="_blank">🎟️ Acquista su Klook</a></li>
+                    <li><strong>Cerimonia del Tè a Kyoto (Giorno 7):</strong> 🔴 <em>Prenotazione Obbligatoria.</em> I
+                        posti nei tradizionali Machiya sono limitatissimi.</li>
+                    <li><strong>Castello di Osaka & Umeda Sky Building (Giorni 10 e 11):</strong> 🟡 <em>Altamente
+                            Consigliata.</em> Vi fa saltare istantaneamente le lunghissime code alle casse esterne.</li>
                 </ul>
-                <p style="font-size: 0.85rem; color: #666; margin-top: 1rem;"><em>Nota: Templi come Kinkaku-ji, Nijo, Kiyomizu-dera (Kyoto) e Todai-ji (Nara) si pagano velocemente in loco (pochi euro). Fushimi Inari, Arashiyama, Senso-ji e il Palazzo Imperiale sono gratuiti.</em></p>
+                <p style="font-size: 0.85rem; color: #666; margin-top: 1rem;"><em>Nota: Templi come Kinkaku-ji, Nijo,
+                        Kiyomizu-dera (Kyoto) e Todai-ji (Nara) si pagano velocemente in loco (pochi euro). Fushimi
+                        Inari, Arashiyama, Senso-ji e il Palazzo Imperiale sono gratuiti.</em></p>
             </div>
         </details>
 
         <!-- HOTEL -->
         <details open style="margin-bottom: 2rem;">
-            <summary class="toggle-header" style="border-bottom: 2px solid var(--secondary); padding-bottom: 0.5rem; margin-bottom: 1rem;">
+            <summary class="toggle-header"
+                style="border-bottom: 2px solid var(--secondary); padding-bottom: 0.5rem; margin-bottom: 1rem;">
                 <span>🏨 Hotel Confermati</span>
                 <span class="toggle-icon"></span>
             </summary>
-            
+
             <div class="hotel-card">
                 <h3>Tokyo: the b akasaka-mitsuke (3 Stelle)</h3>
-                <p><strong>Periodo:</strong> 9 - 13 Ottobre (4 notti) | <strong>Trattamento:</strong> Solo pernottamento (No colazione)<br>
-                <strong>Indirizzo Struttura:</strong> 3-21-7 Akasaka, Minato-ku, Tokyo 107-0052, Giappone
-                <a class="maps-link" href="https://maps.app.goo.gl/dNjDk9x6T2iFNEGV7" target="_blank">📍 Apri su Maps</a></p>
+                <p><strong>Periodo:</strong> 9 - 13 Ottobre (4 notti) | <strong>Trattamento:</strong> Solo pernottamento
+                    (No colazione)<br>
+                    <strong>Indirizzo Struttura:</strong> 3-21-7 Akasaka, Minato-ku, Tokyo 107-0052, Giappone
+                    <a class="maps-link" href="https://maps.app.goo.gl/dNjDk9x6T2iFNEGV7" target="_blank">📍 Apri su
+                        Maps</a>
+                </p>
             </div>
 
             <div class="hotel-card">
                 <h3>Kyoto: Urban Hotel Kyoto Shijo Premium (3 Stelle)</h3>
-                <p><strong>Periodo:</strong> 13 - 16 Ottobre (3 notti) | <strong>Trattamento:</strong> Solo pernottamento (No colazione)<br>
-                <strong>Indirizzo Struttura:</strong> 272 Horikawa-cho, Shijo-agaru, Horikawa-dori, Nakagyo-ku, Kyoto
-                <a class="maps-link" href="https://maps.google.com/?q=Urban+Hotel+Kyoto+Shijo+Premium" target="_blank">📍 Apri su Maps</a></p>
+                <p><strong>Periodo:</strong> 13 - 16 Ottobre (3 notti) | <strong>Trattamento:</strong> Solo
+                    pernottamento (No colazione)<br>
+                    <strong>Indirizzo Struttura:</strong> 272 Horikawa-cho, Shijo-agaru, Horikawa-dori, Nakagyo-ku,
+                    Kyoto
+                    <a class="maps-link" href="https://maps.google.com/?q=Urban+Hotel+Kyoto+Shijo+Premium"
+                        target="_blank">📍 Apri su Maps</a>
+                </p>
             </div>
 
             <div class="hotel-card">
                 <h3>Toyooka (Kinosaki Onsen): Oyado Seri</h3>
-                <p><strong>Periodo:</strong> 16 - 17 Ottobre (1 notte) | <strong>Trattamento:</strong> Mezza Pensione (Colazione e Cena Incluse)<br>
-                <strong>Indirizzo Struttura:</strong> 1296 Kinosakicho Yushima, Toyooka, Hyogo
-                <a class="maps-link" href="https://maps.google.com/?q=Oyado+Seri+Kinosaki" target="_blank">📍 Apri su Maps</a></p>
+                <p><strong>Periodo:</strong> 16 - 17 Ottobre (1 notte) | <strong>Trattamento:</strong> Mezza Pensione
+                    (Colazione e Cena Incluse)<br>
+                    <strong>Indirizzo Struttura:</strong> 1296 Kinosakicho Yushima, Toyooka, Hyogo
+                    <a class="maps-link" href="https://maps.google.com/?q=Oyado+Seri+Kinosaki" target="_blank">📍 Apri
+                        su Maps</a>
+                </p>
             </div>
 
             <div class="hotel-card">
                 <h3>Osaka: Hearton Hotel Nishiumeda (3 Stelle)</h3>
-                <p><strong>Periodo:</strong> 17 - 19 Ottobre (2 notti) | <strong>Trattamento:</strong> Solo pernottamento (No colazione)<br>
-                <strong>Indirizzo Struttura:</strong> 3-3-55 Umeda, Kita-ku, Osaka
-                <a class="maps-link" href="https://maps.google.com/?q=Hearton+Hotel+Nishiumeda" target="_blank">📍 Apri su Maps</a></p>
+                <p><strong>Periodo:</strong> 17 - 19 Ottobre (2 notti) | <strong>Trattamento:</strong> Solo
+                    pernottamento (No colazione)<br>
+                    <strong>Indirizzo Struttura:</strong> 3-3-55 Umeda, Kita-ku, Osaka
+                    <a class="maps-link" href="https://maps.google.com/?q=Hearton+Hotel+Nishiumeda" target="_blank">📍
+                        Apri su Maps</a>
+                </p>
             </div>
         </details>
 
-        <h2 style="color: var(--secondary); margin-top: 3rem; border-bottom: 2px solid var(--secondary); padding-bottom: 0.5rem;">📅 Itinerario Giornaliero</h2>
+        <h2
+            style="color: var(--secondary); margin-top: 3rem; border-bottom: 2px solid var(--secondary); padding-bottom: 0.5rem;">
+            📅 Itinerario Giornaliero</h2>
 
         <!-- GIORNO 1 -->
         <details class="day-card" open>
@@ -139,12 +451,27 @@
                 <div class="toggle-icon"></div>
             </summary>
             <div class="day-content">
+                <div class="transport-box">
+                    🚌 <strong>Info Trasporti del Giorno:</strong>
+                    Pullman <strong>FlixBus (Tratta 571)</strong> in partenza alle 10:00 da Bari (Autostazione FS Park, Via Capruzzi) con arrivo diretto al Terminal Bus di Roma Fiumicino alle 16:15. Da lì basta camminare 5 minuti fino al <strong>Terminal 3</strong> Partenze Internazionali. I banchi China Eastern Airlines per il volo MU 0788 aprono 3 ore prima (ore 18:10).
+                </div>
+
                 <div class="section-title">🚌 Trasferimento Bari -> Roma Fiumicino</div>
-                <p>Partenza alle ore <strong>10:00</strong> da Bari (Autostazione FS Park, Via Capruzzi) a bordo del <strong>FlixBus (Tratta 571)</strong> in direzione Roma Fiumicino Aeroporto. Arrivo previsto al Terminal dei pullman di Fiumicino (Via Francesco Baracca) alle ore <strong>16:15</strong>.</p>
-                <button class="btn-doc" onclick="window.open('Boarding-Pass-Bari-Rome-Fiumicino-Airport-3378645273.pdf', '_blank')">📄 Apri Biglietto FlixBus</button>
+                <p>Partenza alle ore <strong>10:00</strong> da Bari (Autostazione FS Park, Via Capruzzi) a bordo del
+                    <strong>FlixBus (Tratta 571)</strong> in direzione Roma Fiumicino Aeroporto. Arrivo previsto al
+                    Terminal dei pullman di Fiumicino (Via Francesco Baracca) alle ore <strong>16:15</strong>.
+                </p>
+                <button class="btn-doc"
+                    onclick="window.open('Boarding-Pass-Bari-Rome-Fiumicino-Airport-3378645273.pdf', '_blank')">📄 Apri
+                    Biglietto FlixBus</button>
 
                 <div class="section-title">✈️ Volo Intercontinental Intero (China Eastern Airlines)</div>
-                <p>Disbrigo delle procedure di imbarco presso il <strong>Terminal 3</strong> di Fiumicino. Partenza del primo volo operativo principale **MU 0788** alle ore <strong>21:10</strong> con destinazione Shanghai Pudong (PVG). Pasti e pernottamento a bordo.</p>
+                <p>Disbrigo delle procedure di imbarco presso il <strong>Terminal 3</strong> di Fiumicino. Partenza del
+                    primo volo operativo principale **MU 0788** alle ore <strong>21:10</strong> con destinazione
+                    Shanghai Pudong (PVG). Pasti e pernottamento a bordo.</p>
+                <button class="btn-doc"
+                    onclick="window.open('Travel Reservation October 08 for ANTONELLA URICCHIO.pdf', '_blank')">✈️ Apri
+                    Biglietti Aerei China Eastern</button>
             </div>
         </details>
 
@@ -158,26 +485,49 @@
                 <div class="toggle-icon"></div>
             </summary>
             <div class="day-content">
+                <div class="transport-box">
+                    🚐 <strong>Info Trasporti del Giorno (Transfer Aeroporto Incluso):</strong>
+                    All'arrivo a Tokyo Narita (Terminal 2, ore 20:55), dopo il ritiro bagagli e i controlli doganali, troverete l'autista incaricato del servizio <strong>Hana Transfer</strong> per il trasferimento privato in minivan condiviso fino all'hotel <em>the b akasaka-mitsuke</em> (incluso nel pacchetto).<br>
+                    💡 <em>Consiglio per Tokyo:</em> Attivate subito su smartphone la tessera contactless <strong>Suica</strong> o <strong>Pasmo</strong> (su Apple Wallet o acquistando la tessera fisica turistica Welcome Suica in aeroporto/stazione) caricandola con circa 2.000–3.000 Yen per muovervi senza pensieri da domani su qualsiasi metro o treno urbano.
+                </div>
+
                 <div class="section-title">✈️ Volo in Coincidenza & Sbarco in Giappone</div>
-                <p>Arrivo a Shanghai (Terminal 1) alle 14:40. Breve transito e ripartenza alle ore <strong>17:00</strong> con l'ultimo volo di collegamento **MU 0271** operato da China Eastern Airlines. Arrivo ufficiale all'Aeroporto di Tokyo Narita (NRT) alle ore <strong>20:55</strong> presso il <strong>Terminal 2</strong>.</p>
-                
+                <p>Arrivo a Shanghai (Terminal 1) alle 14:40. Breve transito e ripartenza alle ore
+                    <strong>17:00</strong> con l'ultimo volo di collegamento **MU 0271** operato da China Eastern
+                    Airlines. Arrivo ufficiale all'Aeroporto di Tokyo Narita (NRT) alle ore <strong>20:55</strong>
+                    presso il <strong>Terminal 2</strong>.
+                </p>
+
                 <div class="section-title">🛂 Controlli Immigrazione & Dogana (Visit Japan Web)</div>
-                <p>Cliccate sui pulsanti per esibire i vostri codici QR doganali e velocizzare lo sbarco. Una volta ritirati i bagagli, l'autista vi attenderà per il trasferimento privato in minivan condiviso verso il vostro hotel <strong>the b akasaka-mitsuke</strong> <a class="maps-link" href="https://maps.google.com/?q=the+b+akasaka-mitsuke" target="_blank">📍 Maps</a>.</p>
-                
+                <p>Cliccate sui pulsanti per esibire i vostri codici QR doganali e velocizzare lo sbarco. Una volta
+                    ritirati i bagagli, l'autista vi attenderà per il trasferimento privato in minivan condiviso verso
+                    il vostro hotel <strong>the b akasaka-mitsuke</strong> <a class="maps-link"
+                        href="https://maps.google.com/?q=the+b+akasaka-mitsuke" target="_blank">📍 Maps</a>.</p>
+
                 <div class="qr-container">
                     <div class="qr-box">
                         <h4>SOLDO MAURO</h4>
-                        <button class="btn-doc" style="background-color: var(--accent-qr);" onclick="window.open('QR Code visto SOLDO MAURO.jpg', '_blank')">📲 APRI QR DOGANA MAURO</button>
+                        <button class="btn-doc" style="background-color: var(--accent-qr);"
+                            onclick="window.open('QR Code visto SOLDO MAURO.jpg', '_blank')">📲 APRI QR DOGANA
+                            MAURO</button>
                     </div>
                     <div class="qr-box">
                         <h4>URICCHIO ANTONELLA</h4>
-                        <button class="btn-doc" style="background-color: var(--accent-qr);" onclick="window.open('QR Code visto URICCHIO ANTONELLA.jpg', '_blank')">📲 APRI QR DOGANA ANTONELLA</button>
+                        <button class="btn-doc" style="background-color: var(--accent-qr);"
+                            onclick="window.open('QR Code visto URICCHIO ANTONELLA.jpg', '_blank')">📲 APRI QR DOGANA
+                            ANTONELLA</button>
                     </div>
                 </div>
 
                 <div class="food-box">
-                    <div class="food-title">🍜 Food Experience Notturna</div>
-                    <p>Data l'ora tarda del check-in, fate un salto rapido al <strong>Lawson</strong> <a class="maps-link" href="https://maps.google.com/?q=Lawson+Akasaka-mitsuke" target="_blank">📍 Maps</a> o al <strong>7-Eleven</strong> adiacente alla struttura per provare i famosi sandwich giapponesi all'uovo (Tamago Sando) o degli Onigiri caldi al salmone.</p>
+                    <div class="food-title">🍣 Sushi Notturno Post Check-in</div>
+                    <p>Nonostante l'arrivo in tarda serata, a soli <strong>2 minuti a piedi dall'hotel</strong> (~150
+                        metri) trovate l'eccellente <strong>Itamae Sushi Akasaka</strong> <a class="maps-link"
+                            href="https://maps.google.com/?q=Itamae+Sushi+Akasaka" target="_blank">📍 Maps</a>. È
+                        celebre per la qualità del pescato (in particolare il tonno rosso pinna blu) ed è <strong>aperto
+                            fino alle 03:30 del mattino</strong> (con ultimo ordine alle 03:00): la soluzione perfetta
+                        per iniziare il viaggio gustando un autentico sushi preparato al momento senza limiti d'orario!
+                    </p>
                 </div>
             </div>
         </details>
@@ -192,19 +542,64 @@
                 <div class="toggle-icon"></div>
             </summary>
             <div class="day-content">
+                <div class="transport-box">
+                    🚇 <strong>Info Trasporti a Tokyo (Metro Diretta con Suica/Pasmo):</strong>
+                    Dall'hotel raggiungete la stazione di <em>Akasaka-mitsuke</em> (1 min a piedi).
+                    <ul class="custom-list" style="margin: 0.4rem 0 0 0;">
+                        <li><strong>Verso Asakusa:</strong> Prendete la linea <strong>Tokyo Metro Ginza Line (G)</strong> in direzione Asakusa. È diretta: si arriva al capolinea in soli 20 minuti senza alcun cambio!</li>
+                        <li><strong>Verso Tokyo Skytree:</strong> Da Asakusa potete attraversare a piedi il suggestivo ponte pedonale sul fiume Sumida (15-20 min), oppure fare 1 sola fermata di metro (Toei Asakusa Line da Asakusa a Oshiage).</li>
+                        <li><strong>Verso Akihabara & Tokyo Dome:</strong> Da Skytree/Oshiage treno veloce fino ad Akihabara (linea Tsukuba Express o Hanzomon Line). A fine serata, per tornare in hotel da Tokyo Dome, prendete la <strong>Marunouchi Line</strong> da Korakuen ad Akasaka-mitsuke diretta in 12 minuti.</li>
+                    </ul>
+                </div>
+
                 <div class="section-title">☕ Colazione a due passi dall'Hotel</div>
-                <p><strong>Aoyama Flower Market Teahouse (Akasaka Biz Tower):</strong> Una meravigliosa caffetteria floreale immersa nel verde a soli 3 minuti a piedi dall'hotel. Provate i loro soffici pancake stagionali o i toast dolci con infusi aromatici. <a class="maps-link" href="https://maps.google.com/?q=Aoyama+Flower+Market+Teahouse+Akasaka+Biz+Tower" target="_blank">📍 Maps</a></p>
+                <p><strong>Aoyama Flower Market Teahouse (Akasaka Biz Tower):</strong> Una meravigliosa caffetteria
+                    floreale immersa nel verde a soli 3 minuti a piedi dall'hotel. Provate i loro soffici pancake
+                    stagionali o i toast dolci con infusi aromatici. <a class="maps-link"
+                        href="https://maps.google.com/?q=Aoyama+Flower+Market+Teahouse+Akasaka+Biz+Tower"
+                        target="_blank">📍 Maps</a></p>
 
                 <div class="section-title">⛩️ Mattina (Zona Est: Asakusa)</div>
-                <p>Incontro alle 10:00 con l'assistente locale in hotel per pianificare i dettagli. Ci si sposta insieme ad <strong>Asakusa</strong> <a class="maps-link" href="https://maps.google.com/?q=Asakusa+Tokyo" target="_blank">📍 Maps</a>. Superate la grandiosa porta del tuono <strong>Kaminarimon</strong> <a class="maps-link" href="https://maps.google.com/?q=Kaminarimon+Gate+Tokyo" target="_blank">📍 Maps</a>, camminate lungo la via dei mercatini tradizionali <strong>Nakamise Dori</strong> <a class="maps-link" href="https://maps.google.com/?q=Nakamise+Dori+Tokyo" target="_blank">📍 Maps</a> e visitate lo splendido complesso buddista del <strong>Senso-ji</strong> <a class="maps-link" href="https://maps.google.com/?q=Senso-ji+Temple+Tokyo" target="_blank">📍 Maps</a>.</p>
+                <p>Alle ore <strong>10:00</strong> incontro nella hall dell'hotel con l'assistente locale parlante
+                    italiano per l'<strong>Hotel Welcome Service (3 ore)</strong>: un briefing dedicato per spiegarvi la
+                    rete metropolitana, aiutarvi nella convalida dei pass ferroviari e darvi consigli pratici su Tokyo.
+                    Terminato l'orientamento, vi sposterete in autonomia ad <strong>Asakusa</strong>. Superate la
+                    grandiosa porta del tuono <strong>Kaminarimon</strong> <a class="maps-link"
+                        href="https://maps.google.com/?q=Kaminarimon+Gate+Tokyo" target="_blank">📍 Maps</a>, camminate
+                    lungo la via dei mercatini tradizionali <strong>Nakamise Dori</strong> <a class="maps-link"
+                        href="https://maps.google.com/?q=Nakamise+Dori+Tokyo" target="_blank">📍 Maps</a> e visitate lo
+                    splendido complesso buddista del <strong>Senso-ji</strong> <a class="maps-link"
+                        href="https://maps.google.com/?q=Senso-ji+Temple+Tokyo" target="_blank">📍 Maps</a>.</p>
 
                 <div class="section-title">⚡ Pomeriggio & Sera (Zona: Sumida & Akihabara)</div>
-                <p>Attraversate il parco Sumida <a class="maps-link" href="https://maps.google.com/?q=Sumida+Park+Tokyo" target="_blank">📍 Maps</a> e salite sulla <strong>Tokyo Sky Tree</strong> <a class="maps-link" href="https://maps.google.com/?q=Tokyo+Skytree" target="_blank">📍 Maps</a> per ammirare l'immensità della metropoli dall'alto. Nel tardo pomeriggio, spostamento ad <strong>Akihabara</strong> <a class="maps-link" href="https://maps.google.com/?q=Akihabara+Tokyo" target="_blank">📍 Maps</a>, la città dell'elettronica e dei manga. Visitate il santuario storico <strong>Kanda Myojin</strong> <a class="maps-link" href="https://maps.google.com/?q=Kanda+Myojin+Shrine" target="_blank">📍 Maps</a> e concludete la serata al <strong>Tokyo Dome City</strong> <a class="maps-link" href="https://maps.google.com/?q=Tokyo+Dome+City" target="_blank">📍 Maps</a>.</p>
+                <p>Attraversate il parco Sumida <a class="maps-link" href="https://maps.google.com/?q=Sumida+Park+Tokyo"
+                        target="_blank">📍 Maps</a> e salite sulla <strong>Tokyo Sky Tree</strong> <a class="maps-link"
+                        href="https://maps.google.com/?q=Tokyo+Skytree" target="_blank">📍 Maps</a> (ingresso confermato
+                    alle ore <strong>16:30 - 17:00</strong> per entrambi i ponti panoramici a <strong>350m e
+                        450m</strong>) per ammirare l'immensità della metropoli dall'alto al tramonto.</p>
+                <button class="btn-doc" style="background-color: var(--accent-ticket);"
+                    onclick="window.open('Biglietti-Tokyo-Skytree-10-Ottobre.pdf', '_blank')">🗼 Mostra Biglietti
+                    Skytree (Ore 16:30)</button>
+                <p style="margin-top: 0.8rem;">Nel tardo pomeriggio, spostamento ad
+                    <strong>Akihabara</strong> <a class="maps-link" href="https://maps.google.com/?q=Akihabara+Tokyo"
+                        target="_blank">📍 Maps</a>, la città dell'elettronica e dei manga. Visitate il santuario
+                    storico <strong>Kanda Myojin</strong> <a class="maps-link"
+                        href="https://maps.google.com/?q=Kanda+Myojin+Shrine" target="_blank">📍 Maps</a> e concludete
+                    la serata al <strong>Tokyo Dome City</strong> <a class="maps-link"
+                        href="https://maps.google.com/?q=Tokyo+Dome+City" target="_blank">📍 Maps</a>.
+                </p>
 
                 <div class="food-box">
                     <div class="food-title">🍱 Food Experience del Giorno</div>
-                    <p><strong>Pranzo ad Asakusa:</strong> <em>Asakusa Unatetsu</em> per gustare l'Unagi (l'anguilla grigliata caramellata su riso), un piatto regale e super saporito. <a class="maps-link" href="https://maps.google.com/?q=Asakusa+Unatetsu" target="_blank">📍 Maps</a></p>
-                    <p><strong>Cena a Tokyo Dome City:</strong> <em>Yakiniku Jojoen (LaQua)</em>, un eccellente ed elegante ristorante situato all'interno del centro commerciale LaQua, perfetto per cuocere la pregiata carne Wagyu direttamente sulla griglia al tavolo godendosi la vista sul parco divertimenti illuminato. <a class="maps-link" href="https://maps.google.com/?q=Jojoen+Tokyo+Dome+City+LaQua" target="_blank">📍 Maps</a></p>
+                    <p><strong>Pranzo ad Asakusa:</strong> <em>Asakusa Unatetsu</em> per gustare l'Unagi (l'anguilla
+                        grigliata caramellata su riso), un piatto regale e super saporito. <a class="maps-link"
+                            href="https://maps.google.com/?q=Asakusa+Unatetsu" target="_blank">📍 Maps</a></p>
+                    <p><strong>Cena a Tokyo Dome City:</strong> <em>Yakiniku Jojoen (LaQua)</em>, un eccellente ed
+                        elegante ristorante situato all'interno del centro commerciale LaQua, perfetto per cuocere la
+                        pregiata carne Wagyu direttamente sulla griglia al tavolo godendosi la vista sul parco
+                        divertimenti illuminato. <a class="maps-link"
+                            href="https://maps.google.com/?q=Jojoen+Tokyo+Dome+City+LaQua" target="_blank">📍 Maps</a>
+                    </p>
                 </div>
             </div>
         </details>
@@ -219,25 +614,63 @@
                 <div class="toggle-icon"></div>
             </summary>
             <div class="day-content">
+                <div class="transport-box">
+                    🚇 <strong>Info Trasporti del Giorno (Tokyo Metro Centro & Sud):</strong>
+                    Spostamenti rapidi e comodi con Suica/Pasmo:
+                    <ul class="custom-list" style="margin: 0.4rem 0 0 0;">
+                        <li><strong>Palazzo Imperiale:</strong> Dalla stazione di Akasaka-mitsuke prendete la <strong>Marunouchi Line</strong> fino a <em>Tokyo Station</em> (9 min) oppure raggiungete i giardini a piedi con una bella camminata tra i viali governativi.</li>
+                        <li><strong>Da Ginza a Tokyo Tower / Roppongi:</strong> Prendete la <strong>Hibiya Line (H)</strong> da Ginza fino a <em>Kamiyacho</em> (per fotografare la Tokyo Tower da vicino) o direttamente fino a <em>Roppongi (H04)</em>.</li>
+                        <li><strong>Rientro serale in hotel:</strong> Da Roppongi prendete la linea <strong>Toei Oedo Line</strong> fino ad <em>Aoyama-itchome</em> (2 min), poi 1 fermata di Ginza Line fino ad <em>Akasaka-mitsuke</em> (meno di 10 minuti totali).</li>
+                    </ul>
+                </div>
+
                 <div class="section-title">☕ Colazione a due passi dall'Hotel</div>
-                <p><strong>Hoshino Coffee Akasaka:</strong> Famosissimo per il suo caffè colato a mano e per i suoi "Pancake Soufflé" alti tre centimetri, incredibilmente soffici e serviti con sciroppo d'acero puro. <a class="maps-link" href="https://maps.google.com/?q=Hoshino+Coffee+Akasaka" target="_blank">📍 Maps</a></p>
+                <p><strong>Hoshino Coffee Akasaka:</strong> Famosissimo per il suo caffè colato a mano e per i suoi
+                    "Pancake Soufflé" alti tre centimetri, incredibilmente soffici e serviti con sciroppo d'acero puro.
+                    <a class="maps-link" href="https://maps.google.com/?q=Hoshino+Coffee+Akasaka" target="_blank">📍
+                        Maps</a>
+                </p>
 
                 <div class="section-title">🏛️ Mattina (Zona Centro: Marunouchi & Ginza)</div>
                 <p>Tour fai-da-te a piedi del <strong>Palazzo Imperiale di Tokyo</strong>:</p>
                 <ul class="custom-list">
-                    <li><strong>Piazzale e Ponte Nijubashi:</strong> Scendete alla stazione <em>Nijubashimae</em> e scattate l'iconica foto al doppio ponte. <a class="maps-link" href="https://maps.google.com/?q=Nijubashi+Bridge+Tokyo" target="_blank">📍 Maps</a></li>
-                    <li><strong>Porta Ote-mon:</strong> Costeggiate il fossato fino all'antico ingresso dei samurai per ritirare il gettone d'ingresso gratuito. <a class="maps-link" href="https://maps.google.com/?q=Ote-mon+Gate+Tokyo" target="_blank">📍 Maps</a></li>
-                    <li><strong>Giardini Orientali:</strong> Esplorate le antiche fondamenta del castello (Honmaru) e il meraviglioso giardino giapponese Ninomaru. <a class="maps-link" href="https://maps.google.com/?q=Imperial+Palace+East+Gardens" target="_blank">📍 Maps</a></li>
-                    <li><strong>Marunouchi:</strong> Uscite verso il quartiere finanziario, passeggiate per l'elegante via alberata <em>Naka-dori</em> <a class="maps-link" href="https://maps.google.com/?q=Marunouchi+Naka-dori" target="_blank">📍 Maps</a> fino all'architettura navale in vetro del <strong>Tokyo International Forum</strong>. <a class="maps-link" href="https://maps.google.com/?q=Tokyo+International+Forum" target="_blank">📍 Maps</a></li>
+                    <li><strong>Piazzale e Ponte Nijubashi:</strong> Scendete alla stazione <em>Nijubashimae</em> e
+                        scattate l'iconica foto al doppio ponte. <a class="maps-link"
+                            href="https://maps.google.com/?q=Nijubashi+Bridge+Tokyo" target="_blank">📍 Maps</a></li>
+                    <li><strong>Porta Ote-mon:</strong> Costeggiate il fossato fino all'antico ingresso dei samurai per
+                        ritirare il gettone d'ingresso gratuito. <a class="maps-link"
+                            href="https://maps.google.com/?q=Ote-mon+Gate+Tokyo" target="_blank">📍 Maps</a></li>
+                    <li><strong>Giardini Orientali:</strong> Esplorate le antiche fondamenta del castello (Honmaru) e il
+                        meraviglioso giardino giapponese Ninomaru. <a class="maps-link"
+                            href="https://maps.google.com/?q=Imperial+Palace+East+Gardens" target="_blank">📍 Maps</a>
+                    </li>
+                    <li><strong>Marunouchi:</strong> Uscite verso il quartiere finanziario, passeggiate per l'elegante
+                        via alberata <em>Naka-dori</em> <a class="maps-link"
+                            href="https://maps.google.com/?q=Marunouchi+Naka-dori" target="_blank">📍 Maps</a> fino
+                        all'architettura navale in vetro del <strong>Tokyo International Forum</strong>. <a
+                            class="maps-link" href="https://maps.google.com/?q=Tokyo+International+Forum"
+                            target="_blank">📍 Maps</a></li>
                 </ul>
 
                 <div class="section-title">🗼 Pomeriggio & Sera (Zona Sud: Ginza & Roppongi)</div>
-                <p>Passeggiata pomeridiana lungo i viali dei grandi magazzini di lusso di <strong>Ginza</strong> <a class="maps-link" href="https://maps.google.com/?q=Ginza+Tokyo" target="_blank">📍 Maps</a>. All'imbrunire, spostamento verso sud per una splendida foto alla celebre **Tokyo Tower** <a class="maps-link" href="https://maps.google.com/?q=Tokyo+Tower" target="_blank">📍 Maps</a> illuminata di arancione. Concludete la serata tra i ristoranti alla moda di **Roppongi** <a class="maps-link" href="https://maps.google.com/?q=Roppongi+Tokyo" target="_blank">📍 Maps</a>.</p>
+                <p>Passeggiata pomeridiana lungo i viali dei grandi magazzini di lusso di <strong>Ginza</strong> <a
+                        class="maps-link" href="https://maps.google.com/?q=Ginza+Tokyo" target="_blank">📍 Maps</a>.
+                    All'imbrunire, spostamento verso sud per una splendida foto alla celebre **Tokyo Tower** <a
+                        class="maps-link" href="https://maps.google.com/?q=Tokyo+Tower" target="_blank">📍 Maps</a>
+                    illuminata di arancione. Concludete la serata tra i ristoranti alla moda di **Roppongi** <a
+                        class="maps-link" href="https://maps.google.com/?q=Roppongi+Tokyo" target="_blank">📍 Maps</a>.
+                </p>
 
                 <div class="food-box">
                     <div class="food-title">🍱 Food Experience del Giorno</div>
-                    <p><strong>Pranzo a Ginza:</strong> <em>Ginza Kagari</em>, minuscolo locale leggendario per il suo Ramen cremoso a base di brodo concentrato di pollo (Tori Paitan), una vera poesia per il palato. <a class="maps-link" href="https://maps.google.com/?q=Ginza+Kagari" target="_blank">📍 Maps</a></p>
-                    <p><strong>Cena a Roppongi:</strong> <em>Gonpachi Nishiazabu</em>, lo spettacolare ristorante tradizionale con ballatoi in legno che ha ispirato la celebre battaglia nel film "Kill Bill". Ottimi gli spiedini Yakitori alla brace. <a class="maps-link" href="https://maps.google.com/?q=Gonpachi+Nishiazabu" target="_blank">📍 Maps</a></p>
+                    <p><strong>Pranzo a Ginza:</strong> <em>Ginza Kagari</em>, minuscolo locale leggendario per il suo
+                        Ramen cremoso a base di brodo concentrato di pollo (Tori Paitan), una vera poesia per il palato.
+                        <a class="maps-link" href="https://maps.google.com/?q=Ginza+Kagari" target="_blank">📍 Maps</a>
+                    </p>
+                    <p><strong>Cena a Roppongi:</strong> <em>Gonpachi Nishiazabu</em>, lo spettacolare ristorante
+                        tradizionale con ballatoi in legno che ha ispirato la celebre battaglia nel film "Kill Bill".
+                        Ottimi gli spiedini Yakitori alla brace. <a class="maps-link"
+                            href="https://maps.google.com/?q=Gonpachi+Nishiazabu" target="_blank">📍 Maps</a></p>
                 </div>
             </div>
         </details>
@@ -252,19 +685,62 @@
                 <div class="toggle-icon"></div>
             </summary>
             <div class="day-content">
+                <div class="transport-box">
+                    🚇 <strong>Info Trasporti del Giorno (Tokyo Ovest & Rientro Notturno):</strong>
+                    Giornata dinamica sulla linea circolare e sulle metro con Suica/Pasmo:
+                    <ul class="custom-list" style="margin: 0.4rem 0 0 0;">
+                        <li><strong>Dall'Hotel a Omotesando/Harajuku:</strong> Dalla stazione sotto l'hotel prendete la <strong>Ginza Line (G)</strong>: in sole 2 fermate (5 minuti!) scendete a <em>Omotesando</em>.</li>
+                        <li><strong>Da Harajuku a Shibuya:</strong> Piacevole camminata in discesa lungo Meiji-dori (15 min) oppure 1 sola fermata di treno <strong>JR Yamanote Line</strong>.</li>
+                        <li><strong>Da Shibuya a Shinjuku:</strong> Treno <strong>JR Yamanote Line</strong> (7 minuti, 3 fermate).</li>
+                        <li><strong>Rientro notturno a prova di stanchezza:</strong> Dalla stazione di Shinjuku prendete la <strong>Marunouchi Line (M)</strong> diretta: vi riporta direttamente alla stazione dell'hotel (Akasaka-mitsuke) in 9 minuti senza alcun cambio!</li>
+                    </ul>
+                </div>
+
                 <div class="section-title">☕ Colazione a Omotesando (Prima Tappa)</div>
-                <p><strong>Bills (Tokyu Plaza Omotesando Harajuku):</strong> Iniziate la giornata dirigendovi subito ad Harajuku. Salite all'ultimo piano dell'iconico centro commerciale Tokyu Plaza per provare i leggendari "Ricotta Hotcakes" di Bills. Sono pancake completamente diversi da quelli dei giorni scorsi: cremosissimi all'interno, super soffici e serviti con burro artigianale al favo di miele e banane fresche. <a class="maps-link" href="https://maps.google.com/?q=Bills+Omotesando" target="_blank">📍 Maps</a></p>
+                <p><strong>Bills (Tokyu Plaza Omotesando Harajuku):</strong> Iniziate la giornata dirigendovi subito ad
+                    Harajuku. Salite all'ultimo piano dell'iconico centro commerciale Tokyu Plaza per provare i
+                    leggendari "Ricotta Hotcakes" di Bills. Sono pancake completamente diversi da quelli dei giorni
+                    scorsi: cremosissimi all'interno, super soffici e serviti con burro artigianale al favo di miele e
+                    banane fresche. <a class="maps-link" href="https://maps.google.com/?q=Bills+Omotesando"
+                        target="_blank">📍 Maps</a></p>
 
                 <div class="section-title">🌳 Mattina (Zona Ovest: Harajuku & Omotesando)</div>
-                <p>Dopo colazione, esplorate la folle e coloratissima via dello shopping giovanile **Takeshita Dori** <a class="maps-link" href="https://maps.google.com/?q=Takeshita+Dori+Harajuku" target="_blank">📍 Maps</a> ad Harajuku, proseguendo poi lungo l'elegante viale alberato d'alta moda di **Omotesando** <a class="maps-link" href="https://maps.google.com/?q=Omotesando+Tokyo" target="_blank">📍 Maps</a>. Infine, camminate nel polmone verde del Parco Yoyogi <a class="maps-link" href="https://maps.google.com/?q=Yoyogi+Park+Tokyo" target="_blank">📍 Maps</a> fino al solenne santuario shintoista **Meiji Jingu** <a class="maps-link" href="https://maps.google.com/?q=Meiji+Jingu+Tokyo" target="_blank">📍 Maps</a>.</p>
+                <p>Dopo colazione, esplorate la folle e coloratissima via dello shopping giovanile **Takeshita Dori** <a
+                        class="maps-link" href="https://maps.google.com/?q=Takeshita+Dori+Harajuku" target="_blank">📍
+                        Maps</a> ad Harajuku, proseguendo poi lungo l'elegante viale alberato d'alta moda di
+                    **Omotesando** <a class="maps-link" href="https://maps.google.com/?q=Omotesando+Tokyo"
+                        target="_blank">📍 Maps</a>. Infine, camminate nel polmone verde del Parco Yoyogi <a
+                        class="maps-link" href="https://maps.google.com/?q=Yoyogi+Park+Tokyo" target="_blank">📍
+                        Maps</a> fino al solenne santuario shintoista **Meiji Jingu** <a class="maps-link"
+                        href="https://maps.google.com/?q=Meiji+Jingu+Tokyo" target="_blank">📍 Maps</a>.</p>
 
                 <div class="section-title">🏙️ Pomeriggio & Sera (Zona Ovest: Shibuya & Shinjuku)</div>
-                <p>Raggiungete a piedi **Shibuya** <a class="maps-link" href="https://maps.google.com/?q=Shibuya+Tokyo" target="_blank">📍 Maps</a>. Attraversate il famosissimo incrocio pedonale **Shibuya Scramble** <a class="maps-link" href="https://maps.google.com/?q=Shibuya+Scramble+Crossing" target="_blank">📍 Maps</a>, salutate la statua del cagnolino **Hachiko** <a class="maps-link" href="https://maps.google.com/?q=Hachiko+Statue+Shibuya" target="_blank">📍 Maps</a> e salite sulla terrazza panoramica all'aperto **Shibuya Sky** <a class="maps-link" href="https://maps.google.com/?q=Shibuya+Sky" target="_blank">📍 Maps</a> per il tramonto. Concludete la serata a **Shinjuku** <a class="maps-link" href="https://maps.google.com/?q=Shinjuku+Tokyo" target="_blank">📍 Maps</a> ammirando il gatto 3D e cenando nei minuscoli vicoli vintage di **Omoide Yokocho** <a class="maps-link" href="https://maps.google.com/?q=Omoide+Yokocho+Shinjuku" target="_blank">📍 Maps</a>.</p>
+                <p>Raggiungete a piedi **Shibuya** <a class="maps-link" href="https://maps.google.com/?q=Shibuya+Tokyo"
+                        target="_blank">📍 Maps</a>. Attraversate il famosissimo incrocio pedonale **Shibuya Scramble**
+                    <a class="maps-link" href="https://maps.google.com/?q=Shibuya+Scramble+Crossing" target="_blank">📍
+                        Maps</a>, salutate la statua del cagnolino **Hachiko** <a class="maps-link"
+                        href="https://maps.google.com/?q=Hachiko+Statue+Shibuya" target="_blank">📍 Maps</a> e salite
+                    sulla terrazza panoramica all'aperto **Shibuya Sky** <a class="maps-link"
+                        href="https://maps.google.com/?q=Shibuya+Sky" target="_blank">📍 Maps</a> <a class="ticket-link"
+                        href="https://www.klook.com/it/activity/70672-shibuya-sky-tokyo/" target="_blank">🎟️ Biglietti
+                        Klook (da Lun 28/09)</a> per il tramonto. Concludete la serata a **Shinjuku** <a
+                        class="maps-link" href="https://maps.google.com/?q=Shinjuku+Tokyo" target="_blank">📍 Maps</a>
+                    ammirando il gatto 3D e cenando nei minuscoli vicoli vintage di **Omoide Yokocho** <a
+                        class="maps-link" href="https://maps.google.com/?q=Omoide+Yokocho+Shinjuku" target="_blank">📍
+                        Maps</a>.
+                </p>
 
                 <div class="food-box">
                     <div class="food-title">🍱 Food Experience del Giorno</div>
-                    <p><strong>Pranzo a Harajuku:</strong> Provate i Gyoza (fagottini alla piastra) speciali di <em>Harajuku Gyozaro</em>, economici, caldi e saporitissimi. <a class="maps-link" href="https://maps.google.com/?q=Harajuku+Gyozaro" target="_blank">📍 Maps</a></p>
-                    <p><strong>Cena a Shinjuku:</strong> Sedetevi a uno dei minuscoli banconi di <em>Omoide Yokocho</em> <a class="maps-link" href="https://maps.google.com/?q=Omoide+Yokocho" target="_blank">📍 Maps</a> per gustare spiedini Yakitori di pollo e verdure cotti sulla brace di carbone davanti a voi.</p>
+                    <p><strong>Pranzo a Harajuku:</strong> Provate i Gyoza (fagottini alla piastra) speciali di
+                        <em>Harajuku Gyozaro</em>, economici, caldi e saporitissimi. <a class="maps-link"
+                            href="https://maps.google.com/?q=Harajuku+Gyozaro" target="_blank">📍 Maps</a>
+                    </p>
+                    <p><strong>Cena a Shinjuku:</strong> Sedetevi a uno dei minuscoli banconi di <em>Omoide Yokocho</em>
+                        <a class="maps-link" href="https://maps.google.com/?q=Omoide+Yokocho" target="_blank">📍
+                            Maps</a> per gustare spiedini Yakitori di pollo e verdure cotti sulla brace di carbone
+                        davanti a voi.
+                    </p>
                 </div>
             </div>
         </details>
@@ -280,19 +756,37 @@
             </summary>
             <div class="day-content">
                 <div class="section-title">🐈 Mattina (Tokyo Periferica)</div>
-                <p>Prima di lasciare la capitale, visitate il delizioso tempio dei gatti **Gotokuji** <a class="maps-link" href="https://maps.google.com/?q=Gotokuji+Temple+Tokyo" target="_blank">📍 Maps</a>, celebre per le sue migliaia di statuette Maneki Neko bianche depositate come offerta portafortuna.</p>
+                <p>Prima di lasciare la capitale, visitate il delizioso tempio dei gatti **Gotokuji** <a
+                        class="maps-link" href="https://maps.google.com/?q=Gotokuji+Temple+Tokyo" target="_blank">📍
+                        Maps</a>, celebre per le sue migliaia di statuette Maneki Neko bianche depositate come offerta
+                    portafortuna.</p>
 
                 <div class="section-title">🚄 Pomeriggio & Sera (Spostamento in Treno Veloce)</div>
-                <p>Al mattino portate i vostri bagagli (essendo medi/piccoli e leggeri) direttamente con voi sul treno proiettile Shinkansen (biglietto incluso). Nel primo pomeriggio partenza per Kyoto. Arrivo e check-in presso l'<strong>Urban Hotel Kyoto Shijo Premium</strong> <a class="maps-link" href="https://maps.google.com/?q=Urban+Hotel+Kyoto+Shijo+Premium" target="_blank">📍 Maps</a>.</p>
+                <p>Al mattino portate i vostri bagagli (essendo medi/piccoli e leggeri) direttamente con voi sul treno
+                    proiettile Shinkansen (biglietto incluso). Nel primo pomeriggio partenza per Kyoto. Arrivo e
+                    check-in presso l'<strong>Urban Hotel Kyoto Shijo Premium</strong> <a class="maps-link"
+                        href="https://maps.google.com/?q=Urban+Hotel+Kyoto+Shijo+Premium" target="_blank">📍 Maps</a>.
+                </p>
 
                 <div class="transport-box">
-                    🚄 <strong>Consiglio sui Trasporti a Kyoto:</strong> Per gli spostamenti di questa prima serata (es. per andare a cena), utilizzate corse singole pagando comodamente appoggiando il telefono (Apple/Google Wallet con Suica/Pasmo) sui tornelli. Il pass giornaliero oggi andrebbe sprecato.
+                    🚄 <strong>Info Trasporti del Giorno (Treno Shinkansen Incluso):</strong>
+                    <ul class="custom-list" style="margin: 0.4rem 0 0 0;">
+                        <li><strong>Mattina (Gotokuji):</strong> Dalla stazione di Akasaka-mitsuke prendete la Marunouchi Line per Shinjuku e poi la linea privata <em>Odakyu Line</em> fino alla fermata <em>Gotokuji</em> (20 min con Suica/Pasmo).</li>
+                        <li><strong>Pomeriggio (Shinkansen per Kyoto):</strong> Tornate in hotel a prendere i bagagli e salite sulla Marunouchi Line diretta fino alla <strong>Stazione di Tokyo (Tokyo Station)</strong> (9 min). Qui salite sul treno proiettile <strong>Shinkansen Tokaido</strong> per Kyoto (biglietto incluso nel pacchetto CartOrange, durata ~2h 15m).</li>
+                        <li><strong>Arrivo all'Hotel di Kyoto:</strong> Dalla Stazione di Kyoto prendete la metro <em>Karasuma Line</em> per 2 fermate fino a <em>Shijo</em> (poi 7 min a piedi), oppure prendete comodamente un taxi fuori dalla stazione (circa 1.000–1.200 yen). Per la cena della prima serata usate corse singole con Suica/Pasmo.</li>
+                    </ul>
                 </div>
 
                 <div class="food-box">
                     <div class="food-title">🍱 Food Experience del Giorno</div>
-                    <p><strong>Pranzo in Stazione/Treno:</strong> Acquistate una raffinata <em>Ekiben</em> (la tipica scatola bento da viaggio per i treni) alla stazione di Tokyo <a class="maps-link" href="https://maps.google.com/?q=Tokyo+Station" target="_blank">📍 Maps</a> da mangiare a bordo guardando il panorama sfrecciare.</p>
-                    <p><strong>Cena a Kyoto:</strong> <em>Menami</em>, un locale eccezionale per provare la cucina tipica Obanzai di Kyoto (tanti piccoli piattini tradizionali di verdure e carne di stagione). <a class="maps-link" href="https://maps.google.com/?q=Menami+Kyoto" target="_blank">📍 Maps</a></p>
+                    <p><strong>Pranzo in Stazione/Treno:</strong> Acquistate una raffinata <em>Ekiben</em> (la tipica
+                        scatola bento da viaggio per i treni) alla stazione di Tokyo <a class="maps-link"
+                            href="https://maps.google.com/?q=Tokyo+Station" target="_blank">📍 Maps</a> da mangiare a
+                        bordo guardando il panorama sfrecciare.</p>
+                    <p><strong>Cena a Kyoto:</strong> <em>Menami</em>, un locale eccezionale per provare la cucina
+                        tipica Obanzai di Kyoto (tanti piccoli piattini tradizionali di verdure e carne di stagione). <a
+                            class="maps-link" href="https://maps.google.com/?q=Menami+Kyoto" target="_blank">📍 Maps</a>
+                    </p>
                 </div>
             </div>
         </details>
@@ -308,22 +802,50 @@
             </summary>
             <div class="day-content">
                 <div class="section-title">☕ Colazione (Specialità Matcha)</div>
-                <p><strong>Umezono Cafe & Gallery:</strong> A soli 10 minuti dal vostro hotel (zona Karasuma). È una deliziosa caffetteria in una vecchia casa di legno tradizionale (Machiya). Sono celebri per i loro "Matcha Hotcakes": pancake verdissimi, sofficissimi, preparati con pregiato tè matcha di Uji e serviti con pasta di fagioli rossi azuki e sciroppo di zucchero di canna nero. <a class="maps-link" href="https://maps.google.com/?q=Umezono+Cafe+and+Gallery+Kyoto" target="_blank">📍 Maps</a></p>
+                <p><strong>Umezono Cafe & Gallery:</strong> A soli 10 minuti dal vostro hotel (zona Karasuma). È una
+                    deliziosa caffetteria in una vecchia casa di legno tradizionale (Machiya). Sono celebri per i loro
+                    "Matcha Hotcakes": pancake verdissimi, sofficissimi, preparati con pregiato tè matcha di Uji e
+                    serviti con pasta di fagioli rossi azuki e sciroppo di zucchero di canna nero. <a class="maps-link"
+                        href="https://maps.google.com/?q=Umezono+Cafe+and+Gallery+Kyoto" target="_blank">📍 Maps</a></p>
 
                 <div class="transport-box">
-                    🚌 <strong>Consiglio sui Trasporti:</strong> Oggi è la giornata perfetta per acquistare il <strong>Kyoto Subway & Bus 1-Day Pass (1.100 yen)</strong>. Farete numerosi spostamenti tra nord (Kinkaku-ji), centro (Castello di Nijo) ed est (Kiyomizu-dera/Gion). Con il pass avrete viaggi illimitati e risparmierete nettamente sulle singole corse.
+                    🚌 <strong>Info Trasporti a Kyoto (Bus & Metro Pass):</strong>
+                    Oggi è l'unica giornata ideale per acquistare il <strong>Kyoto Subway & Bus 1-Day Pass (1.100 yen)</strong> (acquistabile alle macchinette automatiche della metro o alla reception):
+                    <ul class="custom-list" style="margin: 0.4rem 0 0 0;">
+                        <li><strong>Verso il Kinkaku-ji (Nord):</strong> Dalla fermata Shijo Horikawa prendete il bus urbano n. 12 diretto fino al Padiglione d'Oro (~35 min).</li>
+                        <li><strong>Verso il Castello di Nijo (Centro):</strong> Bus n. 12 o n. 9 in discesa fino a <em>Nijojo-mae</em> (10 min).</li>
+                        <li><strong>Verso Gion & Kiyomizu-dera (Est):</strong> Metro Tozai Line da Nijojo-mae fino a <em>Higashiyama</em> o <em>Sanjo Keihan</em>, e poi salita a piedi per le caratteristiche viuzze storiche fino al tramonto.</li>
+                    </ul>
                 </div>
 
                 <div class="section-title">✨ Mattina (Zona Nord-Ovest & Centro)</div>
-                <p>Raggiungete il favoloso padiglione interamente ricoperto di foglie d'oro del tempio **Kinkaku-ji** <a class="maps-link" href="https://maps.google.com/?q=Kinkaku-ji+Kyoto" target="_blank">📍 Maps</a> che si specchia sul laghetto. Al rientro, visitate il maestoso **Castello di Nijo** <a class="maps-link" href="https://maps.google.com/?q=Nijo+Castle+Kyoto" target="_blank">📍 Maps</a>, l'antica residenza dello Shogun con i suoi spettacolari giardini e pavimenti sonori.</p>
+                <p>Raggiungete il favoloso padiglione interamente ricoperto di foglie d'oro del tempio **Kinkaku-ji** <a
+                        class="maps-link" href="https://maps.google.com/?q=Kinkaku-ji+Kyoto" target="_blank">📍 Maps</a>
+                    che si specchia sul laghetto. Al rientro, visitate il maestoso **Castello di Nijo** <a
+                        class="maps-link" href="https://maps.google.com/?q=Nijo+Castle+Kyoto" target="_blank">📍
+                        Maps</a>, l'antica residenza dello Shogun con i suoi spettacolari giardini e pavimenti sonori.
+                </p>
 
                 <div class="section-title">🍵 Pomeriggio & Sera (Zona Est: Gion & Higashiyama)</div>
-                <p><strong>Esperienza culturale:</strong> Pomeriggio dedicato alla cultura con una <strong>Cerimonia del Tè tradizionale</strong> guidata da un maestro. Verso l'imbrunire, camminate tra le storiche case in legno di **Gion** <a class="maps-link" href="https://maps.google.com/?q=Gion+Kyoto" target="_blank">📍 Maps</a> e salite lungo la suggestiva scalinata di **SannenZaka** <a class="maps-link" href="https://maps.google.com/?q=Sannenzaka+Kyoto" target="_blank">📍 Maps</a> fino al tempio **Kiyomizu-dera** <a class="maps-link" href="https://maps.google.com/?q=Kiyomizu-dera+Kyoto" target="_blank">📍 Maps</a> per ammirare il tramonto sulla città.</p>
+                <p><strong>Esperienza culturale:</strong> Pomeriggio dedicato alla cultura con una <strong>Cerimonia del
+                        Tè tradizionale</strong> guidata da un maestro. Verso l'imbrunire, camminate tra le storiche
+                    case in legno di **Gion** <a class="maps-link" href="https://maps.google.com/?q=Gion+Kyoto"
+                        target="_blank">📍 Maps</a> e salite lungo la suggestiva scalinata di **SannenZaka** <a
+                        class="maps-link" href="https://maps.google.com/?q=Sannenzaka+Kyoto" target="_blank">📍 Maps</a>
+                    fino al tempio **Kiyomizu-dera** <a class="maps-link"
+                        href="https://maps.google.com/?q=Kiyomizu-dera+Kyoto" target="_blank">📍 Maps</a> per ammirare
+                    il tramonto sulla città.</p>
 
                 <div class="food-box">
                     <div class="food-title">🍱 Food Experience del Giorno</div>
-                    <p><strong>Pranzo al Mercato:</strong> Pranzate facendo street food tra i banchi coperti del secolare **Nishiki Market** <a class="maps-link" href="https://maps.google.com/?q=Nishiki+Market+Kyoto" target="_blank">📍 Maps</a>, provando spiedini di polpo, mochi al matcha e frittate giapponesi.</p>
-                    <p><strong>Cena a Gion:</strong> <em>Gion Okaru</em>, ristorante famosissimo per i suoi Udon al curry caldi, cremosi e saporiti, frequentato spesso dalle stesse Geishe del quartiere. <a class="maps-link" href="https://maps.google.com/?q=Gion+Okaru" target="_blank">📍 Maps</a></p>
+                    <p><strong>Pranzo al Mercato:</strong> Pranzate facendo street food tra i banchi coperti del
+                        secolare **Nishiki Market** <a class="maps-link"
+                            href="https://maps.google.com/?q=Nishiki+Market+Kyoto" target="_blank">📍 Maps</a>, provando
+                        spiedini di polpo, mochi al matcha e frittate giapponesi.</p>
+                    <p><strong>Cena a Gion:</strong> <em>Gion Okaru</em>, ristorante famosissimo per i suoi Udon al
+                        curry caldi, cremosi e saporiti, frequentato spesso dalle stesse Geishe del quartiere. <a
+                            class="maps-link" href="https://maps.google.com/?q=Gion+Okaru" target="_blank">📍 Maps</a>
+                    </p>
                 </div>
             </div>
         </details>
@@ -339,22 +861,48 @@
             </summary>
             <div class="day-content">
                 <div class="section-title">☕ Colazione nei pressi di Shijo (Kyoto)</div>
-                <p><strong>Smart Coffee Kyoto:</strong> Un'istituzione storica dal 1932. Atmosfera accogliente in legno e un leggendario French Toast dorato servito caldissimo con sciroppo e caffè tostato in casa. <a class="maps-link" href="https://maps.google.com/?q=Smart+Coffee+Kyoto" target="_blank">📍 Maps</a></p>
+                <p><strong>Smart Coffee Kyoto:</strong> Un'istituzione storica dal 1932. Atmosfera accogliente in legno
+                    e un leggendario French Toast dorato servito caldissimo con sciroppo e caffè tostato in casa. <a
+                        class="maps-link" href="https://maps.google.com/?q=Smart+Coffee+Kyoto" target="_blank">📍
+                        Maps</a></p>
 
                 <div class="transport-box">
-                    🚄 <strong>Consiglio sui Trasporti:</strong> Da oggi si attiva il vostro <strong>Kansai Wide Area Pass!</strong> I treni della linea JR (fermata Inari e fermata Saga-Arashiyama) sono coperti <strong>gratuitamente</strong>. Non comprate il pass cittadino: vi basterà pagare solo 1 singola corsa in metro per raggiungere la Stazione Centrale dal vostro hotel, poi il resto della giornata è tutto incluso nell'abbonamento.
+                    🚄 <strong>Info Trasporti: Attivazione Kansai Wide Area Pass (Giorno 1/5):</strong>
+                    Da oggi è attivo il vostro <strong>Kansai Wide Area Pass</strong> incluso nel preventivo!
+                    <ul class="custom-list" style="margin: 0.4rem 0 0 0;">
+                        <li><strong>Raggiungere la Stazione Centrale:</strong> Dalla fermata dell'hotel prendete la metro (singola corsa da ~220 yen con Suica) fino a <em>Kyoto Station</em>.</li>
+                        <li><strong>Verso Fushimi Inari:</strong> Dalla stazione di Kyoto salite sul treno <strong>JR Nara Line</strong> (incluso nel pass!) e scendete dopo sole 2 fermate a <em>Inari</em> (5 min): la stazione è proprio di fronte all'ingresso del santuario!</li>
+                        <li><strong>Verso la Foresta di Bambù (Arashiyama):</strong> Riprendete la JR Nara Line per tornare a Kyoto Station, poi salite sul treno <strong>JR Sagano Line (San-in Line)</strong> e scendete a <em>Saga-Arashiyama</em> (16 min, coperto al 100% dal pass). A fine giornata, stesso treno JR per rientrare a Kyoto.</li>
+                    </ul>
                 </div>
 
                 <div class="section-title">🦊 Mattina (Zona Sud: Fushimi Inari)</div>
-                <p>Sveglia presto per raggiungere il santuario **Fushimi Inari Taisha** <a class="maps-link" href="https://maps.google.com/?q=Fushimi+Inari+Taisha+Kyoto" target="_blank">📍 Maps</a>. Godetevi una camminata memorabile sotto gli infiniti tunnel di Torii rossi che risalgono la montagna sacra immersa nel silenzio della foresta.</p>
+                <p>Sveglia presto per raggiungere il santuario **Fushimi Inari Taisha** <a class="maps-link"
+                        href="https://maps.google.com/?q=Fushimi+Inari+Taisha+Kyoto" target="_blank">📍 Maps</a>.
+                    Godetevi una camminata memorabile sotto gli infiniti tunnel di Torii rossi che risalgono la montagna
+                    sacra immersa nel silenzio della foresta.</p>
 
                 <div class="section-title">🎋 Pomeriggio & Sera (Zona Ovest: Arashiyama)</div>
-                <p>Spostamento ad ovest in treno per camminare nella celebre **Foresta di Bambù di Arashiyama** <a class="maps-link" href="https://maps.google.com/?q=Arashiyama+Bamboo+Grove" target="_blank">📍 Maps</a>. Proseguite a piedi fuori dai sentieri di massa fino ai templi storici **Adashino Nenbutsuji** <a class="maps-link" href="https://maps.google.com/?q=Adashino+Nenbutsuji+Temple" target="_blank">📍 Maps</a> e **Otagi Nenbutsuji** <a class="maps-link" href="https://maps.google.com/?q=Otagi+Nenbutsuji+Temple" target="_blank">📍 Maps</a>, quest'ultimo famoso per le sue 1200 sculture di pietra ironiche e stravaganti.</p>
+                <p>Spostamento ad ovest in treno per camminare nella celebre **Foresta di Bambù di Arashiyama** <a
+                        class="maps-link" href="https://maps.google.com/?q=Arashiyama+Bamboo+Grove" target="_blank">📍
+                        Maps</a>. Proseguite a piedi fuori dai sentieri di massa fino ai templi storici **Adashino
+                    Nenbutsuji** <a class="maps-link" href="https://maps.google.com/?q=Adashino+Nenbutsuji+Temple"
+                        target="_blank">📍 Maps</a> e **Otagi Nenbutsuji** <a class="maps-link"
+                        href="https://maps.google.com/?q=Otagi+Nenbutsuji+Temple" target="_blank">📍 Maps</a>,
+                    quest'ultimo famoso per le sue 1200 sculture di pietra ironiche e stravaganti.</p>
 
                 <div class="food-box">
                     <div class="food-title">🍱 Food Experience del Giorno</div>
-                    <p><strong>Pranzo ad Arashiyama:</strong> <em>Arashiyama Yoshimura</em> per mangiare squisiti spaghetti di grano saraceno Soba fatti a mano, con una vista da sogno sul fiume e sul ponte Togetsukyo. <a class="maps-link" href="https://maps.google.com/?q=Arashiyama+Yoshimura" target="_blank">📍 Maps</a></p>
-                    <p><strong>Cena a Pontocho:</strong> Esplorate l'affascinante e stretto vicolo di **Pontocho Alley** <a class="maps-link" href="https://maps.google.com/?q=Pontocho+Alley+Kyoto" target="_blank">📍 Maps</a> e cenate da *Chao Chao Gyoza*, locale pluripremiato per i suoi mini-gyoza croccanti serviti su piastre bollenti. <a class="maps-link" href="https://maps.google.com/?q=Chao+Chao+Gyoza+Pontocho" target="_blank">📍 Maps</a></p>
+                    <p><strong>Pranzo ad Arashiyama:</strong> <em>Arashiyama Yoshimura</em> per mangiare squisiti
+                        spaghetti di grano saraceno Soba fatti a mano, con una vista da sogno sul fiume e sul ponte
+                        Togetsukyo. <a class="maps-link" href="https://maps.google.com/?q=Arashiyama+Yoshimura"
+                            target="_blank">📍 Maps</a></p>
+                    <p><strong>Cena a Pontocho:</strong> Esplorate l'affascinante e stretto vicolo di **Pontocho Alley**
+                        <a class="maps-link" href="https://maps.google.com/?q=Pontocho+Alley+Kyoto" target="_blank">📍
+                            Maps</a> e cenate da *Chao Chao Gyoza*, locale pluripremiato per i suoi mini-gyoza croccanti
+                        serviti su piastre bollenti. <a class="maps-link"
+                            href="https://maps.google.com/?q=Chao+Chao+Gyoza+Pontocho" target="_blank">📍 Maps</a>
+                    </p>
                 </div>
             </div>
         </details>
@@ -370,27 +918,56 @@
             </summary>
             <div class="day-content">
                 <div class="transport-box">
-                    🧳 <strong>Logistica Bagagli (Check-out Kyoto):</strong> Scegliete l'opzione che preferite per non portarvi le valigie pesanti a Nara:
+                    🧳 <strong>Logistica Bagagli (Check-out Kyoto):</strong> Scegliete l'opzione che preferite per non
+                    portarvi le valigie pesanti a Nara:
                     <ul class="custom-list" style="margin-bottom: 0;">
-                        <li><strong>Opzione 1 (Consigliata):</strong> Spedite le valigie grandi dall'hotel di Kyoto direttamente a quello di Osaka (Hearton Hotel Nishiumeda) tramite il servizio <em>Takkyubin</em> alla reception. Viaggiate verso Nara e Kinosaki solo con uno zainetto leggero per la notte.</li>
-                        <li><strong>Opzione 2 (Economica):</strong> Portate le valigie alla Stazione Centrale di Kyoto e chiudetele nei <em>Coin Lockers</em> a pagamento. Andate a Nara leggeri, poi tornate alla stazione di Kyoto a recuperare i bagagli prima di prendere il treno per Kinosaki Onsen.</li>
+                        <li><strong>Opzione 1 (Consigliata):</strong> Spedite le valigie grandi dall'hotel di Kyoto
+                            direttamente a quello di Osaka (Hearton Hotel Nishiumeda) tramite il servizio
+                            <em>Takkyubin</em> alla reception. Viaggiate verso Nara e Kinosaki solo con uno zainetto
+                            leggero per la notte.
+                        </li>
+                        <li><strong>Opzione 2 (Economica):</strong> Portate le valigie alla Stazione Centrale di Kyoto e
+                            chiudetele nei <em>Coin Lockers</em> a pagamento. Andate a Nara leggeri, poi tornate alla
+                            stazione di Kyoto a recuperare i bagagli prima di prendere il treno per Kinosaki Onsen.</li>
                     </ul>
                 </div>
 
                 <div class="transport-box">
-                    🚄 <strong>Consiglio sui Trasporti:</strong> Oggi viaggiate al 100% coperti dal vostro <strong>Kansai Wide Area Pass</strong>. Copre gratuitamente sia il treno locale JR per arrivare a Nara, sia il treno ultra-rapido (Direct Limited Express) per raggiungere comodamente la località di Kinosaki Onsen nel pomeriggio.
+                    🚄 <strong>Consiglio sui Trasporti:</strong> Oggi viaggiate al 100% coperti dal vostro
+                    <strong>Kansai Wide Area Pass</strong>. Copre gratuitamente sia il treno locale JR per arrivare a
+                    Nara, sia il treno ultra-rapido (Direct Limited Express) per raggiungere comodamente la località di
+                    Kinosaki Onsen nel pomeriggio.
                 </div>
 
                 <div class="section-title">🦌 Mattina (Escursione a Nara)</div>
-                <p>Prendete il treno locale per **Nara** <a class="maps-link" href="https://maps.google.com/?q=Nara+Park" target="_blank">📍 Maps</a>. Passeggiate nel parco tra centinaia di cervi sacri in libertà, entrate nello straordinario tempio **Todai-ji** <a class="maps-link" href="https://maps.google.com/?q=Todai-ji+Nara" target="_blank">📍 Maps</a> per ammirare il Buddha gigante di bronzo e camminate tra le lanterne del santuario **Kasuga Taisha** <a class="maps-link" href="https://maps.google.com/?q=Kasuga+Taisha+Nara" target="_blank">📍 Maps</a>.</p>
+                <p>Prendete il treno locale per **Nara** <a class="maps-link"
+                        href="https://maps.google.com/?q=Nara+Park" target="_blank">📍 Maps</a>. Passeggiate nel parco
+                    tra centinaia di cervi sacri in libertà, entrate nello straordinario tempio **Todai-ji** <a
+                        class="maps-link" href="https://maps.google.com/?q=Todai-ji+Nara" target="_blank">📍 Maps</a>
+                    per ammirare il Buddha gigante di bronzo e camminate tra le lanterne del santuario **Kasuga Taisha**
+                    <a class="maps-link" href="https://maps.google.com/?q=Kasuga+Taisha+Nara" target="_blank">📍
+                        Maps</a>.
+                </p>
 
                 <div class="section-title">♨️ Pomeriggio & Sera (Kinosaki Onsen - Soggiorno Tradizionale)</div>
-                <p>Prendete il treno Direct Limited Express incluso nel pass verso la splendida località termale di <strong>Kinosaki Onsen</strong> <a class="maps-link" href="https://maps.google.com/?q=Kinosaki+Onsen" target="_blank">📍 Maps</a>. Check-in presso lo storico Ryokan <strong>Oyado Seri</strong> <a class="maps-link" href="https://maps.google.com/?q=Oyado+Seri+Kinosaki" target="_blank">📍 Maps</a>. Indossate subito lo Yukata e i sandali Geta in legno per esplorare a piedi i **7 bagni termali pubblici** disposti lungo il fiume.</p>
+                <p>Prendete il treno Direct Limited Express incluso nel pass verso la splendida località termale di
+                    <strong>Kinosaki Onsen</strong> <a class="maps-link"
+                        href="https://maps.google.com/?q=Kinosaki+Onsen" target="_blank">📍 Maps</a>. Check-in presso lo
+                    storico Ryokan <strong>Oyado Seri</strong> <a class="maps-link"
+                        href="https://maps.google.com/?q=Oyado+Seri+Kinosaki" target="_blank">📍 Maps</a>. Indossate
+                    subito lo Yukata e i sandali Geta in legno per esplorare a piedi i **7 bagni termali pubblici**
+                    disposti lungo il fiume.
+                </p>
 
                 <div class="food-box">
                     <div class="food-title">🍱 Food Experience del Giorno (Mezza Pensione Inclusa!)</div>
-                    <p><strong>Pranzo a Nara:</strong> <em>Mizutani Chaya</em>, una pittoresca casa da tè antica con tetto in paglia immersa nel bosco del parco, ottima per un piatto di udon rustici caldi. <a class="maps-link" href="https://maps.google.com/?q=Mizutani+Chaya+Nara" target="_blank">📍 Maps</a></p>
-                    <p><strong>Cena in Ryokan (Inclusa):</strong> Sontuoso banchetto Kaiseki multi-portata servito direttamente all'interno del ryokan, a base di specialità di pesce locale e della pregiatissima carne bovina di Tajima.</p>
+                    <p><strong>Pranzo a Nara:</strong> <em>Mizutani Chaya</em>, una pittoresca casa da tè antica con
+                        tetto in paglia immersa nel bosco del parco, ottima per un piatto di udon rustici caldi. <a
+                            class="maps-link" href="https://maps.google.com/?q=Mizutani+Chaya+Nara" target="_blank">📍
+                            Maps</a></p>
+                    <p><strong>Cena in Ryokan (Inclusa):</strong> Sontuoso banchetto Kaiseki multi-portata servito
+                        direttamente all'interno del ryokan, a base di specialità di pesce locale e della pregiatissima
+                        carne bovina di Tajima.</p>
                 </div>
             </div>
         </details>
@@ -405,16 +982,46 @@
                 <div class="toggle-icon"></div>
             </summary>
             <div class="day-content">
+                <div class="transport-box">
+                    🚄 <strong>Info Trasporti del Giorno (Treno Panoramico Diretto per Osaka):</strong>
+                    <ul class="custom-list" style="margin: 0.4rem 0 0 0;">
+                        <li><strong>Treno Limited Express Konotori (Incluso nel Kansai Pass):</strong> Dalla stazione di Kinosaki Onsen salite sul treno rapido diretto <em>Limited Express Konotori</em> che vi porta direttamente alla <strong>Stazione di Osaka</strong> (durata ~2h 40m attraverso splendidi panorami montani). Potete prenotare gratuitamente i posti a sedere riservati alle macchinette JR con il pass.</li>
+                        <li><strong>Check-in immediato a piedi:</strong> L'hotel <strong>Hearton Hotel Nishiumeda</strong> si trova a soli 300 metri (4 minuti a piedi) dall'uscita Sakurabashi / West della stazione JR di Osaka: comodissimo coi bagagli, nessun taxi o metro necessari!</li>
+                        <li><strong>Spostamento serale a Dotonbori / Namba:</strong> Dalla stazione sotterranea di Umeda prendete la linea <strong>Midosuji Line (linea rossa)</strong> fino a <em>Namba</em> (8 min, corsa con Suica/Pasmo) per immergervi nel cuore dei neon e dello street food.</li>
+                    </ul>
+                </div>
+
                 <div class="section-title">🏙️ Mattina (Spostamento a Osaka)</div>
-                <p>Ricca colazione giapponese inclusa nel Ryokan e partenza in treno verso **Osaka** <a class="maps-link" href="https://maps.google.com/?q=Osaka" target="_blank">📍 Maps</a>. Arrivo e check-in all'**Hearton Hotel Nishiumeda** <a class="maps-link" href="https://maps.google.com/?q=Hearton+Hotel+Nishiumeda" target="_blank">📍 Maps</a>. Iniziate salendo sulle spettacolari scale mobili sospese dell'**Umeda Sky Building** <a class="maps-link" href="https://maps.google.com/?q=Umeda+Sky+Building+Osaka" target="_blank">📍 Maps</a> per una vista aerea totale della metropoli.</p>
+                <p>Ricca colazione giapponese inclusa nel Ryokan e partenza in treno verso **Osaka** <a
+                        class="maps-link" href="https://maps.google.com/?q=Osaka" target="_blank">📍 Maps</a>. Arrivo e
+                    check-in all'**Hearton Hotel Nishiumeda** <a class="maps-link"
+                        href="https://maps.google.com/?q=Hearton+Hotel+Nishiumeda" target="_blank">📍 Maps</a>. Iniziate
+                    salendo sulle spettacolari scale mobili sospese dell'**Umeda Sky Building** <a class="maps-link"
+                        href="https://maps.google.com/?q=Umeda+Sky+Building+Osaka" target="_blank">📍 Maps</a> per una
+                    vista aerea totale della metropoli.</p>
 
                 <div class="section-title">🐙 Pomeriggio & Sera (Zona Centro-Sud: Namba & Dotonbori)</div>
-                <p>Spostatevi a Namba per fotografare l'enorme bocca di leone del santuario **Namba Yasaka** <a class="maps-link" href="https://maps.google.com/?q=Namba+Yasaka+Shrine+Osaka" target="_blank">📍 Maps</a>. Attraversate il quartiere vintage di **Shinsekai** <a class="maps-link" href="https://maps.google.com/?q=Shinsekai+Osaka" target="_blank">📍 Maps</a> e passate la sera tra le folli insegne 3D al neon di **Dotonbori** <a class="maps-link" href="https://maps.google.com/?q=Dotonbori+Osaka" target="_blank">📍 Maps</a>, scattando l'iconica foto sotto il cartellone di *Glico Sign* <a class="maps-link" href="https://maps.google.com/?q=Glico+Sign+Osaka" target="_blank">📍 Maps</a>.</p>
+                <p>Spostatevi a Namba per fotografare l'enorme bocca di leone del santuario **Namba Yasaka** <a
+                        class="maps-link" href="https://maps.google.com/?q=Namba+Yasaka+Shrine+Osaka" target="_blank">📍
+                        Maps</a>. Attraversate il quartiere vintage di **Shinsekai** <a class="maps-link"
+                        href="https://maps.google.com/?q=Shinsekai+Osaka" target="_blank">📍 Maps</a> e passate la sera
+                    tra le folli insegne 3D al neon di **Dotonbori** <a class="maps-link"
+                        href="https://maps.google.com/?q=Dotonbori+Osaka" target="_blank">📍 Maps</a>, scattando
+                    l'iconica foto sotto il cartellone di *Glico Sign* <a class="maps-link"
+                        href="https://maps.google.com/?q=Glico+Sign+Osaka" target="_blank">📍 Maps</a>.</p>
 
                 <div class="food-box">
                     <div class="food-title">🍱 Food Experience del Giorno</div>
-                    <p><strong>Pranzo a Umeda:</strong> <em>Kiji Umeda Sky Building</em>, situato nei sotterranei storici del palazzo, per assaggiare la vera e saporitissima Okonomiyaki (la famosa frittata salata alla piastra di Osaka). <a class="maps-link" href="https://maps.google.com/?q=Kiji+Okonomiyaki+Umeda" target="_blank">📍 Maps</a></p>
-                    <p><strong>Cena a Dotonbori:</strong> Street food itinerante lungo il canale provando i celebri e fumanti <em>Takoyaki</em> (polpette di polpo) da <em>Acchichi Honpo</em> <a class="maps-link" href="https://maps.google.com/?q=Acchichi+Honpo+Dotonbori" target="_blank">📍 Maps</a> e gli spiedini fritti Kushikatsu da Daruma <a class="maps-link" href="https://maps.google.com/?q=Kushikatsu+Daruma+Dotonbori" target="_blank">📍 Maps</a>.</p>
+                    <p><strong>Pranzo a Umeda:</strong> <em>Kiji Umeda Sky Building</em>, situato nei sotterranei
+                        storici del palazzo, per assaggiare la vera e saporitissima Okonomiyaki (la famosa frittata
+                        salata alla piastra di Osaka). <a class="maps-link"
+                            href="https://maps.google.com/?q=Kiji+Okonomiyaki+Umeda" target="_blank">📍 Maps</a></p>
+                    <p><strong>Cena a Dotonbori:</strong> Street food itinerante lungo il canale provando i celebri e
+                        fumanti <em>Takoyaki</em> (polpette di polpo) da <em>Acchichi Honpo</em> <a class="maps-link"
+                            href="https://maps.google.com/?q=Acchichi+Honpo+Dotonbori" target="_blank">📍 Maps</a> e gli
+                        spiedini fritti Kushikatsu da Daruma <a class="maps-link"
+                            href="https://maps.google.com/?q=Kushikatsu+Daruma+Dotonbori" target="_blank">📍 Maps</a>.
+                    </p>
                 </div>
             </div>
         </details>
@@ -429,19 +1036,46 @@
                 <div class="toggle-icon"></div>
             </summary>
             <div class="day-content">
+                <div class="transport-box">
+                    🚆 <strong>Info Trasporti a Osaka (JR Loop Line Gratuita con Pass):</strong>
+                    Oggi è l'ultimo giorno di validità del vostro <strong>Kansai Wide Area Pass</strong>:
+                    <ul class="custom-list" style="margin: 0.4rem 0 0 0;">
+                        <li><strong>Castello di Osaka a costo zero:</strong> Dalla Stazione di Osaka (a 4 min dall'hotel) prendete la linea circolare <strong>JR Osaka Loop Line</strong> in direzione oraria e scendete alla fermata <em>Osakajokoen</em> (10 min, 100% gratuita con il Kansai Pass). La stazione è posizionata direttamente all'ingresso del parco del castello!</li>
+                        <li><strong>Serata gastronomica a Tenma:</strong> Per la cena, prendete la JR Loop Line per sole 2 fermate fino alla stazione di <strong>Tenma</strong> (inclusa nel pass): usciti dai tornelli vi ritroverete subito sotto i caratteristici vicoli vintage di lanterne rosse e Yakiniku. Rientro comodo con 1 fermata JR fino all'hotel.</li>
+                    </ul>
+                </div>
+
                 <div class="section-title">☕ Colazione nei pressi di Umeda (Osaka)</div>
-                <p><strong>Gariguette Osaka:</strong> Pasticceria super alla moda a Umeda. Prepari grandiosi millefoglie rotondi croccanti (Mille-presse) farciti al momento con creme fresche e frutta, perfetti da abbinare a un buon caffè nero. <a class="maps-link" href="https://maps.google.com/?q=Gariguette+Osaka" target="_blank">📍 Maps</a></p>
+                <p><strong>Gariguette Osaka:</strong> Pasticceria super alla moda a Umeda. Prepari grandiosi millefoglie
+                    rotondi croccanti (Mille-presse) farciti al momento con creme fresche e frutta, perfetti da abbinare
+                    a un buon caffè nero. <a class="maps-link" href="https://maps.google.com/?q=Gariguette+Osaka"
+                        target="_blank">📍 Maps</a></p>
 
                 <div class="section-title">🏰 Mattina (Zona Centro-Est: Castello di Osaka)</div>
-                <p>Esplorate il magnifico **Castello di Osaka** <a class="maps-link" href="https://maps.google.com/?q=Osaka+Castle" target="_blank">📍 Maps</a>, visitando il museo storico interno alla torre principale e godendovi una camminata romantica tra gli enormi prati del parco circostante.</p>
+                <p>Esplorate il magnifico **Castello di Osaka** <a class="maps-link"
+                        href="https://maps.google.com/?q=Osaka+Castle" target="_blank">📍 Maps</a>, visitando il museo
+                    storico interno alla torre principale e godendovi una camminata romantica tra gli enormi prati del
+                    parco circostante.</p>
 
                 <div class="section-title">🛍️ Pomeriggio & Sera (Tempo Libero per Souvenirs)</div>
-                <p>Pomeriggio libero per gli ultimi acquisti nei grandiosi centri commerciali di Umeda <a class="maps-link" href="https://maps.google.com/?q=Umeda+Osaka" target="_blank">📍 Maps</a>. Concludete l'ultima splendida notte giapponese tra i piccoli e vivacissimi vicoli gastronomici tradizionali sotto la ferrovia di **Tenma** <a class="maps-link" href="https://maps.google.com/?q=Tenma+Osaka" target="_blank">📍 Maps</a> o **Ura Namba** <a class="maps-link" href="https://maps.google.com/?q=Ura+Namba+Osaka" target="_blank">📍 Maps</a>.</p>
+                <p>Pomeriggio libero per gli ultimi acquisti nei grandiosi centri commerciali di Umeda <a
+                        class="maps-link" href="https://maps.google.com/?q=Umeda+Osaka" target="_blank">📍 Maps</a>.
+                    Concludete l'ultima splendida notte giapponese tra i piccoli e vivacissimi vicoli gastronomici
+                    tradizionali sotto la ferrovia di **Tenma** <a class="maps-link"
+                        href="https://maps.google.com/?q=Tenma+Osaka" target="_blank">📍 Maps</a> o **Ura Namba** <a
+                        class="maps-link" href="https://maps.google.com/?q=Ura+Namba+Osaka" target="_blank">📍 Maps</a>.
+                </p>
 
                 <div class="food-box">
                     <div class="food-title">🍱 Food Experience del Giorno</div>
-                    <p><strong>Pranzo a Tenma:</strong> <em>Harukoma Sushi</em>, famosissimo mercato coperto locale rinomato per servire nigiri e sushi freschissimo con tagli di pesce incredibilmente spessi e generosi. <a class="maps-link" href="https://maps.google.com/?q=Harukoma+Sushi+Tenma+Osaka" target="_blank">📍 Maps</a></p>
-                    <p><strong>Cena a Ura Namba:</strong> Scegliete un tipico ristorante Yakiniku per grigliare voi stessi pregiati tagli di carne Wagyu su un piccolo braciere al tavolo, brindando alla fine di questo viaggio indimenticabile. <a class="maps-link" href="https://maps.google.com/?q=Yakiniku+Ura+Namba" target="_blank">📍 Maps</a></p>
+                    <p><strong>Pranzo a Tenma:</strong> <em>Harukoma Sushi</em>, famosissimo mercato coperto locale
+                        rinomato per servire nigiri e sushi freschissimo con tagli di pesce incredibilmente spessi e
+                        generosi. <a class="maps-link" href="https://maps.google.com/?q=Harukoma+Sushi+Tenma+Osaka"
+                            target="_blank">📍 Maps</a></p>
+                    <p><strong>Cena a Ura Namba:</strong> Scegliete un tipico ristorante Yakiniku per grigliare voi
+                        stessi pregiati tagli di carne Wagyu su un piccolo braciere al tavolo, brindando alla fine di
+                        questo viaggio indimenticabile. <a class="maps-link"
+                            href="https://maps.google.com/?q=Yakiniku+Ura+Namba" target="_blank">📍 Maps</a></p>
                 </div>
             </div>
         </details>
@@ -456,12 +1090,36 @@
                 <div class="toggle-icon"></div>
             </summary>
             <div class="day-content">
+                <div class="transport-box">
+                    ✈️ <strong>Info Trasporti del Giorno (Transfer Aeroporto & Rientro Inclusi):</strong>
+                    <ul class="custom-list" style="margin: 0.4rem 0 0 0;">
+                        <li><strong>Ore 06:15 - Trasferimento Privato per Aeroporto KIX:</strong> L'autista privato incaricato da CartOrange vi preleverà direttamente nella hall dell'Hearton Hotel Nishiumeda per portarvi all'Aeroporto Internazionale del Kansai (Terminal 1) in tempo per il check-in del volo China Eastern MU 0730 (partenza ore 09:30). Servizio incluso nel pacchetto.</li>
+                        <li><strong>Ore 19:10 - Arrivo a Roma Fiumicino (Terminal 3):</strong> Ritiro bagagli da stiva e spostamento a piedi al vicino Terminal dei pullman (Via Francesco Baracca).</li>
+                        <li><strong>Ore 22:30 - Pullman Notturno per Bari:</strong> Partenza con il bus <strong>Itabus (Bus 1101)</strong> con arrivo a Bari Centrale il mattino successivo alle ore 05:20.</li>
+                    </ul>
+                </div>
+
                 <div class="section-title">✈️ Il Rientro Aereo (China Eastern Airlines)</div>
-                <p>Sveglia all'alba. Alle ore <strong>06:15</strong> l'autista privato vi preleverà in hotel per portarvi all'Aeroporto Internazionale del Kansai (KIX) <a class="maps-link" href="https://maps.google.com/?q=Kansai+International+Airport" target="_blank">📍 Maps</a>. Partenza del primo volo **MU 0730** alle ore <strong>09:30</strong> (Terminal 1) con arrivo a Shanghai alle 10:50. Ripartenza con il volo lungo **MU 0787** alle ore <strong>12:25</strong> e atterraggio ufficiale a Roma Fiumicino (Terminal 3) previsto alle ore <strong>19:10</strong> dello stesso giorno.</p>
+                <p>Sveglia all'alba. Alle ore <strong>06:15</strong> l'autista privato vi preleverà in hotel per
+                    portarvi all'Aeroporto Internazionale del Kansai (KIX) <a class="maps-link"
+                        href="https://maps.google.com/?q=Kansai+International+Airport" target="_blank">📍 Maps</a>.
+                    Partenza del primo volo **MU 0730** alle ore <strong>09:30</strong> (Terminal 1) con arrivo a
+                    Shanghai alle 10:50. Ripartenza con il volo lungo **MU 0787** alle ore <strong>12:25</strong> e
+                    atterraggio ufficiale a Roma Fiumicino (Terminal 3) previsto alle ore <strong>19:10</strong> dello
+                    stesso giorno.</p>
+                <button class="btn-doc"
+                    onclick="window.open('Travel Reservation October 08 for ANTONELLA URICCHIO.pdf', '_blank')">✈️ Apri
+                    Biglietti Aerei China Eastern</button>
 
                 <div class="section-title">🚌 Pullman di Rientro Roma Fiumicino -> Bari</div>
-                <p>Una volta ritirati i bagagli da stiva, spostatevi al Terminal dei pullman di Fiumicino (Via Francesco Baracca) <a class="maps-link" href="https://maps.google.com/?q=Terminal+Bus+Fiumicino" target="_blank">📍 Maps</a>. Partenza alle ore <strong>22:30</strong> a bordo dell'**Itabus (Bus 1101)** in direzione Bari. Arrivo previsto a Bari (Autostazione FS Park, Via Capruzzi) alle ore <strong>05:20</strong> del mattino successivo (Martedì 20 Ottobre).</p>
-                <button class="btn-doc" onclick="window.open('EF3ZKB_260727115441867.pdf', '_blank')">📄 Apri Biglietto Itabus</button>
+                <p>Una volta ritirati i bagagli da stiva, spostatevi al Terminal dei pullman di Fiumicino (Via Francesco
+                    Baracca) <a class="maps-link" href="https://maps.google.com/?q=Terminal+Bus+Fiumicino"
+                        target="_blank">📍 Maps</a>. Partenza alle ore <strong>22:30</strong> a bordo dell'**Itabus (Bus
+                    1101)** in direzione Bari. Arrivo previsto a Bari (Autostazione FS Park, Via Capruzzi) alle ore
+                    <strong>05:20</strong> del mattino successivo (Martedì 20 Ottobre).
+                </p>
+                <button class="btn-doc" onclick="window.open('EF3ZKB_260727115441867.pdf', '_blank')">📄 Apri Biglietto
+                    Itabus</button>
             </div>
         </details>
 
@@ -472,4 +1130,5 @@
     </footer>
 
 </body>
+
 </html>
